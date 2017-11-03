@@ -1,7 +1,6 @@
 This is a markup document.
 
-Link to the effort_commitment spreadsheet: 
-https://docs.google.com/spreadsheets/d/1e8mAxaa04NjGEFdHMqVXnvAoCGOThwHOcgVDM6tjN7I/edit?usp=sharing
+[Link to the effort_commitment spreadsheet](https://docs.google.com/spreadsheets/d/1e8mAxaa04NjGEFdHMqVXnvAoCGOThwHOcgVDM6tjN7I/edit?usp=sharing)
 
 Link to Trello boards:</br>
 [Project Overview](https://trello.com/b/pQUjWQI2)</br>

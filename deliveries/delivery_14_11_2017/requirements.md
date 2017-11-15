@@ -9,4 +9,4 @@ The user will have to register and comfirm his/her e-mail address. Once register
 
 
 Budget: 846hours
-[Project Overview](https://trello.com/b/pQUjWQI2)</br>
+[Budget: 846 hours](https://github.com/CodeGreenGL/survbu/blob/master/deliveries/effort_committment.xlsx)</br>

@@ -9,7 +9,7 @@ CodeGreen is building a survey builder web application. The application's main f
 The user will have to register and comfirm his/her e-mail address, once registered the user will have to log in, in order to be able to create a survey.
 
 
-[Budget: 846 hours](https://github.com/CodeGreenGL/survbu/blob/master/deliveries/effort_committment.xlsx)</br>
+[Budget: 846 hours](https://github.com/CodeGreenGL/survbu/blob/master/docs/budget/effort_committment.xlsx)</br>
 
 [Features](https://trello.com/b/kk4rkYEn/features)</br>
 

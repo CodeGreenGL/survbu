@@ -1,6 +1,6 @@
 ## Team Green
 # Survey Builder
-This is readme for the Team Green survey builder repository.
+This is readme for the Team CodeGreen survey builder repository.
 
 Important files:
 

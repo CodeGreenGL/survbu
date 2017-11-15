@@ -9,3 +9,4 @@ The user will have to register and comfirm his/her e-mail address. Once register
 
 
 Budget: 846hours
+[Project Overview](https://trello.com/b/pQUjWQI2)</br>

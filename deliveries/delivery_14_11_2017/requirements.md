@@ -1,6 +1,6 @@
-<h1>Survey Builder: CodeGreen</h1>
+<h3>Survey Builder: CodeGreen</h3>
 
-<h3>[Brief](https://github.com/CodeGreenGL/survbu/tree/master/brief)</h3></br> 
+[Brief](https://github.com/CodeGreenGL/survbu/tree/master/brief)</br>
 
 <h3>Introduction:</h3> 
 

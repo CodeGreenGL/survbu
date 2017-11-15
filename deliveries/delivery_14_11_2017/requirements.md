@@ -1,7 +1,7 @@
 <h3>Team: Survey Builder</h3>
 <h3>Project: CodeGreen</h3>
 
-[Brief](https://github.com/CodeGreenGL/survbu/tree/master/brief)</br>
+[Brief](https://github.com/CodeGreenGL/survbu/blob/master/docs/brief/surveybuilder.pdf)</br>
 
 <h3>Introduction:</h3> 
 

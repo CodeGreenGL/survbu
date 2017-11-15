@@ -1,4 +1,5 @@
-<h3>Survey Builder: CodeGreen</h3>
+<h3>Team: Survey Builder</h3>
+<h3>Project: CodeGreen</h3>
 
 [Brief](https://github.com/CodeGreenGL/survbu/tree/master/brief)</br>
 

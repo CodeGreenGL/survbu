@@ -1,0 +1,87 @@
+body{
+background-color: white;
+    font-family: sans-serif;
+}
+
+table{
+margin: 0px;
+padding: 0px;
+border-radius: 2px;
+}
+
+thead tr td{
+    background: #f7f7f7;
+    width: 300px;
+    text-align: center;
+}
+
+tr{
+    height: 30px;
+   
+
+}
+
+tr td{
+       border-top: 0.5px solid lightgray;
+
+    text-align: center;
+}
+
+.addQuestionInput{
+width: 150px;
+height: 40px;
+margin-top: 10px;
+background-color: lightseagreen;
+color: white;
+border-radius: 4px;
+border: none;
+box-shadow: 1px 1px 3px 1px lightgray;
+}
+
+.addQuestionInput:after{
+  content: "";
+    display: block;
+    background: url("Media/arrowWhite.svg") no-repeat;
+    width: 17px;
+    height: 17px;
+    float: right;
+    margin: 0px 6px 0px 10px;
+    transition-delay: 0.2s;
+    transition: all 0.5s;
+}
+
+.addQuestionInput:hover:after{
+    transform: rotate(90deg);
+}
+
+.addQuestionInput:hover{
+box-shadow: none;
+}
+
+#insertQuestionHolder{
+border: 1px solid lightgray;
+width: 196px;
+height: auto;
+margin-top: 20px;
+}
+
+.innputQuestion{
+width: 150px;
+height: 40px;
+margin: 20px;
+}
+
+#insertQuestionHolder .addQuestionInput{
+margin-left: 80px;
+margin-bottom: 10px;
+width: 100px;
+}
+
+#filterQuestions{
+height: 20px;
+}
+
+select{
+width: 100px;
+height: 30px;
+}

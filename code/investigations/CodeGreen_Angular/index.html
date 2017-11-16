@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html ng-app="CodeGreen"> 
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
+    <script src="script.js" type="text/javascript"></script>
+    <link href="stylesheet.css" type="text/css" rel="stylesheet">
+</head>
+ 
+<body ng-controller="MainController">
+    FIND A GIT HUB USER :
+      <form name="searchName" ng-submit="search(username)">
+        <input type="search" required placeholder="User to find" ng-model="username"/>
+         <input type="submit" value="Search"/>
+    </form>
+    {{error}}
+
+    <div ng-show="user">
+    <h1>Hello {{user.name}}</h1>
+    <div>
+        <p>{{user.location}}</p>
+        <p>{{user.id}}</p>
+        <img ng-src="{{user.avatar_url}}" title="{{user.name}}">
+    </div> 
+        Order by:
+        <select ng-model="repoSortOrder">
+            <option value="+name" selected>Name</option>
+            <option value="-stargazers_count">Stars</option>
+            <option value="+language">Language</option>
+       </select>
+        <table>
+            <thead>
+                <tr>
+                    <td>Name</td>
+                     <td>Stars</td>
+                     <td>Languages</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="repo in repos | orderBy:repoSortOrder ">
+                    <td>{{repo.name}}</td>
+                    <td>{{repo.stargazers_count | number}}</td>
+                    <td>{{repo.language}}</td>
+                </tr>
+            </tbody>
+        </table> 
+    
+    </div>
+    
+    <h1>RESTLET INFORMATION</h1>
+    <p><input id="filterQuestions" type="text" placeholder="Search" ng-model="filerQuestions"></p>
+     <table>
+            <thead>
+                <tr>   
+                     <td>Question</td>
+                     <td>Type</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="question in questions | orderBy: 'questionText' | filter : filerQuestions">
+                    <td>{{question.questionText}}</td>
+                    <td>{{question.questionType}}</td>
+                </tr>
+            </tbody>
+        </table>
+    
+     <button class="addQuestionInput" ng-click="someClass=true">Add question</button>
+    
+    <div id="insertQuestionHolder" ng-show="someClass">
+        <form name="insertQuestions" ng-submit="addQuestion(questionText, questionType, questionChoices)">
+            <input class="innputQuestion" type="text" placeholder="Question Type" ng-model="questionText">
+            <input class="innputQuestion" type="text" placeholder="Question Text" ng-model="questionType">
+            <input class="innputQuestion" type="text" placeholder="Question Choices" ng-model="questionChoices">
+            <input class="addQuestionInput" type="submit" value="SEND" ng-click="someClass=false">
+        </form>
+    </div>
+</body>
+
+</html>

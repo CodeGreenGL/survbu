@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21.6 21.6">
+<defs>
+  <style>
+    svg{
+      fill:#ffffff;
+    }
+  </style>
+</defs>
+<path d="M10.8 0C4.8 0 0 4.8 0 10.8c0 6 4.8 10.8 10.8 10.8 6 0 10.8-4.8 10.8-10.8 0-6-4.8-10.8-10.8-10.8m0 16.2v-4H5.4V9.5h5.4v-4l5.4 5.4-5.4 5.3z"/></svg>

@@ -19,7 +19,9 @@ var restletQuestions = function()
     }).then(function successCallback(response)
         {
         $scope.questions = response.data;
+           console.log("Before");
         console.log(response.data);
+           console.log("After");
         }, 
         function errorCallback(response){
         console.error('Error while fetching notes');

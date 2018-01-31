@@ -3,7 +3,7 @@
 
     angular
         .module('sectionsjs')
-        .controller('sectionsDetailCtrl', control);
+        .controller('sectionsListCtrl', control);
 
     control.$inject = [
         '$state',
@@ -31,10 +31,8 @@
         }
 
         vm.update = function(){
-            console.log("Works");
             $state.go('sections_update');
         }
-
 
         vm.sections = sectionsSrvc.getSections();
               

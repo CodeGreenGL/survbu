@@ -5,6 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', [
   'ionic',
+  'questionsjs',
   'sectionsjs' // ADDED our events module
   //'auth0.auth0' //THIS BREAKS THE APP
 ])

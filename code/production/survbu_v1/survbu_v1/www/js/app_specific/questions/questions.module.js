@@ -2,8 +2,8 @@
 	'use strict';
 
 	angular
-		.module('questionsjs', [
-		])
+		.module('questionsjs', [])
+
         .config(function($stateProvider) {
 			$stateProvider
 				.state('questions_list', {

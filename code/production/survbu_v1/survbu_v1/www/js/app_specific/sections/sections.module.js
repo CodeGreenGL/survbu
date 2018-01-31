@@ -2,8 +2,8 @@
 	'use strict';
 
 	angular
-		.module('sectionsjs', [
-		])
+		.module('sectionsjs', [])
+
         .config(function($stateProvider) {
 			$stateProvider
 				.state('sections_list', {

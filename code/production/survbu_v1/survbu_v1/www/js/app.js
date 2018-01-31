@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', [
   'ionic',
-  'questionsjs' // ADDED our events module
+  'sectionsjs' // ADDED our events module
   //'auth0.auth0' //THIS BREAKS THE APP
 ])
 
@@ -28,7 +28,7 @@ angular.module('starter', [
         StatusBar.styleDefault();
       }
       // ADDED START
-      $state.go("questions_list");
+      $state.go("sections_list");
       // ADDED END
 
     });

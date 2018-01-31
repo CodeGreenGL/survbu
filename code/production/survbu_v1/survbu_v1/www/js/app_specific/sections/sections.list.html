@@ -10,8 +10,7 @@
         <div ng-hide="vm.noSections()">
 
             <ion-list>
-                <ion-item ng-click="vm.onItemSelected($index)" ng-repeat="section in vm.sections">
-                    {{section.sectionText}}
+                <ion-item ng-click="vm.onItemSelected($index)" ng-repeat="section in vm.sections">{{section.heading}}
                 </ion-item>
             </ion-list>
 
@@ -29,7 +28,6 @@
         <button class="button button-positive col" style="margin: 5px; color: white;" ng-click="vm.update()" style="position: absolute; width: 50%; left: 50%; transform: translate(-50%,0%);">
             Update
         </button>
-
         <i class="col-20"></i>
     </ion-footer-bar>
 

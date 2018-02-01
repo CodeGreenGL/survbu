@@ -10,7 +10,9 @@
         <div ng-hide="vm.noSections()">
 
             <ion-list>
-                <ion-item ng-click="vm.onItemSelected($index)" ng-repeat="section in vm.sections">{{section.heading}}
+                <!--<ion-item ng-click="vm.onItemSelected($index)" ng-repeat="section in vm.sections">{{section.heading}} <button id="buttonEdit" class="button button-small button-energized">Edit</button> 
+                </ion-item> -->
+                <ion-item ng-click="vm.listQuestions()" ng-repeat="section in vm.sections">{{section.heading}} <button id="buttonEdit" class="button button-small button-energized">Edit</button> 
                 </ion-item>
             </ion-list>
 

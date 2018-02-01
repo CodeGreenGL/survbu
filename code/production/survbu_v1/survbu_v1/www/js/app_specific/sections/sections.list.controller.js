@@ -34,6 +34,11 @@
             $state.go('sections_update');
         }
 
+        vm.listQuestions = function(){
+            console.log("WORKS");
+            $state.go('questions_list')
+        }
+
         vm.sections = sectionsSrvc.getSections();
               
     }

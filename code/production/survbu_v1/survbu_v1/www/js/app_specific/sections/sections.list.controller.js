@@ -35,7 +35,6 @@
         }
 
         vm.listQuestions = function(){
-            console.log("WORKS");
             $state.go('questions_list')
         }
 

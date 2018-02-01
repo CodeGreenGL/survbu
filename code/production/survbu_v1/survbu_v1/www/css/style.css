@@ -1,6 +1,9 @@
 /* Empty. Add your own CSS if you like */
 
 
-#buttonEdit{
+#buttonEdit, #buttonDelete{
 	float: right;
+	width: 50px;
+	margin-left: 5px;
+	margin-right: 5px;
 }

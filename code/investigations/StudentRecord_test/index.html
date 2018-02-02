@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html ng-app="studentRecordApp">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Student Record System</title>
+        <style>
+            html, body, h1, ul {
+                padding: 0;
+                margin: 0;
+            }
+            body {
+                min-height: 600px;
+                background-color: #e9e9e9;
+            }
+            nav {
+                box-shadow: 0px 2px 6px #6e5858;
+                margin-bottom: 6px;
+            }
+            nav ul {
+                list-style: none;
+                max-width: 700px;
+                margin: 0 0 0 14%;
+            }
+            nav li {
+                width: 35%;
+                display: inline-block;
+                font-family: arial,sans-serif;
+                text-align: center;
+            }
+            a {
+                display: block;
+                width: 100%;
+                padding: 13px 0 11px;
+                text-decoration: none;
+                color: white;
+            }
+            nav li:hover {
+                background-color: #5b78bd4d;
+            }
+            h1 {
+                padding: 20px;
+                font-family: arial,sans-serif;
+            }
+            input {
+                width: 90%;
+                margin: 5px;
+            }
+            select {
+                width: 30%;
+                margin: 5px;
+            }
+            .line {
+                border-bottom: 1px solid rgba(0,0,0,.08);
+            }
+            .item {
+                padding: 10px;
+            }
+            .col1 {
+                width: 140px;
+                text-align: left;
+            }
+            .col2 {
+                width: 240px;
+                text-align: left;
+            }
+            .menu {
+                background-color: #3495D4;
+                color: white;
+            }
+            .mainContent {
+                max-width: 70%;
+                margin: 0 auto;
+                background-color: #fff;
+                padding: 15px 25px;
+            }
+            .menuButton {
+                background-color: transparent;
+                color: white;
+                border: none;
+                padding: 13px 0 11px;
+                width: 100%;
+                font-size: 17px;
+            }
+        </style>
+
+    
+    </head>
+     
+    <body ng-controller="MainCtrl as mainCtrl">
+        <nav class="menu">
+        <h1>Student Record System</h1>
+            <ul>
+                <li ng-style="mainCtrl.style(mainCtrl.acli1)"><button class="menuButton" ng-click="mainCtrl.open('stuList')">STUDENTS LIST</button></li><li ng-style="mainCtrl.style(mainCtrl.acli2)"><button class="menuButton" ng-click="mainCtrl.open('addStu')">ADD STUDENT</button></li>
+            </ul>
+        </nav>
+        <div ng-switch on="mainCtrl.tab">
+        <div ng-switch-when="stuList">
+        <div ng-controller="ListCtrl as ctrl">
+        <div class="mainContent">
+        <table>
+            <tr>
+                <th class="col1 line">Student No</th>
+                <th class="col2 line">Student Name</th>
+            </tr>
+            <tr ng-repeat="student in ctrl.items | orderBy:ctrl.sortOrderByNumAsc" class="item">
+                <td class="line"><span ng-bind="student.studentNumber"></span></td>
+                <td class="line"><span ng-bind="student.name"></span></td>
+                <td><button ng-click="ctrl.showEdit(student)">Edit</button></td>
+                <td><button ng-click="ctrl.deleteStudent(student)">Delete</button></td>
+            </tr>
+        </table>
+        <div ng-show="ctrl.editShows"> 
+            <div>
+            <form>
+                <input type="text" ng-model="ctrl.editedStudent.studentNumber"/>
+                <input type="text" placeholder="Name" ng-model="ctrl.editedStudent.name"/>
+                <input type="text" placeholder="Address" ng-model="ctrl.editedStudent.address"/>
+                <input type="text" placeholder="Postcode" ng-model="ctrl.editedStudent.postcode"/>
+                <input type="text" placeholder="DOB" ng-model="ctrl.editStudent.dob"/>
+                <input type="text" placeholder="Gender" ng-model="ctrl.editedStudent.gender"/>
+                <input type="text" placeholder="Course Title: dd/mm/yyyy" ng-model="ctrl.editedStudent.courseTitle"/>
+                <input type="text" placeholder="Start Date: dd/mm/yyyy" ng-model="ctrl.editedStudent.startDate"/>
+                <input type="text" placeholder="Bursary" ng-model="ctrl.editedStudent.bursary"/>
+                <input type="text" placeholder="E-mail" ng-model="ctrl.editedStudent.email"/>
+                </form>
+                <button ng-click="ctrl.updateStudent(ctrl.editedStudent)">Update</button>
+            </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <div ng-switch-when="addStu">
+        <div ng-controller="AddCtrl as aCtrl">
+        <div class="mainContent">
+            <h3>Please enter student information:</h3>
+            <form name="aCtrl.createStudentForm">
+                <input type="text" placeholder="Student Number" ng-model="aCtrl.student.studentNumber">
+                <input type="text" placeholder="Name" ng-model="aCtrl.student.name">
+                <select ng-model="aCtrl.student.gender">
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                </select>
+                <input type="text" placeholder="DOB:dd/mm/yyyy" ng-model="aCtrl.student.dob">
+                <input type="text" placeholder="Address" ng-model="aCtrl.student.address">
+                <input type="text" placeholder="Postcode" ng-model="aCtrl.student.postcode">
+                <input type="text" placeholder="Course Title" ng-model="aCtrl.student.courseTitle">
+                <input type="text" placeholder="Start:dd/mm/yyyy" ng-model="aCtrl.student.startDate">
+                <input type="text" placeholder="Bursary" ng-model="aCtrl.student.bursary">
+                <input type="text" placeholder="E-mail" ng-model="aCtrl.student.email">
+            </form>
+            <button ng-click="aCtrl.createStudent()">Create</button>
+        </div>
+        </div>
+        </div>
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+        <script type="text/javascript">
+            angular.module('studentRecordApp', [])
+            .controller('MainCtrl', [function() {
+                var self = this;
+                self.acli1 = '2px solid white';
+                self.acli2 = 'none';
+                self.tab = 'stuList';
+                self.open = function(tab) {
+                    self.tab = tab;
+                    if (self.tab == 'stuList') {
+                        self.acli1 = '2px solid white';
+                        self.acli2 = 'none';
+                    } else {
+                        self.acli1 = 'none';
+                        self.acli2 = '2px solid white';
+                    };
+                };
+                self.style = function(value) {
+                    return { "border-bottom": value };
+                }
+            }])
+            .controller('ListCtrl', ['$http', function($http) {
+                var self = this;
+                self.items = [];
+                var getList = function() {
+                    $http({
+                        method: 'GET',
+                        url: 'http://localhost:3000/getallstudents',
+                        headers: {
+                            "content-type": "application/json",
+                            "accept": "application/json"
+                        }
+                    }).then(function successCallback(response) {
+                        self.items = response.data;
+                    }, function errorCallback(response) {
+                        console.error('Error while fetching Student Records');
+                        console.error(response);
+                    });
+                };
+
+                getList();
+
+                self.deleteStudent = function(student) {
+                    
+                    var deleteRecord = function() {
+                        var result = {
+                            studentNumber : parseInt(student.studentNumber)
+                        };
+                        return result;
+                    };
+
+                    var student = deleteRecord();
+                    var studentStr = JSON.stringify(student);
+                    
+                    $http({
+                        method: 'DELETE',
+                        url: 'http://localhost:3000/deletestudent',
+                        params: student,
+                        headers: {
+                            'Content-Type': undefined
+                        }
+                    }).then(function successCallback(response) {
+                        getList();
+                    }, function errorCallback(response) {
+                        console.error('Error while deleting Student Record');
+                        console.error(response);
+                    });
+                };
+
+                
+                self.updateStudent = function(student) {
+                
+                    var updateRecord = function() {
+                        var result = {
+                            studentNumber : parseInt(student.studentNumber),
+                            name : student.name,
+                            gender : student.gender,
+                            dob : student.dob,
+                            address : student.address,
+                            postcode : student.postcode,
+                            courseTitle : student.courseTitle,
+                            startDate : student.startDate,
+                            bursary : parseFloat(student.bursary),
+                            email : student.email
+                        };
+                        return result;
+                    };
+
+                    var student = updateRecord();
+                    var studentStr = JSON.stringify(student);
+                    console.log(studentStr);
+
+                    $http({
+                        method: 'PUT',
+                        url: 'http://localhost:3000/updatestudent',
+                        params: {id: student.studentNumber},
+                        data: studentStr,
+                        headers: {
+                            'Content-Type': 'application/json'
+//                            'Accept': 'application/json'
+                        }
+                    }).then(function successCallback(response) {
+                        getList();
+                        self.showEdit(student);
+                    }, function errorCallback(response) {
+                            console.error('Error while updating Student Records');
+                            console.error(response);
+                    });
+                };
+                
+                self.sortOrderByNumAsc = ['+studentNumber'];
+                self.editShows = false;
+                self.showEdit = function(student) {
+                    if (self.editShows == false) {
+                        self.editShows = true;
+                    } else if (self.editedStudent.studentNumber == student.studentNumber) {
+                        self.editShows = false;
+                    };
+                    self.editedStudent = angular.copy(student);
+                };
+            }])
+            .controller('AddCtrl', ['$http', function($http) {
+                var self = this;
+
+                self.student = {
+                    studentNumber: null,
+                    name: null,
+                    gender: null,
+                    dob: null,
+                    address: null,
+                    postcode: null,
+                    courseTitle: null,
+                    startDate: null,
+                    bursary: null,
+                    email: null
+                };
+
+                var createRecord = function() {
+                    var result = {
+                        studentNumber : parseInt(self.student.studentNumber),
+                        name : self.student.name,
+                        gender : self.student.gender,
+                        dob : self.student.dob,
+                        address : self.student.address,
+                        postcode : self.student.postcode,
+                        courseTitle : self.student.courseTitle,
+                        startDate : self.student.startDate,
+                        bursary : parseFloat(self.student.bursary),
+                        email : self.student.email
+                    };
+                    return result;
+                };
+
+                self.createStudent = function() {
+                    var newStudent = createRecord();
+                    var studentStr = JSON.stringify(newStudent);
+                    $http({
+                        method: 'POST',
+                        url: 'http://localhost:3000/createstudent',
+                        data: studentStr,
+                        headers: {
+                            'Content-Type': undefined
+                        }
+                    }).then(function successCallback(response) {
+                        self.createStudentForm.$setPristine();
+                        self.student = null;
+                        // self.items = response.data;
+                    }, function errorCallback(response) {
+                        console.error('Error while creating Student Records');
+                        console.error(response);
+                        console.error(response.status);
+                    });
+                };
+            }]); 
+        </script>
+    </body>
+</html>

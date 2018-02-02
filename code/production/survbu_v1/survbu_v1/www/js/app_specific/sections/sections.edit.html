@@ -1,0 +1,26 @@
+<ion-view style="background-color: #272733;" can-swipe-back="false">
+
+    <ion-header-bar class="bar-dark" align-title="center">
+        <h1 class="title">Edit Section</h1>
+    </ion-header-bar>
+
+		<div class="list" style="margin-top: 40px;">
+		  <label class="item item-input">
+		    <input type="text" placeholder="Section Name">
+		  </label>
+		  <label class="item item-input">
+		    <input type="text" placeholder="Section Description">
+		  </label>
+		</div>
+
+	<ion-footer-bar class="bar bar-dark bar-footer row" style="position:fixed; bottom:0px; padding: 0px;">
+        <i class="col-20"></i>
+
+        <button class="button button-positive col" ng-click="vm.update()" style="margin: 5px; color: white; position: absolute; width: 50%; left: 50%; transform: translate(-50%,0%);">
+            Save
+        </button>
+
+        <i class="col-20"></i>
+    </ion-footer-bar>
+
+<ion-view>

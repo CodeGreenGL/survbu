@@ -2,25 +2,28 @@
     'use strict';
 
     angular
-        .module('questionsjs')
-        .controller('questionsUpdateCtrl', control);
+        .module('surveysjs')
+        .controller('surveysUpdateCtrl', control);
 
     control.$inject = [
         '$state',
-        'questionsSrvc'
+        'surveysSrvc'
         ];
     
     function control(
         $state,
-        questionsSrvc
+        surveysSrvc
     ) {
         var vm = angular.extend(this, {
             
          });
+        
 
+      
+      
         // TODO: Error Handling
-        questionsSrvc.updateQuestions().then(function(){
-            $state.go('questions_list');
+        surveysSrvc.updateSurveys().then(function(){
+            $state.go('surveys_list');
         });    
     }
 })();

@@ -1,24 +1,22 @@
 <ion-view style="background-color: #272733;" can-swipe-back="false">
 
     <ion-header-bar class="bar-dark" align-title="center">
-        <h1 class="title">Sections</h1>
+        <h1 class="title">Surveys</h1>
     </ion-header-bar>
 
     <ion-content class="has-header">
 
 
-        <div ng-hide="vm.noSections()">
+        <div ng-hide="vm.nosurveys()">
 
             <ion-list>
-                <!--<ion-item ng-click="vm.onItemSelected($index)" ng-repeat="section in vm.sections">{{section.heading}} <button id="buttonEdit" class="button button-small button-energized">Edit</button> 
-                </ion-item> -->
-                <ion-item class="test" ng-click="vm.listQuestions()" ng-repeat="section in vm.sections">{{section.heading}} <button ng-click="vm.editSection()" id="buttonEdit" class="button button-small button-energized">Edit</button> <button id="buttonDelete" class="button button-small button-assertive">Delete</button>
+                <ion-item ng-click="vm.onItemSelected($index)" ng-repeat="section in vm.surveys">{{section.heading}}
                 </ion-item>
             </ion-list>
 
         </div>
 
-        <div ng-hide="!vm.noSections()" style="margin-top: 140px; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        <div ng-hide="!vm.noSurveys()" style="margin-top: 140px; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
             <h1 class="light">No Items Yet!</h1>
         </div>
 

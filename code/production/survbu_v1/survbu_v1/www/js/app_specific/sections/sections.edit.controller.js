@@ -3,7 +3,7 @@
 
     angular
         .module('sectionsjs')
-        .controller('sectionsListCtrl', control);
+        .controller('sectionsEditCtrl', control);
 
     control.$inject = [
         '$state',
@@ -35,15 +35,15 @@
         }
 
         vm.listQuestions = function(){
-            $state.go('questions_update');
+            $state.go('questions_list');
         }
-    //add $event to the function as param - this should prevent double clikcing on ng-click (I found it still now working.)
+
         vm.editSection = function(){
-            //$event.stopPropagation();
             $state.go('sections_edit');
         }
 
         vm.sections = sectionsSrvc.getSections();
+              
               
     }
 })();

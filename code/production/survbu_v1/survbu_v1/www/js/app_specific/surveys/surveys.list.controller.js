@@ -2,20 +2,20 @@
     'use strict';
 
     angular
-        .module('questionsjs')
-        .controller('questionsListCtrl', control);
+        .module('surveysjs')
+        .controller('surveysListCtrl', control);
 
     control.$inject = [
         '$state',
-        'questionsSrvc'
+        'surveysSrvc'
         ];
     
     function control(
         $state,
-        questionsSrvc
+        surveysSrvc
     ) {
         var vm = angular.extend(this, {
-            questions : []
+            surveys : []
          });
         
         vm.onItemSelected = function(index){
@@ -23,18 +23,18 @@
             // we're passing parameters into the new state
             // 'selected is an attribute in a parameter object, defined in the module definition
             // I'm going to write the destination controller, so it knows to look for an object with a 'selected' attribute
-            $state.go('questions_detail', {selected: index});
+            $state.go('surveys_detail', {selected: index}); // NEEDS TO BE CHANGED TO THE APPOPRIATE STATE !!!
         }
 
-        vm.noQuestions = function(){
-            return vm.questions.length == 0;
+        vm.nosurveys = function(){
+            return vm.surveys.length == 0;
         }
 
         vm.update = function(){
-            $state.go('questions_update');
+            $state.go('surveys_update');
         }
 
-        vm.questions = questionsSrvc.getQuestions();
+        vm.surveys = surveysSrvc.getsurveys();
               
     }
 })();

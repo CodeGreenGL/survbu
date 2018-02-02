@@ -26,6 +26,14 @@
                     controller: 'sectionsDetailCtrl as vm'
                 })
 
+                .state('sections_edit', {
+					cache: false,
+					url: '/sections_edit',
+                    templateUrl: 'js/app_specific/sections/sections.edit.html',
+                    params: {'selected': 0 },
+                    controller: 'sectionsEditCtrl as vm'
+                })
+
             });
 				
 })();

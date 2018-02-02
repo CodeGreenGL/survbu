@@ -44,6 +44,10 @@
             $state.go('sections_edit');
         }
 
+        vm.backToSurveysButton = function(){
+            $state.go('surveys_update');
+        };
+
         vm.sections = sectionsSrvc.getSections();
               
     }

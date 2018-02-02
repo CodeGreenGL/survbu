@@ -34,6 +34,10 @@
             $state.go('questions_update');
         }
 
+        vm.backToQuestionsButton = function(){
+            $state.go('sections_update');
+        };
+
         vm.questions = questionsSrvc.getQuestions();
               
     }

@@ -34,6 +34,7 @@
             $state.go('sections_update');
         }
 
+        //take you to the questions list and updates the list
         vm.listQuestions = function(){
             $state.go('questions_update');
         }

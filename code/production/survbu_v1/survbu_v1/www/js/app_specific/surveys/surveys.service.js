@@ -24,7 +24,7 @@
             var deferred = $q.defer();
 
             $http({
-                url: 'https://codegreen.restlet.net/v1/surveySurveys/',
+                url: 'https://codegreen.restlet.net/v1/surveys/',
                 headers : {
                     "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
                     "content-type": "application/json",

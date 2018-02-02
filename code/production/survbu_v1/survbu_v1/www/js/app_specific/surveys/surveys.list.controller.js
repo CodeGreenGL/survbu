@@ -26,7 +26,7 @@
             $state.go('surveys_detail', {selected: index}); // NEEDS TO BE CHANGED TO THE APPOPRIATE STATE !!!
         }
 
-        vm.nosurveys = function(){
+        vm.noSurveys = function(){
             return vm.surveys.length == 0;
         }
 
@@ -34,7 +34,7 @@
             $state.go('surveys_update');
         }
 
-        vm.surveys = surveysSrvc.getsurveys();
+        vm.surveys = surveysSrvc.getSurveys();
               
     }
 })();

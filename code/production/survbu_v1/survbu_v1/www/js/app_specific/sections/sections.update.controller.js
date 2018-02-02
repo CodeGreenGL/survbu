@@ -17,9 +17,7 @@
         var vm = angular.extend(this, {
             
          });
-        
 
-      
       
         // TODO: Error Handling
         sectionsSrvc.updateSections().then(function(){

@@ -6,7 +6,8 @@
 angular.module('starter', [
   'ionic',
   'questionsjs',
-  'sectionsjs' // ADDED our events module
+  'sectionsjs',
+  'surveysjs' // ADDED our events module
   //'auth0.auth0' //THIS BREAKS THE APP
 ])
 
@@ -29,7 +30,7 @@ angular.module('starter', [
         StatusBar.styleDefault();
       }
       // ADDED START
-      $state.go("sections_list");
+      $state.go("surveys_update");
       // ADDED END
 
     });

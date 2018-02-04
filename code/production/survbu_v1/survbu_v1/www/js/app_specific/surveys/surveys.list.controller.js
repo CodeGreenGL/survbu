@@ -7,12 +7,14 @@
 
     control.$inject = [
         '$state',
-        'surveysSrvc'
+        'surveysSrvc',
+        'sectionsSrvc'
         ];
     
     function control(
         $state,
-        surveysSrvc
+        surveysSrvc,
+        sectionsSrvc
     ) {
         var vm = angular.extend(this, {
             surveys : []
@@ -32,7 +34,12 @@
             // we're passing parameters into the new state
             // 'selected is an attribute in a parameter object, defined in the module definition
             // I'm going to write the destination controller, so it knows to look for an object with a 'selected' attribute
-            $state.go('sections_update', {selected: index}); // NEEDS TO BE CHANGED TO THE APPOPRIATE STATE !!!
+            // TODO: Error Handling
+            $state.go('sections_list', {selected: index});
+            sectionsSrvc.updateSections().then(function(){
+                $state.reload();
+               
+            });
         }
 
 

@@ -47,6 +47,7 @@
         }
 
         service.updateSections = function(){
+            sectionsArray = [];
             return promiseToUpdateSections();   
         } 
 

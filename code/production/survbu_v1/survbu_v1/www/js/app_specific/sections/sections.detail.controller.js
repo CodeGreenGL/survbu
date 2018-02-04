@@ -24,7 +24,7 @@
          });
         
 
-        vm.done = function(){
+        vm.updateSection = function(){
             $state.go('sections_list');
         }
 

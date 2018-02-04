@@ -15,7 +15,7 @@
         $http
     ) {
 
-        var surveysArray = [];
+        var surveysArray = []; //Set up initial values here for debugging
 
         var service = { };
        

@@ -7,12 +7,14 @@
 
     control.$inject = [
         '$state',
-        'sectionsSrvc'
+        'sectionsSrvc',
+        'questionsSrvc'
         ];
     
     function control(
         $state,
-        sectionsSrvc
+        sectionsSrvc,
+        questionsSrvc
     ) {
         var vm = angular.extend(this, {
             sections : []
@@ -38,12 +40,18 @@
         vm.listQuestions = function(){
             $state.go('questions_update');
         }
+
         vm.listQuestionsButton = function(){
+             // TODO: Error Handling
             $state.go('questions_list');
+            questionsSrvc.updateQuestions().then(function(){
+                $state.reload();
+                questionsSrvc.isWaiting(false);
+            });    
         }
+
     //add $event to the function as param - this should prevent double clikcing on ng-click (I found it still now working.)
         vm.editSection = function($event){
-            console.log("WORKS EDIT");
             $event.stopPropagation();
             $state.go('sections_edit');
         }

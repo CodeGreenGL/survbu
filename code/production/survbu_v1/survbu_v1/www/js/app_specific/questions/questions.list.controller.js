@@ -1,6 +1,5 @@
 (function () {
     'use strict';
-
     angular
         .module('questionsjs')
         .controller('questionsListCtrl', control);
@@ -15,9 +14,12 @@
         questionsSrvc
     ) {
         var vm = angular.extend(this, {
-            questions : []
+            questions : [],
+            stillWaits : questionsSrvc.isItWaiting()
          });
         
+       
+
         vm.onItemSelected = function(index){
 
             // we're passing parameters into the new state
@@ -38,7 +40,14 @@
             $state.go('sections_update');
         };
 
+        vm.stillWaiting = function(){
+            console.log("STILL WAITS " + vm.stillWaits);
+            return vm.stillWaits;
+        };
+        
         vm.questions = questionsSrvc.getQuestions();
+
+        //vm.stillWaits = questionsSrvc.isItWaiting();
               
     }
 })();

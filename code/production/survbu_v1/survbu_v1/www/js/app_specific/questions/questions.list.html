@@ -21,6 +21,28 @@
         <div ng-hide="!vm.noQuestions()" style="margin-top: 140px; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
             <h1 class="light">No Items Yet!</h1>
         </div>
+        
+        <div ng-hide="!vm.noQuestions() && vm.stillWaiting()" style="margin-top: 140px; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+            <div style="text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                <h1 class="light">Updating</h1>
+            </div>
+         
+            <div style="position: absolute; top: 100%; left: 50%; transform: translate(-50%, -100%);">
+                <ion-spinner icon="ios" class="spinner-light"/>
+            </div>
+        </div>
+
+       <!-- <span ng-hide="vm.stillWaiting()">Still Waiting is false</span><br>
+        <span ng-hide="!vm.stillWaiting()">Still Waiting is true</span><br>
+        <span ng-hide="!vm.stillWaiting() && !vm.noQuestions()">Still Waiting == true && NoQuestion == true</span><br>
+        <span ng-hide="vm.stillWaiting() && vm.noQuestions()">Still Waiting == false && NoQuestions == false</span><br>
+
+         <span ng-hide="!vm.stillWaiting() && vm.noQuestions()">Still Waiting == true && NoQuestions == false</span><br>
+
+          <span ng-hide="vm.stillWaiting() && !vm.noQuestions()">Still Waiting == false && NoQuestions == true</span> -->
+        
+
+
 
     </ion-content>
 

@@ -16,6 +16,7 @@
     ) {
 
         var questionsArray = [];
+        var slon = true;
 
         var service = { };
        
@@ -62,6 +63,17 @@
             return angular.copy(questionsArray[index]);
         }
 
+       service.isWaiting = function(nWait){
+            slon = nWait;
+            console.log("GET FINISHED " + nWait + " Slon : " + slon);
+            //return slon = nWait;
+        }
+
+
+        service.isItWaiting = function(){
+            console.log("isItWaiting " + slon);
+            return slon;
+        };
 
         return service;
 

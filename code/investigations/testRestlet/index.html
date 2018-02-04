@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html ng-app="notesApp">
+    <head>
+
+        <title>Notes App</title>
+        <style>
+            .item {
+                padding: 10px;
+            }
+        </style>
+
+    
+    </head>
+     
+    <body ng-controller="MainCtrl as ctrl">
+        <h1>Hello Servers!</h1>
+        <div ng-repeat="question in ctrl.items" class="item">
+            <div><span ng-bind="question.questionType"></span></div>
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+        <script type="text/javascript">
+            angular.module('notesApp', [])
+            .controller('MainCtrl', ['$http', function($http) {
+                var self = this;
+                self.items = [];
+                $http({
+                    method: 'GET',
+                    url: 'https://codegreen.restlet.net/v1/questions/',
+                    headers : {
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                        "content-type": "application/json",
+                        "accept": "application/json",
+                    }
+
+                }).then(function successCallback(response) {
+                    self.items = response.data;
+                    }, function errorCallback(response) {
+                        console.error('Error while fetching notes');
+                        console.error(response);
+                    });
+                }]);
+        </script>
+    </body>
+</html>

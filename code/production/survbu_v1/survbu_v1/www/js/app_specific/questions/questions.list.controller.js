@@ -40,7 +40,13 @@
         
         vm.questions = questionsSrvc.getQuestions();
 
-        //vm.stillWaits = questionsSrvc.isItWaiting();
-              
+        vm.hideQList = function() {
+            return (vm.stillWaiting() || vm.noQuestions());
+        };
+
+        vm.hideNoItems = function() {
+            return (vm.stillWaiting() || !vm.noQuestions());
+        };
+
     }
 })();

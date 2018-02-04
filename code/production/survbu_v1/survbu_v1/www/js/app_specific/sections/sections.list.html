@@ -1,9 +1,9 @@
-<ion-view style="background-color: #272733;" can-swipe-back="false">
+<ion-view view-title="Sections" style="background-color: #272733;" can-swipe-back="false">
 
-    <ion-header-bar class="bar-dark" align-title="center">
+    <ion-nav-bar class="bar-dark" align-title="center">
         <button ng-click="vm.backToSurveysButton()" class="button button-small button-positive">Back</button>
         <h1 class="title">Sections</h1>
-    </ion-header-bar>
+    </ion-nav-bar>
 
     <ion-content class="has-header">
 
@@ -15,7 +15,7 @@
                 <ion-item class="test" ng-click="vm.listQuestions()" ng-repeat="section in vm.sections">{{section.heading}} <button ng-click="vm.editSection($event)" id="buttonEdit" class="button button-small button-energized">Edit</button> <button id="buttonDelete" class="button button-small button-assertive">Delete</button>
                 </ion-item>
             </ion-list>
-
+            <button ng-click="vm.listQuestionsButton()">Next</button>
         </div>
 
         <div ng-hide="!vm.noSections()" style="margin-top: 140px; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">

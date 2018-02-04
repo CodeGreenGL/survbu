@@ -12,7 +12,7 @@
             <ion-list>
                 <!--<ion-item ng-click="vm.onItemSelected($index)" ng-repeat="section in vm.sections">{{section.heading}} <button id="buttonEdit" class="button button-small button-energized">Edit</button> 
                 </ion-item> -->
-                <ion-item class="test" ng-click="vm.listQuestions()" ng-repeat="section in vm.sections">{{section.heading}} <button ng-click="vm.editSection()" id="buttonEdit" class="button button-small button-energized">Edit</button> <button id="buttonDelete" class="button button-small button-assertive">Delete</button>
+                <ion-item class="test" ng-click="vm.listQuestions()" ng-repeat="section in vm.sections">{{section.heading}} <button ng-click="vm.editSection($event)" id="buttonEdit" class="button button-small button-energized">Edit</button> <button id="buttonDelete" class="button button-small button-assertive">Delete</button>
                 </ion-item>
             </ion-list>
 

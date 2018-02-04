@@ -39,8 +39,9 @@
             $state.go('questions_update');
         }
     //add $event to the function as param - this should prevent double clikcing on ng-click (I found it still now working.)
-        vm.editSection = function(){
-            //$event.stopPropagation();
+        vm.editSection = function($event){
+            console.log("WORKS EDIT");
+            $event.stopPropagation();
             $state.go('sections_edit');
         }
 

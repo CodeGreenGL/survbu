@@ -17,14 +17,8 @@
             questions : [],
             stillWaits : questionsSrvc.isItWaiting()
          });
-        
-       
 
         vm.onItemSelected = function(index){
-
-            // we're passing parameters into the new state
-            // 'selected is an attribute in a parameter object, defined in the module definition
-            // I'm going to write the destination controller, so it knows to look for an object with a 'selected' attribute
             $state.go('questions_detail', {selected: index});
         }
 
@@ -41,7 +35,6 @@
         };
 
         vm.stillWaiting = function(){
-            console.log("STILL WAITS " + vm.stillWaits);
             return vm.stillWaits;
         };
         

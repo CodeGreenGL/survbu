@@ -21,27 +21,22 @@
          });
         
         vm.onItemSelectedEdit = function(index){
-
-            // we're passing parameters into the new state
-            // 'selected is an attribute in a parameter object, defined in the module definition
-            // I'm going to write the destination controller, so it knows to look for an object with a 'selected' attribute
             $state.go('surveys_detail', {selected: index}); // NEEDS TO BE CHANGED TO THE APPOPRIATE STATE !!!
         }
 
-
-        vm.onItemSelectedSecList = function(index){
-
-            // we're passing parameters into the new state
-            // 'selected is an attribute in a parameter object, defined in the module definition
-            // I'm going to write the destination controller, so it knows to look for an object with a 'selected' attribute
-            // TODO: Error Handling
-            $state.go('sections_list', {selected: index});
-            sectionsSrvc.updateSections().then(function(){
-                $state.reload();
-               
-            });
+        vm.editSurveys = function($event){
+            $event.stopPropagation();
+            $state.go('surveys_detail');
         }
 
+        vm.onItemSelectedSecList = function(index){
+            sectionsSrvc.isWaiting(true);
+            $state.go('sections_list'); //, {selected: index});
+            sectionsSrvc.updateSections().then(function(){
+                $state.reload();
+                sectionsSrvc.isWaiting(true); 
+            });
+        }
 
         vm.noSurveys = function(){
             return vm.surveys.length == 0;

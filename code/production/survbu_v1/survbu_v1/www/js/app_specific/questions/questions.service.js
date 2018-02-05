@@ -64,13 +64,13 @@
             return angular.copy(questionsArray[index]);
         }
 
-       service.isWaiting = function(iWait){
+        service.isWaiting = function(iWait){
             waitingState = iWait;
         }
 
         service.isItWaiting = function(){
             return waitingState;
-        };
+        }
 
         return service;
     }

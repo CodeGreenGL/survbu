@@ -7,8 +7,10 @@
     <ion-content class="has-header">
 
         <div  style="margin-top: 140px; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-            <h3 class="light">Question: {{vm.question.questionText}}</h3>
-            <h3 class="light">Type: {{vm.question.questionType}}</h3>
+            <h3 class="light">Question:</h3>
+            <input type="text" placeholder="Question text" ng-model="vm.question.questionText"/>
+            <h3 class="light">Type:</h3>
+            <input type="text" placeholder="Question type" ng-model="vm.question.questionType"/>
         </div>
 
     </ion-content>

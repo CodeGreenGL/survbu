@@ -17,7 +17,8 @@
         questionsSrvc
     ) {
         var vm = angular.extend(this, {
-            sections : []
+            sections : [],
+            stillWaits : sectionsSrvc.isItWaiting()
          });
         
         vm.onItemSelected = function(index){
@@ -36,7 +37,6 @@
         vm.listQuestions = function(){
             questionsSrvc.isWaiting(true);
             $state.go('questions_list');
-            console.log("does it log the previous list?");
             questionsSrvc.updateQuestions().then(function(){
                 $state.reload();
                 questionsSrvc.isWaiting(false);
@@ -48,11 +48,23 @@
             $state.go('sections_edit');
         }
 
-        vm.backToSurveysButton = function(){ //NEEDS REMOVING
-            $state.go('surveys_update');
+//        vm.backToSurveysButton = function(){ //NEEDS REMOVING
+//            $state.go('surveys_update');
+//        };
+
+        vm.stillWaiting = function(){
+            return vm.stillWaits();
         };
 
         vm.sections = sectionsSrvc.getSections();
-              
+        
+        vm.hideSList = function() {
+            return (vm.stillWaiting() || !vm.noSections());
+        };
+
+        vm.hideNoItems = function() {
+            return (vm.stillWaiting() || !vm.noSections());
+        };
+
     }
 })();

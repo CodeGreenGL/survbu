@@ -12,12 +12,6 @@
 					templateUrl: 'js/app_specific/sections/sections.list.html',
                     controller: 'sectionsListCtrl as vm'
                 })
-                .state('sections_update', {
-					cache: false,
-					url: '/sections_update',
-					templateUrl: 'js/app_specific/sections/sections.update.html',
-                    controller: 'sectionsUpdateCtrl as vm'
-                })
                 .state('sections_detail', {
 					cache: false,
 					url: '/sections_detail',

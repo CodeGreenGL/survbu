@@ -16,6 +16,7 @@
     ) {
 
         var sectionsArray = [];
+        var waitingState = true;
 
         var service = { };
        
@@ -63,10 +64,14 @@
             return angular.copy(sectionsArray[index]);
         }
 
+        service.isWaiting = function(iWait){
+            waitingState = iWait;
+        }
+
+        service.isItWaiting = function(){
+            return waitingState;
+        }
 
         return service;
-
     }
-
-    
 })();

@@ -26,8 +26,6 @@
             });
         };
 
-
-
         //        vm.backToQuestionsButton = function(){
         //            $state.go('sections_update');
         //        };

@@ -25,7 +25,6 @@
                 }
             });
 
-
         vm.done = function () {
             $state.go('questions_list');
         };

@@ -18,8 +18,8 @@
     ) {
         var vm = angular.extend(this, {
             section : {
-                sectionText: "no text",
-                sectionType: "no type"
+                heading: "no text",
+                introductionMessage: "no type"
             }
          });
         

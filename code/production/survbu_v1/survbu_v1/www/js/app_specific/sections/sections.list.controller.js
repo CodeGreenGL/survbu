@@ -21,7 +21,8 @@
             stillWaits : sectionsSrvc.isItWaiting()
          });
         
-        vm.onItemSelected = function(index){
+        vm.onItemSelected = function($event,index){
+            $event.stopPropagation();
             $state.go('sections_detail', {selected: index}); // NEEDS TO BE CHANGED TO THE APPOPRIATE STATE !!!
         }
 
@@ -30,7 +31,7 @@
         }
 
         vm.update = function(){
-            $state.go('sections_update');
+            $state.go('sections_list');
         }
 
         //take you to the questions list and updates the list
@@ -43,10 +44,10 @@
             });    
         }
 
-        vm.editSection = function($event){
-            $event.stopPropagation();
-            $state.go('sections_edit');
-        }
+//        vm.editSection = function($event){
+//            $event.stopPropagation();
+//            $state.go('sections_edit');
+//        }
 
 //        vm.backToSurveysButton = function(){ //NEEDS REMOVING
 //            $state.go('surveys_update');
@@ -54,17 +55,17 @@
 
         vm.stillWaiting = function(){
             return vm.stillWaits;
-        };
+        }
 
         vm.sections = sectionsSrvc.getSections();
         
         vm.hideSList = function() {
             return (vm.stillWaiting() || vm.noSections());
-        };
+        }
 
         vm.hideNoItems = function() {
             return (vm.stillWaiting() || !vm.noSections());
-        };
+        }
 
     }
 })();

@@ -17,9 +17,9 @@
         surveysSrvc
     ) {
         var vm = angular.extend(this, {
-            section : {
-                sectionText: "no text",
-                sectionType: "no type"
+            survey : {
+                introductionMessage: "no text",
+                completionMessage: "no type"
             }
          });
         

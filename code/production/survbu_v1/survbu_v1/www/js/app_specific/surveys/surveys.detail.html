@@ -7,9 +7,16 @@
 
     <ion-content class="has-header">
 
-        <div  style="margin-top: 140px; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-            <h3 class="light">Title: {{vm.survey.introductionMessage}}</h3>
-            <h3 class="light">Description: {{vm.survey.completionMessage}}</h3>
+        <div  style="margin-top: 140px; text-align: center; position: absolute; top: 50%; left: 50%; width: 50%; transform: translate(-50%, -50%);">
+            <h3 class="light">Title:</h3>
+            <label class="item item-input">
+                <input type="text" placeholder="Intro Message" ng-model="vm.survey.introductionMessage"/>
+            </label>
+
+            <h3 class="light">Description:</h3>
+            <label class="item item-input">
+                <input type="text" placeholder="Completion Message" ng-model="vm.survey.completionMessage"/>
+            </label>
         </div>
 
     </ion-content>

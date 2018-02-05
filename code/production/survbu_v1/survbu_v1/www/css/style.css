@@ -1,15 +1,8 @@
-/* Empty. Add your own CSS if you like */
-
-
-#buttonEdit, #buttonDelete{
+.contextButton {
 	float: right;
-	width: 50px;
+	width: 60px;
 	margin-left: 5px;
 	margin-right: 5px;
-}
-
-#buttonGoBack{
-	color: green;
 }
 
 span{

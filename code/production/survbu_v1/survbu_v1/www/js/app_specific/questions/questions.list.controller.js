@@ -1,5 +1,7 @@
+/*global angular */
 (function () {
     'use strict';
+    
     angular
         .module('questionsjs')
         .controller('questionsListCtrl', control);
@@ -21,33 +23,34 @@
         vm.onItemSelected = function(index){
             $state.go('questions_detail', {selected: index});
         }
-
-        vm.noQuestions = function(){
-            return vm.questions.length == 0;
-        }
-
-        vm.update = function(){
-            $state.go('questions_update');
-        }
+        
+        
 
 //        vm.backToQuestionsButton = function(){
 //            $state.go('sections_update');
 //        };
-
-
-        vm.stillWaiting = function(){
+        
+        vm.update = function(){
+            $state.go('questions_update');
+        }
+        
+        vm.stillWaiting = function () {
             return vm.stillWaits;
         };
         
+        vm.noContent = function () {
+            return vm.questions.length === 0;
+        };
+        
+        vm.hideList = function () {
+            return (vm.stillWaiting() || vm.noContent());
+        };
+
+        vm.hideNoItems = function () {
+            return (vm.stillWaiting() || !vm.noContent());
+        };
+        
         vm.questions = questionsSrvc.getQuestions();
-
-        vm.hideQList = function() {
-            return (vm.stillWaiting() || vm.noQuestions());
-        };
-
-        vm.hideNoItems = function() {
-            return (vm.stillWaiting() || !vm.noQuestions());
-        };
 
     }
 })();

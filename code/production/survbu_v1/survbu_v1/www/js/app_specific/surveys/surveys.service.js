@@ -1,3 +1,4 @@
+/*global angular */
 (function () {
     'use strict';
 
@@ -17,18 +18,18 @@
 
         var surveysArray = []; //Set up initial values here for debugging
 
-        var service = { };
-       
+        var service = {};
+
         //get all surveys from codegreen restlet; returns deferred promise
-        var getAllSurveys = function(){
+        var getAllSurveys = function () {
             var deferred = $q.defer();
 
             $http({
                 url: 'https://codegreen.restlet.net/v1/surveys/',
-                headers : {
+                headers: {
                     "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
                     "content-type": "application/json",
-                    "accept": "application/json",
+                    "accept": "application/json"
                 }
             }).then(function successCallback(response) {
                 surveysArray = response.data;
@@ -37,35 +38,32 @@
                 console.error('Error while fetching notes');
                 console.error(response);
             });
-            
+
             return deferred.promise;
         }
 
-        var promiseToUpdateSurveys = function(){
+        var promiseToUpdateSurveys = function () {
             // returns a promise
             return getAllSurveys();
-        }
+        };
 
-        service.updateSurveys = function(){
-            return promiseToUpdateSurveys();   
-        } 
+        service.updateSurveys = function () {
+            return promiseToUpdateSurveys();
+        };
 
-        service.getSurveys = function(){
+        service.getSurveys = function () {
             return angular.copy(surveysArray);
-        }
+        };
 
-        service.getNumSurveys = function(){
+        service.getNumSurveys = function () {
             return surveysArray.length;
-        }
+        };
 
-        service.getSectionAt = function(index){
+        service.getSectionAt = function (index) {
             return angular.copy(surveysArray[index]);
-        }
-
+        };
 
         return service;
-
     }
 
-    
-})();
+}());

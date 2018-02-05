@@ -1,3 +1,4 @@
+/*global angular */
 (function () {
     'use strict';
 
@@ -9,63 +10,60 @@
         '$state',
         'sectionsSrvc',
         'questionsSrvc'
-        ];
-    
-    function control(
-        $state,
+    ];
+
+    function control($state,
         sectionsSrvc,
         questionsSrvc
     ) {
         var vm = angular.extend(this, {
-            sections : [],
-            stillWaits : sectionsSrvc.isItWaiting()
-         });
-        
-        vm.onItemSelected = function($event,index){
+            sections: [],
+            stillWaits: sectionsSrvc.isItWaiting()
+        });
+
+        vm.onItemSelected = function ($event, index) {
             $event.stopPropagation();
-            $state.go('sections_detail', {selected: index}); // NEEDS TO BE CHANGED TO THE APPOPRIATE STATE !!!
-        }
-
-        vm.noSections = function(){
-            return vm.sections.length == 0;
-        }
-
-        vm.update = function(){
-            $state.go('sections_list');
-        }
+            $state.go('sections_detail', {
+                selected: index
+            }); // NEEDS TO BE CHANGED TO THE APPOPRIATE STATE !!!
+        };
 
         //take you to the questions list and updates the list
-        vm.listQuestions = function(){
+        vm.listQuestions = function () {
             questionsSrvc.isWaiting(true);
             $state.go('questions_list');
-            questionsSrvc.updateQuestions().then(function(){
+            questionsSrvc.updateQuestions().then(function () {
                 $state.reload();
                 questionsSrvc.isWaiting(false);
-            });    
-        }
+            });
+        };
 
-//        vm.editSection = function($event){
-//            $event.stopPropagation();
-//            $state.go('sections_edit');
-//        }
+        //        vm.editSection = function($event){
+        //            $event.stopPropagation();
+        //            $state.go('sections_edit');
+        //        }
 
-//        vm.backToSurveysButton = function(){ //NEEDS REMOVING
-//            $state.go('surveys_update');
-//        };
+        vm.update = function () {
+            $state.go('sections_list');
+        };
 
-        vm.stillWaiting = function(){
+        vm.stillWaiting = function () {
             return vm.stillWaits;
-        }
+        };
+
+        vm.noContent = function () {
+            return vm.sections.length === 0;
+        };
+
+        vm.hideList = function () {
+            return (vm.stillWaiting() || vm.noContent());
+        };
+
+        vm.hideNoItems = function () {
+            return (vm.stillWaiting() || !vm.noContent());
+        };
 
         vm.sections = sectionsSrvc.getSections();
-        
-        vm.hideSList = function() {
-            return (vm.stillWaiting() || vm.noSections());
-        }
-
-        vm.hideNoItems = function() {
-            return (vm.stillWaiting() || !vm.noSections());
-        }
 
     }
-})();
+}());

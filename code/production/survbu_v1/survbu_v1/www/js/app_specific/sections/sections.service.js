@@ -1,3 +1,4 @@
+/*global angular */
 (function () {
     'use strict';
 
@@ -14,64 +15,62 @@
         $q,
         $http
     ) {
-
-        var sectionsArray = [];
-        var waitingState = true;
-
-        var service = { };
-       
         //get all sections from codegreen restlet; returns deferred promise
-        var getAllSections = function(){
-            var deferred = $q.defer();
+        var sectionsArray = [],
+            waitingState = true,
+            service = {},
+            getAllSections = function () {
+                var deferred = $q.defer();
 
-            $http({
-                url: 'https://codegreen.restlet.net/v1/surveySections/',
-                headers : {
-                    "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
-                    "content-type": "application/json",
-                    "accept": "application/json",
-                }
-            }).then(function successCallback(response) {
-                sectionsArray = response.data;
-                deferred.resolve(sectionsArray);
-            }, function errorCallback(response) {
-                console.error('Error while fetching notes');
-                console.error(response);
-            });
-            
-            return deferred.promise;
-        }
+                $http({
+                    url: 'https://codegreen.restlet.net/v1/surveySections/',
+                    headers: {
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                        "content-type": "application/json",
+                        "accept": "application/json"
+                    }
+                }).then(function successCallback(response) {
+                    sectionsArray = response.data;
+                    deferred.resolve(sectionsArray);
+                }, function errorCallback(response) {
+                    console.error('Error while fetching notes');
+                    console.error(response);
+                });
 
-        var promiseToUpdateSections = function(){
+                return deferred.promise;
+            };
+
+        var promiseToUpdateSections = function () {
             // returns a promise
             return getAllSections();
-        }
+        };
 
-        service.updateSections = function(){
+        service.updateSections = function () {
             sectionsArray = [];
-            return promiseToUpdateSections();   
-        } 
+            return promiseToUpdateSections();
+        };
 
-        service.getSections = function(){
+        service.getSections = function () {
             return angular.copy(sectionsArray);
-        }
+        };
 
-        service.getNumSections = function(){
+        service.getNumSections = function () {
             return sectionsArray.length;
-        }
+        };
 
-        service.getSectionAt = function(index){
+        service.getSectionAt = function (index) {
             return angular.copy(sectionsArray[index]);
-        }
+        };
 
-        service.isWaiting = function(iWait){
+        service.isWaiting = function (iWait) {
             waitingState = iWait;
-        }
+        };
 
-        service.isItWaiting = function(){
+        service.isItWaiting = function () {
             return waitingState;
-        }
+        };
 
         return service;
+
     }
 })();

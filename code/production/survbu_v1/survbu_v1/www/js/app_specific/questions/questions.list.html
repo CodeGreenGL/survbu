@@ -1,53 +1,46 @@
 <ion-view view-title="Questions" style="background-color: #272733;" can-swipe-back="false">
 
     <ion-nav-bar class="bar-dark" align-title="center">
-           <ion-nav-back-button>
-           </ion-nav-back-button>
+        <ion-nav-back-button/>
     </ion-nav-bar>
 
     <ion-content class="has-header">
 
-        <div ng-hide="vm.hideQList()">
+        <div ng-hide="vm.hideList()">
 
             <ion-list>
-                <ion-item ng-click="vm.onItemSelected($index)" ng-repeat="question in vm.questions">{{question.questionText}} <button class="button button-small button-addertive">Delete</button>
+                <ion-item ng-click="vm.onItemSelected($index)" ng-repeat="question in vm.questions">{{question.questionText}}
+                    <!-- Placeholder -->
+                    <button class="button button-small button-assertive contextButton">Delete</button>
                 </ion-item>
             </ion-list>
-
         </div>
 
         <div ng-hide="vm.hideNoItems()" style="margin-top: 140px; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
             <h1 class="light">No Items Yet!</h1>
         </div>
-        
+
         <div ng-hide="!vm.stillWaiting()" style="margin-top: 140px; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
             <div style="text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                 <h1 class="light">Updating</h1>
             </div>
-         
+
             <div style="position: absolute; top: 100%; left: 50%; transform: translate(-50%, -100%);">
                 <ion-spinner icon="ios" class="spinner-light"/>
             </div>
         </div>
 
-       <!-- <span ng-hide="vm.stillWaiting()">Still Waiting is false</span><br>
+        <!--<span ng-hide="vm.stillWaiting()">Still Waiting is false</span><br>
         <span ng-hide="!vm.stillWaiting()">Still Waiting is true</span><br>
         <span ng-hide="!vm.stillWaiting() && !vm.noQuestions()">Still Waiting == true && NoQuestion == true</span><br>
         <span ng-hide="vm.stillWaiting() && vm.noQuestions()">Still Waiting == false && NoQuestions == false</span><br>
-
-         <span ng-hide="!vm.stillWaiting() && vm.noQuestions()">Still Waiting == true && NoQuestions == false</span><br>
-
-          <span ng-hide="vm.stillWaiting() && !vm.noQuestions()">Still Waiting == false && NoQuestions == true</span> -->
+        <span ng-hide="!vm.stillWaiting() && vm.noQuestions()">Still Waiting == true && NoQuestions == false</span><br>
+        <span ng-hide="vm.stillWaiting() && !vm.noQuestions()">Still Waiting == false && NoQuestions == true</span>-->
         
-
-
-
     </ion-content>
 
     <ion-footer-bar class="bar bar-dark bar-footer row" style="position:fixed; bottom:0px; padding: 0px;">
-        <i class="col-20"></i>
-
-        <i class="col-20"></i>
+        <i class="col-20" />
     </ion-footer-bar>
 
 </ion-view>

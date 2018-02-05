@@ -15,7 +15,7 @@
     function control($state,
         sectionsSrvc,
         questionsSrvc
-    ) {
+        ) {
         var vm = angular.extend(this, {
             sections: [],
             stillWaits: sectionsSrvc.isItWaiting()

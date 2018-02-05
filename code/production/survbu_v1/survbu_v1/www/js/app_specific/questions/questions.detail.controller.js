@@ -10,28 +10,27 @@
         '$state',
         '$stateParams',
         'questionsSrvc'
-        ];
-    
+    ];
+
     function control(
         $state,
         $stateParams,
         questionsSrvc
     ) {
-        var vm = angular.extend(this, {
-            question : {
-                questionText: "no text",
-                questionType: "no type"
-            }
-         });
-        
+        var params = $stateParams,
+            vm = angular.extend(this, {
+                question: {
+                    questionText: "no text",
+                    questionType: "no type"
+                }
+            });
 
-        vm.done = function(){
+
+        vm.done = function () {
             $state.go('questions_list');
-        }
-
-        var params = $stateParams;
+        };
 
         vm.question = questionsSrvc.getQuestionAt(params.selected);
 
     }
-})();
+}());

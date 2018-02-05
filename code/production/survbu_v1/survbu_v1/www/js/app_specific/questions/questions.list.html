@@ -7,12 +7,10 @@
 
     <ion-content class="has-header">
 
-
         <div ng-hide="vm.hideQList()">
 
             <ion-list>
-                <ion-item ng-click="vm.onItemSelected($index)" ng-repeat="question in vm.questions">
-                    {{question.questionText}}
+                <ion-item ng-click="vm.onItemSelected($index)" ng-repeat="question in vm.questions">{{question.questionText}} <button class="button button-small button-addertive">Delete</button>
                 </ion-item>
             </ion-list>
 

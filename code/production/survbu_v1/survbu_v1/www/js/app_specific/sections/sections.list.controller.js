@@ -53,13 +53,13 @@
 //        };
 
         vm.stillWaiting = function(){
-            return vm.stillWaits();
+            return vm.stillWaits;
         };
 
         vm.sections = sectionsSrvc.getSections();
         
         vm.hideSList = function() {
-            return (vm.stillWaiting() || !vm.noSections());
+            return (vm.stillWaiting() || vm.noSections());
         };
 
         vm.hideNoItems = function() {

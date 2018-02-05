@@ -34,7 +34,7 @@
             $state.go('sections_list'); //, {selected: index});
             sectionsSrvc.updateSections().then(function(){
                 $state.reload();
-                sectionsSrvc.isWaiting(true); 
+                sectionsSrvc.isWaiting(false); 
             });
         }
 

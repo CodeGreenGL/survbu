@@ -19,35 +19,38 @@
         var questionsArray = [],
             waitingState = true,
             service = {},
-            getAllQuestions = function () {
+            getAllQuestions = function (sectionQuestions) {
                 var deferred = $q.defer();
-
-                $http({
-                    url: 'https://codegreen.restlet.net/v1/questions/',
-                    headers: {
-                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
-                        "content-type": "application/json",
-                        "accept": "application/json"
-                    }
-                }).then(function successCallback(response) {
-                    questionsArray = response.data;
-                    deferred.resolve(questionsArray);
-                }, function errorCallback(response) {
-                    console.error('Error while fetching notes');
-                    console.error(response);
-                });
-
+                for (var i = 0, len = sectionQuestions.length; i < len; i++) {
+                    $http({
+                        url: 'https://codegreen.restlet.net/v1/questions/' + sectionQuestions[i],
+                        headers: {
+                            "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                            "content-type": "application/json",
+                            "accept": "application/json"
+                        }  
+                    }).then(function successCallback(response) {
+                        // Splice in question at order from sectionQuestions to preserve order, deleting 0 items
+                        questionsArray.splice(sectionQuestions.indexOf(response.data['id']), 0, response.data);
+                        if (questionsArray.length == sectionQuestions.length) {
+                            deferred.resolve(questionsArray);
+                        }
+                    }, function errorCallback(response) {
+                        console.error('Error while fetching notes');
+                        console.error(response);
+                    });
+                }
                 return deferred.promise;
             };
 
-        var promiseToUpdateQuestions = function () {
+        var promiseToUpdateQuestions = function (sectionQuestions) {
             // returns a promise
-            return getAllQuestions();
+            return getAllQuestions(sectionQuestions);
         };
 
-        service.updateQuestions = function () {
+        service.updateQuestions = function (sectionQuestions) {
             questionsArray = [];
-            return promiseToUpdateQuestions();
+            return promiseToUpdateQuestions(sectionQuestions);
         };
 
         service.getQuestions = function () {

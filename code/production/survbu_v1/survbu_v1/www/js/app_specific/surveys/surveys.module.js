@@ -5,7 +5,9 @@
     angular
         .module('surveysjs', [])
 
-        .config(function ($stateProvider) {
+        .config(function ($stateProvider, $locationProvider) {
+            // use the HTML5 History API
+            $locationProvider.html5Mode(true);
             $stateProvider
                 .state('surveys_list', {
                     cache: false,

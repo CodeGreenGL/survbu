@@ -17,6 +17,7 @@
     ) {
         //get all surveys from codegreen restlet; returns deferred promise
         var surveysArray = [],
+            waitingState = false, // Set waitingstate to false so surveys load
             service = {},
             getAllSurveys = function () {
                 var deferred = $q.defer();
@@ -59,7 +60,15 @@
         service.getSectionAt = function (index) {
             return angular.copy(surveysArray[index]);
         };
+        
+        service.isWaiting = function (iWait) {
+            waitingState = iWait;
+        };
 
+        service.isItWaiting = function () {
+            return waitingState;
+        };
+            
         return service;
     }
 

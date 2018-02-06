@@ -12,37 +12,35 @@
         'questionsSrvc'
     ];
 
-    function control($state,
+    function control(
+        $state,
         sectionsSrvc,
         questionsSrvc
-        ) {
+    ) {
         var vm = angular.extend(this, {
             sections: [],
             stillWaits: sectionsSrvc.isItWaiting()
         });
 
-        vm.onItemSelected = function ($event, index) {
+        vm.selectDetail = function ($event, index) {
             $event.stopPropagation();
             $state.go('sections_detail', {
                 selected: index
-            }); // NEEDS TO BE CHANGED TO THE APPOPRIATE STATE !!!
+            });
         };
 
         //take you to the questions list and updates the list
-        vm.listQuestions = function () {
+        vm.selectQuestion = function (index) {
             questionsSrvc.isWaiting(true);
-            $state.go('questions_list');
+            $state.go('questions_list', {
+                selected: index
+            });
             questionsSrvc.updateQuestions().then(function () {
                 $state.reload();
                 questionsSrvc.isWaiting(false);
             });
         };
-
-        //        vm.editSection = function($event){
-        //            $event.stopPropagation();
-        //            $state.go('sections_edit');
-        //        }
-
+            
         vm.update = function () {
             $state.go('sections_list');
         };

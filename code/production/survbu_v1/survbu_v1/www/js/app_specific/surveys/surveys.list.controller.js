@@ -18,29 +18,29 @@
         sectionsSrvc
     ) {
         var vm = angular.extend(this, {
-            surveys: []
+            surveys: [],
+            stillWaits: sectionsSrvc.isItWaiting()
         });
 
-        vm.onItemSelectedEdit = function (index) {
+        vm.onItemSelected = function ($event, index) {
+            $event.stopPropagation();
             $state.go('surveys_detail', {
                 selected: index
-            }); // NEEDS TO BE CHANGED TO THE APPOPRIATE STATE !!!
+            });
         };
-
-        vm.editSurveys = function ($event) {
-            $event.stopPropagation();
-            $state.go('surveys_detail');
-        };
-
-        vm.onItemSelectedSecList = function (index) {
+        
+        //take you to the sections list and updates the list
+        vm.listSections = function (index) {
             sectionsSrvc.isWaiting(true);
-            $state.go('sections_list'); //, {selected: index});
+            $state.go('sections_list', {
+                selected: index
+            });
             sectionsSrvc.updateSections().then(function () {
                 $state.reload();
                 sectionsSrvc.isWaiting(false);
             });
         };
-
+            
         vm.update = function () {
             $state.go('surveys_update');
         };

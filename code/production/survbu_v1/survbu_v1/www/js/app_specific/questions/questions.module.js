@@ -5,7 +5,9 @@
     angular
         .module('questionsjs', [])
 
-        .config(function ($stateProvider) {
+        .config(function ($stateProvider, $locationProvider) {
+            // use the HTML5 History API
+            $locationProvider.html5Mode(true);
             $stateProvider
                 .state('questions_list', {
                     cache: false,

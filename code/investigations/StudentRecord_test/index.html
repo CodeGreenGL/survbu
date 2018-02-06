@@ -83,7 +83,9 @@
             }
         </style>
 
-    
+        <link rel="stylesheet" type="text/css" media="screen" href="./converse.js-master/css/converse.css">
+        <script src="./converse.js-master/dist/converse.js"></script>
+
     </head>
      
     <body ng-controller="MainCtrl as mainCtrl">
@@ -155,6 +157,14 @@
         </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+        <script>
+            converse.initialize({
+                bosh_service_url: 'https://conversejs.org/http-bind/', // Please use this connection manager only for testing purposes
+                show_controlbox_by_default: true
+            });
+        </script>
+
         <script type="text/javascript">
             angular.module('studentRecordApp', [])
             .controller('MainCtrl', [function() {

@@ -1,0 +1,17 @@
+<div class="chatroom-form-container">
+    <form class="pure-form converse-form chatroom-form">
+        <fieldset>
+            <legend>{{{o.heading}}}</legend>
+            <label>{{{o.label_name}}}</label>
+            <input type="text" name="name" required="required"/>
+            <label>{{{o.label_autojoin}}}</label>
+            <input type="checkbox" name="autojoin"/>
+            <label>{{{o.label_nick}}}</label>
+            <input type="text" name="nick" value="{{{o.default_nick}}}"/>
+        </fieldset>
+        <fieldset>
+            <input class="pure-button button-primary" type="submit" value="{{{o.label_submit}}}"/>
+            <input class="pure-button button-cancel" type="button" value="{{{o.label_cancel}}}"/>
+        </fieldset>
+    </form>
+</div>

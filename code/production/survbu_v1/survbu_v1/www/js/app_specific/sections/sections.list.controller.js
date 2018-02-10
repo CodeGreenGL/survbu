@@ -30,12 +30,12 @@
         };
 
         //take you to the questions list and updates the list
-        vm.selectQuestion = function (index) {
+        vm.listQuestions = function (index) {
             questionsSrvc.isWaiting(true);
             $state.go('questions_list');
 
-            var selectedSections = sectionsSrvc.getSections(),
-                sectionQuestions = selectedSections[index]['questionIds'];
+            var selectedSection = sectionsSrvc.getSectionAt(index),
+                sectionQuestions = selectedSection['questionIds'];
 
             questionsSrvc.updateQuestions(sectionQuestions).then(function () {
                 $state.reload();

@@ -8,7 +8,7 @@
         
         <div ng-hide="vm.hideList()">
             <ion-list>
-                <ion-item ng-click="vm.selectQuestion($index)" ng-repeat="section in vm.sections">{{section.heading}}
+                <ion-item ng-click="vm.listQuestions($index)" ng-repeat="section in vm.sections">{{section.heading}}
                     <button ng-click="vm.selectDetail($event, $index)" class="button button-small button-energized contextButton">Edit</button>
                     <button class="button button-small button-assertive contextButton">Delete</button>
                 </ion-item>

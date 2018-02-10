@@ -22,7 +22,7 @@
             stillWaits: sectionsSrvc.isItWaiting()
         });
 
-        vm.onItemSelected = function ($event, index) {
+        vm.selectDetail = function ($event, index) {
             $event.stopPropagation();
             $state.go('surveys_detail', {
                 selected: index

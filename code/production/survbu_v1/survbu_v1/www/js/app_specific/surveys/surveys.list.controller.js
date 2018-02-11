@@ -19,7 +19,7 @@
     ) {
         var vm = angular.extend(this, {
             surveys: [],
-            stillWaits: sectionsSrvc.isItWaiting()
+            stillWaits: surveysSrvc.isItWaiting()
         });
 
         vm.selectDetail = function ($event, index) {
@@ -32,11 +32,15 @@
         //take you to the sections list and updates the list
         vm.listSections = function (index) {
             sectionsSrvc.isWaiting(true);
-            $state.go('sections_list', {
-                selected: index
-            });
-            sectionsSrvc.updateSections().then(function () {
-                $state.reload();
+            $state.go('sections_list');
+
+            var selectedSurvey = surveysSrvc.getSectionAt(index),
+                surveySections = selectedSurvey['sectionIds'];
+            
+            sectionsSrvc.updateSections(surveySections).then(function () {
+                if (surveySections.length > 0) {
+                    $state.reload();
+                };
                 sectionsSrvc.isWaiting(false);
             });
         };

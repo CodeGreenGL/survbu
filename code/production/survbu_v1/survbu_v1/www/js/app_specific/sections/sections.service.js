@@ -17,37 +17,43 @@
     ) {
         //get all sections from codegreen restlet; returns deferred promise
         var sectionsArray = [],
-            waitingState = false, // Set waitingstate to false so surveys load
+            waitingState = true, // Set waitingstate to false so surveys load
             service = {},
-            getAllSections = function () {
+            getAllSections = function (surveySections) {
                 var deferred = $q.defer();
-
-                $http({
-                    url: 'https://codegreen.restlet.net/v1/surveySections/',
-                    headers: {
-                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
-                        "content-type": "application/json",
-                        "accept": "application/json"
+                if (surveySections.length > 0) {
+                    for (var i = 0, len = surveySections.length; i < len; i++) {
+                        $http({
+                            url: 'https://codegreen.restlet.net/v1/surveySections/' + surveySections[i],
+                            headers: {
+                                "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                                "content-type": "application/json",
+                                "accept": "application/json"
+                            }
+                        }).then(function successCallback(response) {
+                            sectionsArray.splice(surveySections.indexOf(response.data['id']), 0, response.data);
+                            if (sectionsArray.length == surveySections.length) {
+                                deferred.resolve(sectionsArray);
+                            }
+                        }, function errorCallback(response) {
+                            console.error('Error while fetching sections');
+                            console.error(response);
+                        });
                     }
-                }).then(function successCallback(response) {
-                    sectionsArray = response.data;
+                } else {
                     deferred.resolve(sectionsArray);
-                }, function errorCallback(response) {
-                    console.error('Error while fetching notes');
-                    console.error(response);
-                });
-
+                }
                 return deferred.promise;
             };
 
-        var promiseToUpdateSections = function () {
+        var promiseToUpdateSections = function (surveySections) {
             // returns a promise
-            return getAllSections();
+            return getAllSections(surveySections);
         };
 
-        service.updateSections = function () {
+        service.updateSections = function (surveySections) {
             sectionsArray = [];
-            return promiseToUpdateSections();
+            return promiseToUpdateSections(surveySections);
         };
 
         service.getSections = function () {

@@ -22,6 +22,7 @@
         // TODO: Error Handling
         surveysSrvc.updateSurveys().then(function () {
             $state.go('surveys_list');
+            surveysSrvc.isWaiting(false);
         });
     }
 }());

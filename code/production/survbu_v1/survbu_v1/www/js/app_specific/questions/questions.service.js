@@ -21,25 +21,29 @@
             service = {},
             getAllQuestions = function (sectionQuestions) {
                 var deferred = $q.defer();
-                for (var i = 0, len = sectionQuestions.length; i < len; i++) {
-                    $http({
-                        url: 'https://codegreen.restlet.net/v1/questions/' + sectionQuestions[i],
-                        headers: {
-                            "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
-                            "content-type": "application/json",
-                            "accept": "application/json"
-                        }  
-                    }).then(function successCallback(response) {
+                if (sectionQuestions.length > 0) {
+                    for (var i = 0, len = sectionQuestions.length; i < len; i++) {
+                        $http({
+                            url: 'https://codegreen.restlet.net/v1/questions/' + sectionQuestions[i],
+                            headers: {
+                                "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                                "content-type": "application/json",
+                                "accept": "application/json"
+                            }  
+                        }).then(function successCallback(response) {
                         // Splice in question at order from sectionQuestions to preserve order, deleting 0 items
-                        questionsArray.splice(sectionQuestions.indexOf(response.data['id']), 0, response.data);
-                        if (questionsArray.length == sectionQuestions.length) {
-                            deferred.resolve(questionsArray);
-                        }
-                    }, function errorCallback(response) {
-                        console.error('Error while fetching notes');
-                        console.error(response);
-                    });
-                }
+                            questionsArray.splice(sectionQuestions.indexOf(response.data['id']), 0, response.data);
+                            if (questionsArray.length == sectionQuestions.length) {
+                                deferred.resolve(questionsArray);
+                            }
+                        }, function errorCallback(response) {
+                            console.error('Error while fetching questions');
+                            console.error(response);
+                        });
+                    } 
+                } else {
+                        deferred.resolve(questionsArray);
+                    }
                 return deferred.promise;
             };
 

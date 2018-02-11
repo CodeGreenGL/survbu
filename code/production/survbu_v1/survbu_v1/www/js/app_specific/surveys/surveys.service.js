@@ -21,7 +21,7 @@
             service = {},
             getAllSurveys = function () {
                 var deferred = $q.defer();
-
+                
                 $http({
                     url: 'https://codegreen.restlet.net/v1/surveys/',
                     headers: {
@@ -36,7 +36,7 @@
                     console.error('Error while fetching notes');
                     console.error(response);
                 });
-
+                
                 return deferred.promise;
             };
 

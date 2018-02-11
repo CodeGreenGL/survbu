@@ -38,7 +38,9 @@
                 sectionQuestions = selectedSection['questionIds'];
 
             questionsSrvc.updateQuestions(sectionQuestions).then(function () {
-                $state.reload();
+                if (sectionQuestions.length > 0) {
+                    $state.reload();
+                };
                 questionsSrvc.isWaiting(false);
             });
         };

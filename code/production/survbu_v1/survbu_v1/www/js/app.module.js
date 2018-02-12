@@ -34,6 +34,15 @@
                     },
                     controller: 'surveysDetailCtrl as vm'
                 })
+                .state('surveys_add', {
+                    cache: false,
+                    url: '/surveys_add',
+                    templateUrl: 'js/app_specific/surveys/surveys.add.html',
+                    params: {
+                        'selected': 0
+                    },
+                    controller: 'surveysAddCtrl as vm'
+                })
 				
 				// SECTIONS
 				.state('sections_list', {
@@ -50,6 +59,15 @@
                         'selected': 0
                     },
                     controller: 'sectionsDetailCtrl as vm'
+                })
+                .state('sections_add', {
+                    cache: false,
+                    url: '/sections_add',
+                    templateUrl: 'js/app_specific/sections/sections.add.html',
+                    params: {
+                        'selected': 0
+                    },
+                    controller: 'sectionsAddCtrl as vm'
                 })
 				
 				// QUESTIONS

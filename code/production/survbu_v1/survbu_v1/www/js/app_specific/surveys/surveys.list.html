@@ -6,6 +6,9 @@
 
     <ion-content class="has-header">
         
+        <! -- Needs to be re-design according to the design -->
+        <button class="button button-positive" ng-click="vm.addSurvey()">+</button>
+
         <div ng-hide="vm.hideList()">
             <ion-list>
                 <ion-item ng-click="vm.listSections($index)" ng-repeat="survey in vm.surveys">{{survey.introductionMessage}}

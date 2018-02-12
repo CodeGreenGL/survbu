@@ -65,6 +65,10 @@
             return (vm.stillWaiting() || !vm.noContent());
         };
 
+        vm.addSurvey = function (){
+            $state.go('surveys_add');
+        };
+
         vm.surveys = surveysSrvc.getSurveys();
 
     }

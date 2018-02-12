@@ -87,6 +87,10 @@
             return createSection(sectionObject);
         }
 
+        var createSectionPromise = function(surveyObject){
+            return createSurvey(surveyObject)
+        };
+
         var createSection = function(sectionObject){
             var addedSections;
             //var deferred = $q.defer();

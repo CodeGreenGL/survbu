@@ -1,0 +1,38 @@
+<ion-view view-title="Sections" can-swipe-back="false">
+    
+    <ion-nav-bar class="bar-dark" align-title="center">
+        <ion-nav-back-button/>
+    </ion-nav-bar>
+    
+    <ion-content class="has-header">
+        
+        <div ng-hide="vm.hideList()">
+            <ion-list>
+                <ion-item ng-click="vm.listQuestions($index)" ng-repeat="section in vm.sections">{{section.heading}}
+                    <button ng-click="vm.selectDetail($event, $index)" class="button button-small button-energized contextButton">Edit</button>
+                    <button class="button button-small button-assertive contextButton">Delete</button>
+                </ion-item>
+            </ion-list>
+        </div>
+        
+        <div ng-hide="vm.hideNoItems()" class="backgroundText">
+            <h1 class="light">No Items Yet!</h1>
+        </div>
+        
+        <div ng-hide="!vm.stillWaiting()" class="backgroundText">
+            <div>
+                <h1 class="light">Updating</h1>
+            </div>
+         
+            <div class="spinner">
+                <ion-spinner icon="ios" class="spinner-light" />
+            </div>
+        </div>
+        
+    </ion-content>
+    
+    <ion-footer-bar class="bar bar-dark bar-footer row">
+        <i class="col-20"></i>
+    </ion-footer-bar>
+    
+</ion-view>

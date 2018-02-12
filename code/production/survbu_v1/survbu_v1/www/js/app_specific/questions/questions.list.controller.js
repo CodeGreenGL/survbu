@@ -16,41 +16,25 @@
         questionsSrvc
     ) {
         var vm = angular.extend(this, {
-            questions: [],
-            stillWaits: questionsSrvc.isItWaiting()
+            questions: questionsSrvc.getQuestions(),
+            stillWaits: questionsSrvc.isItWaiting(),
+            stillWaiting: function () {
+                return vm.stillWaits;
+            },
+            noContent: function () {
+                return vm.questions.length === 0;
+            },
+            hideList: function () {
+                return (vm.stillWaiting() || vm.noContent());
+            },
+            hideNoItems: function () {
+                return (vm.stillWaiting() || !vm.noContent());
+            },
+            selectDetail: function selectDetail(index) {
+                $state.go('questions_detail', {
+                    selected: index
+                });
+            }
         });
-
-        vm.onItemSelected = function (index) {
-            $state.go('questions_detail', {
-                selected: index
-            });
-        };
-
-        //        vm.backToQuestionsButton = function(){
-        //            $state.go('sections_update');
-        //        };
-
-        vm.update = function () {
-            $state.go('questions_update');
-        };
-
-        vm.stillWaiting = function () {
-            return vm.stillWaits;
-        };
-
-        vm.noContent = function () {
-            return vm.questions.length === 0;
-        };
-
-        vm.hideList = function () {
-            return (vm.stillWaiting() || vm.noContent());
-        };
-
-        vm.hideNoItems = function () {
-            return (vm.stillWaiting() || !vm.noContent());
-        };
-
-        vm.questions = questionsSrvc.getQuestions();
-
     }
 }());

@@ -18,54 +18,42 @@
         sectionsSrvc
     ) {
         var vm = angular.extend(this, {
-            surveys: [],
-            stillWaits: surveysSrvc.isItWaiting()
-        });
+            surveys: surveysSrvc.getSurveys(),
+            stillWaits: surveysSrvc.isItWaiting(),
+            stillWaiting: function () {
+                return vm.stillWaits;
+            },
+            noContent: function () {
+                return vm.surveys.length === 0;
+            },
+            hideList: function () {
+                return (vm.stillWaiting() || vm.noContent());
+            },
+            hideNoItems: function () {
+                return (vm.stillWaiting() || !vm.noContent());
+            },
+            selectDetail: function ($event, index) {
+                $event.stopPropagation();
+                $state.go('surveys_detail', {
+                    selected: index
+                });
+            },
+            listSections: function (index) { //take you to the sections list and updates the list
+                sectionsSrvc.isWaiting(true);
+                $state.go('sections_list');
 
-        vm.selectDetail = function ($event, index) {
-            $event.stopPropagation();
-            $state.go('surveys_detail', {
-                selected: index
-            });
-        };
-        
-        //take you to the sections list and updates the list
-        vm.listSections = function (index) {
-            sectionsSrvc.isWaiting(true);
-            $state.go('sections_list');
-
-            var selectedSurvey = surveysSrvc.getSurveyAt(index),
-                surveySections = selectedSurvey.sectionIds;
-            
-            sectionsSrvc.updateSections(surveySections).then(function () {
-				sectionsSrvc.isWaiting(false);
+                var selectedSurvey = surveysSrvc.getSurveyAt(index),
+                    surveySections = selectedSurvey.sectionIds;
+                
                 if (surveySections.length > 0) {
-                    $state.reload();
+                    sectionsSrvc.updateSections(surveySections).then(function () {
+                        $state.reload();
+                        sectionsSrvc.isWaiting(false);
+                    });
+                } else {
+                    sectionsSrvc.isWaiting(false);
                 }
-            });
-        };
-            
-        vm.update = function () {
-            $state.go('surveys_update');
-        };
-
-        vm.stillWaiting = function () {
-            return vm.stillWaits;
-        };
-
-        vm.noContent = function () {
-            return vm.surveys.length === 0;
-        };
-
-        vm.hideList = function () {
-            return (vm.stillWaiting() || vm.noContent());
-        };
-
-        vm.hideNoItems = function () {
-            return (vm.stillWaiting() || !vm.noContent());
-        };
-
-        vm.surveys = surveysSrvc.getSurveys();
-
+            }
+        });
     }
 }());

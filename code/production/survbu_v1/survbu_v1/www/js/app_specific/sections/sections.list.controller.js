@@ -18,54 +18,45 @@
         questionsSrvc
     ) {
         var vm = angular.extend(this, {
-            sections: [],
-            stillWaits: sectionsSrvc.isItWaiting()
-        });
+            sections: sectionsSrvc.getSections(),
+            stillWaits: sectionsSrvc.isItWaiting(),
+            stillWaiting: function () {
+                return vm.stillWaits;
+            },
+            noContent: function () {
+                return vm.sections.length === 0;
+            },
+            hideList: function () {
+                return (vm.stillWaiting() || vm.noContent());
+            },
+            hideNoItems: function () {
+                return (vm.stillWaiting() || !vm.noContent());
+            },
+            addSection: function addSection() {
+                $state.go('sections_add');
+            },
+            selectDetail: function ($event, index) {
+                $event.stopPropagation();
+                $state.go('sections_detail', {
+                    selected: index
+                });
+            },
+            listQuestions: function (index) {
+                questionsSrvc.isWaiting(true);
+                $state.go('questions_list');
 
-        vm.selectDetail = function ($event, index) {
-            $event.stopPropagation();
-            $state.go('sections_detail', {
-                selected: index
-            });
-        };
-
-        //take you to the questions list and updates the list
-        vm.listQuestions = function (index) {
-            questionsSrvc.isWaiting(true);
-            $state.go('questions_list');
-
-            var selectedSection = sectionsSrvc.getSectionAt(index),
-                sectionQuestions = selectedSection['questionIds'];
-
-            questionsSrvc.updateQuestions(sectionQuestions).then(function () {
+                var selectedSection = sectionsSrvc.getSectionAt(index),
+                    sectionQuestions = selectedSection.questionIds;
+            
                 if (sectionQuestions.length > 0) {
-                    $state.reload();
-                };
-                questionsSrvc.isWaiting(false);
-            });
-        };
-
-        vm.update = function () {
-            $state.go('sections_list');
-        };
-
-        vm.stillWaiting = function () {
-            return vm.stillWaits;
-        };
-
-        vm.noContent = function () {
-            return vm.sections.length === 0;
-        };
-
-        vm.hideList = function () {
-            return (vm.stillWaiting() || vm.noContent());
-        };
-
-        vm.hideNoItems = function () {
-            return (vm.stillWaiting() || !vm.noContent());
-        };
-
-        vm.sections = sectionsSrvc.getSections();
-
+                    questionsSrvc.updateQuestions(sectionQuestions).then(function () {
+                        $state.reload();
+                        questionsSrvc.isWaiting(false);
+                    });
+                } else {
+                    questionsSrvc.isWaiting(false);
+                }
+            }
+        });
     }
 }());

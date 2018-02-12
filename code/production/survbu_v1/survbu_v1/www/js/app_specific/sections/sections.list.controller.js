@@ -65,6 +65,10 @@
             return (vm.stillWaiting() || !vm.noContent());
         };
 
+        vm.addSection = function (){
+            $state.go('sections_add');
+        };
+
         vm.sections = sectionsSrvc.getSections();
 
     }

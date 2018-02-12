@@ -76,6 +76,44 @@
             return waitingState;
         };
 
+        // Create a section object
+        service.createSectionService = function(sectionHeading,sectionIntroductionMessage) {
+            var sectionObject = {
+                id : "",
+                introductionMessage : sectionIntroductionMessage,
+                questionIds : [],
+                heading : sectionHeading
+            };
+            return createSection(sectionObject);
+        }
+
+        var createSection = function(sectionObject){
+            var addedSections;
+            //var deferred = $q.defer();
+
+                $http({
+                    method: "POST",
+                    url: 'https://codegreen.restlet.net:443/v1/surveySections/',
+                    data: sectionObject,
+                    headers: {
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                        "content-type": "application/json",
+                        "accept": "application/json"
+                    }
+                }).then(function successCallback(response) {
+                    addedSections = response.data;    
+                    //Add sections to our sectionArray
+                    sectionsArray.push(addedSections);
+
+                    
+                }, function errorCallback(response) {
+                    console.error('Error while fetching notes');
+                    console.error(response);
+                });
+
+                return sectionsArray.length-1;
+        }
+
         return service;
 
     }

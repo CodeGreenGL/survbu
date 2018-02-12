@@ -57,7 +57,7 @@
             return surveysArray.length;
         };
 
-        service.getSectionAt = function (index) {
+        service.getSurveyAt = function (index) {
             return angular.copy(surveysArray[index]);
         };
         

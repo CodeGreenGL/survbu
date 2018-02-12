@@ -34,7 +34,7 @@
             sectionsSrvc.isWaiting(true);
             $state.go('sections_list');
 
-            var selectedSurvey = surveysSrvc.getSectionAt(index),
+            var selectedSurvey = surveysSrvc.getSurveyAt(index),
                 surveySections = selectedSurvey.sectionIds;
             
             sectionsSrvc.updateSections(surveySections).then(function () {

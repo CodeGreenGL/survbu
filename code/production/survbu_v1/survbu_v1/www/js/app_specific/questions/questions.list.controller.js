@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('questionsjs')
+        .module('surveyModule')
         .controller('questionsListCtrl', control);
 
     control.$inject = [

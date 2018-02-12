@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('surveysjs')
+        .module('surveyModule')
         .controller('surveysListCtrl', control);
 
     control.$inject = [
@@ -38,10 +38,10 @@
                 surveySections = selectedSurvey['sectionIds'];
             
             sectionsSrvc.updateSections(surveySections).then(function () {
+				sectionsSrvc.isWaiting(false);
                 if (surveySections.length > 0) {
                     $state.reload();
                 };
-                sectionsSrvc.isWaiting(false);
             });
         };
             

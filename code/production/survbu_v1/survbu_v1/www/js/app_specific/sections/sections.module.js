@@ -7,7 +7,7 @@
 
         .config(function ($stateProvider, $locationProvider) {
             // use the HTML5 History API
-            $locationProvider.html5Mode(true);
+            //$locationProvider.html5Mode(true);
             $stateProvider
                 .state('sections_list', {
                     cache: false,

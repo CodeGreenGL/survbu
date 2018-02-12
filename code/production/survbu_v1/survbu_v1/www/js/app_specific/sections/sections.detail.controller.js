@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('sectionsjs')
+        .module('surveyModule')
         .controller('sectionsDetailCtrl', control);
 
     control.$inject = [

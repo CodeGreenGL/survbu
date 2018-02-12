@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('sectionsjs')
+        .module('surveyModule')
         .factory('sectionsSrvc', sectionsSrvc);
 
     sectionsSrvc.$inject = [

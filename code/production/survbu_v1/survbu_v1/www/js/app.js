@@ -6,9 +6,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', [
     'ionic',
-    'questionsjs',
-    'sectionsjs', // ADDED our events module
-    'surveysjs'
+    'surveyModule'
 ])
 
     .run(function ($ionicPlatform, $state, $rootScope) {
@@ -31,7 +29,7 @@ angular.module('starter', [
                 StatusBar.styleDefault();
             }
             // ADDED START
-            $state.go("surveys_update");
+            $state.go("homepage");
             // ADDED END
 
         });

@@ -35,13 +35,13 @@
             $state.go('sections_list');
 
             var selectedSurvey = surveysSrvc.getSectionAt(index),
-                surveySections = selectedSurvey['sectionIds'];
+                surveySections = selectedSurvey.sectionIds;
             
             sectionsSrvc.updateSections(surveySections).then(function () {
 				sectionsSrvc.isWaiting(false);
                 if (surveySections.length > 0) {
                     $state.reload();
-                };
+                }
             });
         };
             

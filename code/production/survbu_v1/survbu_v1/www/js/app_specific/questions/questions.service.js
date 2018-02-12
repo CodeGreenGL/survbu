@@ -17,7 +17,7 @@
     ) {
         //get all surveys from codegreen restlet; returns deferred promise
         var questionsArray = [],
-            waitingState = true,
+            waitingState = false,
             service = {},
             getAllQuestions = function (sectionQuestions) {
                 var deferred = $q.defer();

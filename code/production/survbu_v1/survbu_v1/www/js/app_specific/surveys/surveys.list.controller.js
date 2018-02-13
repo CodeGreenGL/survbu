@@ -40,7 +40,7 @@
             });
             
             var surveySections = selectedSurvey['sectionIds'];
-            
+           
             sectionsSrvc.updateSections(surveySections).then(function () {   //Possible to move to the section.list.controller 
 				sectionsSrvc.isWaiting(false);
                 if (surveySections.length > 0) {

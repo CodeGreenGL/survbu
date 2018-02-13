@@ -50,7 +50,6 @@
         };
 
         service.getSurveys = function () {
-            console.log("SURVEY ARRAY : " + surveysArray);
             return angular.copy(surveysArray);
         };
 
@@ -112,7 +111,7 @@
                     console.error(response);
                 });
                 
-            console.log(surveysArray);       
+            //console.log(surveysArray);       
             //return surveysArray.length-1;
             return deferred.promise;
             

@@ -21,9 +21,10 @@
     ) {
         var params = $stateParams,
             vm = angular.extend(this, {
+                surveys: [],
                 survey: {
-                    introductionMessage: "no text",
-                    completionMessage: "no type"
+                    introductionMessage: "",
+                    completionMessage: ""
                 }
             });
 
@@ -34,6 +35,7 @@
             }); */
             surveysSrvc.createSurveyService(vm.survey.introductionMessage,vm.survey.completionMessage).then(function (response) {
                 //Returns the promised object
+                
                 return listSections(response);
             });
             
@@ -42,21 +44,24 @@
         //possible needs to be renamed to more appropriate name.
         var listSections = function(surveyObject)
         {
-            console.log(surveyObject);
-            sectionsSrvc.isWaiting(false);
-            $state.go('sections_list');
+            sectionsSrvc.isWaiting(true);
 
-            /*var selectedSurvey = surveysSrvc.getSectionAt(index),
-                surveySections = selectedSurvey['sectionIds']; */
+            var selectedSurvey = surveyObject['id'];
+            
 
-               
-            /*sectionsSrvc.updateSections(surveyObject.ID).then(function () {
-                if (index.length > 0) {
+            $state.go('sections_list', {
+                parentSurvey: selectedSurvey
+            });
+
+            var surveySections = [];
+                        
+            sectionsSrvc.updateSections(surveySections).then(function () {
+                sectionsSrvc.isWaiting(false);
+                if (surveySections.length > 0) {
                     $state.reload();
                 };
-                sectionsSrvc.isWaiting(false);
-            });*/
-        }
+            });
+        };
 
         //vm.survey = surveysSrvc.getSectionAt(params.selected);
 

@@ -42,12 +42,9 @@
         };
 
         //possible needs to be renamed to more appropriate name.
-        var listSections = function(surveyObject)
-        {
+        var listSections = function(surveyObject) {
             sectionsSrvc.isWaiting(true);
-
-            var selectedSurvey = surveyObject['id'];
-            
+            var selectedSurvey = surveyObject;
 
             $state.go('sections_list', {
                 parentSurvey: selectedSurvey

@@ -77,6 +77,48 @@
             return waitingState;
         };
 
+        service.createQuestionService = function(questionText, questionType) {
+            var questionObject = {
+                id : "",
+                questionType : questionType,
+                questionText : questionText,
+                questionChoices : []
+            };
+            return promiseToCreateQuestion(questionObject);
+        };
+
+        var promiseToCreateQuestion = function(questionObject){
+            return createQuestion(questionObject);
+        };
+
+        var createQuestion = function(questionObject){
+            var addedQuestion;
+            var deferred = $q.defer();
+
+                $http({
+                    method: "POST",
+                    url: 'https://codegreen.restlet.net:443/v1/questions/',
+                    data: questionObject,
+                    headers: {
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                        "content-type": "application/json",
+                        "accept": "application/json"
+                    }
+                }).then(function successCallback(response) {
+                    addedQuestion = response.data;    
+                    //Add sections to our sectionArray
+                    questionsArray.push(addedQuestion);
+                    deferred.resolve(addedQuestion);
+
+                    
+                }, function errorCallback(response) {
+                    console.error('Error while fetching notes');
+                    console.error(response);
+                });
+
+                return deferred.promise;
+        };
+
         return service;
     }
 }());

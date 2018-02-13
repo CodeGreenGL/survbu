@@ -29,9 +29,7 @@
                     sectionIntroductionMessage: "no type"
                 }
             });
-
-            console.log("INSIDE ADD");
-            console.log(vm.parentSurvey['sectionIds']);
+            
 
         vm.createSection = function() {
 
@@ -42,10 +40,8 @@
                 surveysSrvc.updateSurveyDetails(vm.parentSurvey).then(function(response){
                     reloadSurveys();
                 });
-                
-
                 //Returns the promise object
-                return listQuestions();
+                return listQuestions(response);
             });
         };
 
@@ -60,9 +56,23 @@
         }
 
         //possible needs to be renamed to more appropriate name.
-        var listQuestions = function(){
-            questionsSrvc.isWaiting(false);
-            $state.go('questions_list'); //Send param in here - need to send the section object to question list
+        var listQuestions = function(sectionObject){
+            questionsSrvc.isWaiting(true);
+
+            var selectedSection = sectionObject;
+            var sectionQuestions = [];
+            
+            $state.go('questions_list', {
+                parentSection: selectedSection,
+                parentSectionSurvey: vm.parentSurvey
+            });
+
+            questionsSrvc.updateQuestions(sectionQuestions).then(function () {
+                if (sectionQuestions.length > 0) {
+                    $state.reload();
+                };
+                questionsSrvc.isWaiting(false);
+            });
         }
 
 

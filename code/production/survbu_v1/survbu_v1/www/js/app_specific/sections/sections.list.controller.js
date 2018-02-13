@@ -17,7 +17,7 @@
         $state,
         sectionsSrvc,
         questionsSrvc,
-        $stateParams,
+        $stateParams
     ) {
         var params = $stateParams,
             vm = angular.extend(this, {
@@ -25,8 +25,6 @@
                 sections: [],
                 stillWaits: sectionsSrvc.isItWaiting()
             });
-
-            console.log("Inside parent " + vm.parentSurvey['sectionIds']);
 
         vm.selectDetail = function ($event, index) {
             $event.stopPropagation();
@@ -38,10 +36,15 @@
         //take you to the questions list and updates the list
         vm.listQuestions = function (index) {
             questionsSrvc.isWaiting(true);
-            $state.go('questions_list');
+            var selectedSection = sectionsSrvc.getSectionAt(index);
 
-            var selectedSection = sectionsSrvc.getSectionAt(index),
-                sectionQuestions = selectedSection['questionIds'];
+            $state.go('questions_list', {
+                parentSection: selectedSection,
+                parentSectionSurvey: vm.parentSurvey
+            });
+
+            
+            var sectionQuestions = selectedSection['questionIds'];
 
             questionsSrvc.updateQuestions(sectionQuestions).then(function () {
                 if (sectionQuestions.length > 0) {

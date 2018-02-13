@@ -31,8 +31,7 @@
         
         //take you to the sections list and updates the list
         vm.listSections = function (index) {
-            sectionsSrvc.isWaiting(true);
-            
+            sectionsSrvc.isWaiting(true); 
             var selectedSurvey = surveysSrvc.getSurveyAt(index);
 
             $state.go('sections_list', {

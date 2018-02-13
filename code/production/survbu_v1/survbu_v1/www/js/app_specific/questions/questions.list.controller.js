@@ -8,16 +8,21 @@
 
     control.$inject = [
         '$state',
-        'questionsSrvc'
+        'questionsSrvc',
+        '$stateParams'
     ];
 
     function control(
         $state,
-        questionsSrvc
+        questionsSrvc,
+        $stateParams
     ) {
-        var vm = angular.extend(this, {
-            questions: [],
-            stillWaits: questionsSrvc.isItWaiting()
+        var params = $stateParams,
+            vm = angular.extend(this, {
+                parentSection: params.parentSection,
+                parentSectionSurvey: params.parentSectionSurvey,
+                questions: [],
+                stillWaits: questionsSrvc.isItWaiting()
         });
 
         vm.onItemSelected = function (index) {
@@ -25,10 +30,6 @@
                 selected: index
             });
         };
-
-        //        vm.backToQuestionsButton = function(){
-        //            $state.go('sections_update');
-        //        };
 
         vm.update = function () {
             $state.go('questions_update');
@@ -48,6 +49,13 @@
 
         vm.hideNoItems = function () {
             return (vm.stillWaiting() || !vm.noContent());
+        };
+
+        vm.addQuestion = function (){
+            $state.go('questions_add', {
+                parentSection: vm.parentSection,
+                parentSectionSurvey: vm.parentSectionSurvey
+                });
         };
 
         vm.questions = questionsSrvc.getQuestions();

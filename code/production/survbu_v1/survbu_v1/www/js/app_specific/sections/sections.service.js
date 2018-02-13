@@ -52,6 +52,8 @@
         };
 
         service.updateSections = function (surveySections) {
+            console.log("SUrvey sections : !!! ");
+            console.log(surveySections);
             sectionsArray = [];
             return promiseToUpdateSections(surveySections);
         };
@@ -118,6 +120,32 @@
 
                 return deferred.promise;
         }
+
+
+        service.updateSectionDetails = function(section){
+            var deferred = $q.defer();
+            var sectionId = section['id'];
+
+            $http({
+                    method: "PUT",
+                    url: 'https://codegreen.restlet.net:443/v1/surveySections/' + sectionId,
+                    data: section,
+                    headers: {
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                        "content-type": "application/json",
+                        "accept": "application/json"
+                    }
+                }).then(function successCallback(response) {
+
+                    deferred.resolve(response.data);
+                    
+                }, function errorCallback(response) {
+                    console.error('Error while fetching notes');
+                    console.error(response);
+                });
+                
+            return deferred.promise;
+        };
 
         return service;
 

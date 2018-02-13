@@ -126,23 +126,23 @@
             var deferred = $q.defer();
             var surveyId = survey['id'];
 
-                $http({
-                    method: "PUT",
-                    url: 'https://codegreen.restlet.net:443/v1/surveys/' + surveyId,
-                    data: survey,
-                    headers: {
-                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
-                        "content-type": "application/json",
-                        "accept": "application/json"
-                    }
-                }).then(function successCallback(response) {
+            $http({
+                method: "PUT",
+                url: 'https://codegreen.restlet.net:443/v1/surveys/' + surveyId,
+                data: survey,
+                headers: {
+                    "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                    "content-type": "application/json",
+                    "accept": "application/json"
+                }
+            }).then(function successCallback(response) {
 
-                    deferred.resolve(response.data);
-                    
-                }, function errorCallback(response) {
-                    console.error('Error while fetching notes');
-                    console.error(response);
-                });
+                deferred.resolve(response.data);
+                
+            }, function errorCallback(response) {
+                console.error('Error while fetching notes');
+                console.error(response);
+            });
                 
             return deferred.promise;
         };

@@ -78,6 +78,10 @@
                     cache: false,
                     url: '/questions_list',
                     templateUrl: 'js/app_specific/questions/questions.list.html',
+                    params: {
+                        'parentSection': 0,
+                        'parentSectionSurvey' : 0
+                    },
                     controller: 'questionsListCtrl as vm'
                 })
                 .state('questions_detail', {
@@ -88,6 +92,16 @@
                         'selected': 0
                     },
                     controller: 'questionsDetailCtrl as vm'
+                })
+                .state('questions_add', {
+                    cache: false,
+                    url: '/questions_add',
+                    templateUrl: 'js/app_specific/questions/questions.add.html',
+                    params: {
+                        'parentSection': 0,
+                        'parentSectionSurvey' : 0
+                    },
+                    controller: 'questionsAddCtrl as vm'
                 });
         });
 }());

@@ -1,0 +1,19 @@
+<ion-view view-title="Add Question" can-swipe-back="false">
+
+    <ion-nav-bar class="bar-dark" align-title="center">
+        <ion-nav-back-button/>
+    </ion-nav-bar>
+    
+    <ion-content class="has-header">
+          <form ng-submit="vm.createQuestion()">
+              <input type="text" placeholder="Question Text" ng-model="vm.question.questionText">
+              <input type="text" placeholder="Question Type" ng-model="vm.question.questionType">
+              <input value="CREATE QUESTION" type="submit">
+          </form>
+    </ion-content>
+
+    <ion-footer-bar class="bar bar-dark bar-footer row">
+        <i class="col-20"></i>
+    </ion-footer-bar>
+
+</ion-view>

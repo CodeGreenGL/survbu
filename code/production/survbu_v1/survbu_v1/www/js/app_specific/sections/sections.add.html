@@ -5,9 +5,9 @@
     </ion-nav-bar>
     
     <ion-content class="has-header">
-          <form ng-submit="vm.createSection(sectionHeading, sectionIntroductionMessage)">
-              <input type="text" placeholder="Section heading" ng-model="sectionHeading">
-              <input type="text" placeholder="Introduction message" ng-model="sectionIntroductionMessage">
+          <form ng-submit="vm.createSection()">
+              <input type="text" placeholder="Section heading" ng-model="vm.section.sectionHeading">
+              <input type="text" placeholder="Introduction message" ng-model="vm.section.sectionIntroductionMessage">
               <input value="CREATE SECTION" type="submit">
           </form>
     </ion-content>

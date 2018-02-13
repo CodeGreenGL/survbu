@@ -50,6 +50,7 @@
         };
 
         service.getSurveys = function () {
+            console.log("SURVEY ARRAY : " + surveysArray);
             return angular.copy(surveysArray);
         };
 
@@ -57,7 +58,7 @@
             return surveysArray.length;
         };
 
-        service.getSectionAt = function (index) {
+        service.getSurveyAt = function (index) {
             return angular.copy(surveysArray[index]);
         };
         
@@ -77,11 +78,11 @@
                 completionMessage : surveyDescription,
                 sectionIds : []
             };
-            return createSurvey(surveyObject);
-        }
+            return promiseToCreateSurvey(surveyObject);
+        };
 
-        var createSurveyPromise = function(surveyObject){
-            return createSurvey(surveyObject)
+        var promiseToCreateSurvey = function(surveyObject){
+            return createSurvey(surveyObject);
         };
 
         var createSurvey = function(surveyObject){
@@ -98,7 +99,7 @@
                         "accept": "application/json"
                     }
                 }).then(function successCallback(response) {
-                    addedSurvey = response.data;  
+                    addedSurvey = response.data;
                     //Add the survey to our surveyArray               
                     surveysArray.push(addedSurvey);
 
@@ -116,7 +117,38 @@
             return deferred.promise;
             
         }
-            
+
+
+        service.updateSurveyDetails = function(survey){
+            return updateSurveyDetailsSections(survey);
+        };
+
+        var updateSurveyDetailsSections = function(survey){
+            var deferred = $q.defer();
+            var surveyId = survey['id'];
+
+                $http({
+                    method: "PUT",
+                    url: 'https://codegreen.restlet.net:443/v1/surveys/' + surveyId,
+                    data: survey,
+                    headers: {
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                        "content-type": "application/json",
+                        "accept": "application/json"
+                    }
+                }).then(function successCallback(response) {
+
+                    deferred.resolve(response.data);
+                    
+                }, function errorCallback(response) {
+                    console.error('Error while fetching notes');
+                    console.error(response);
+                });
+                
+            return deferred.promise;
+        };
+
+
         return service;
     }
 

@@ -84,16 +84,16 @@
                 questionIds : [],
                 heading : sectionHeading
             };
-            return createSection(sectionObject);
+            return promiseToCreateSection(sectionObject);
         }
 
-        var createSectionPromise = function(surveyObject){
-            return createSurvey(surveyObject)
+        var promiseToCreateSection = function(surveyObject){
+            return createSection(surveyObject);
         };
 
         var createSection = function(sectionObject){
             var addedSections;
-            //var deferred = $q.defer();
+            var deferred = $q.defer();
 
                 $http({
                     method: "POST",
@@ -108,6 +108,7 @@
                     addedSections = response.data;    
                     //Add sections to our sectionArray
                     sectionsArray.push(addedSections);
+                    deferred.resolve(addedSections);
 
                     
                 }, function errorCallback(response) {
@@ -115,7 +116,7 @@
                     console.error(response);
                 });
 
-                return sectionsArray.length-1;
+                return deferred.promise;
         }
 
         return service;

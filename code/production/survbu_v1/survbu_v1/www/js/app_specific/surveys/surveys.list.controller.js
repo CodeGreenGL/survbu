@@ -32,12 +32,16 @@
         //take you to the sections list and updates the list
         vm.listSections = function (index) {
             sectionsSrvc.isWaiting(true);
-            $state.go('sections_list');
-
-            var selectedSurvey = surveysSrvc.getSectionAt(index),
-                surveySections = selectedSurvey['sectionIds'];
             
-            sectionsSrvc.updateSections(surveySections).then(function () {
+            var selectedSurvey = surveysSrvc.getSurveyAt(index);
+
+            $state.go('sections_list', {
+                parentSurvey: selectedSurvey
+            });
+            
+            var surveySections = selectedSurvey['sectionIds'];
+            
+            sectionsSrvc.updateSections(surveySections).then(function () {   //Possible to move to the section.list.controller 
 				sectionsSrvc.isWaiting(false);
                 if (surveySections.length > 0) {
                     $state.reload();

@@ -49,6 +49,9 @@
                     cache: false,
                     url: '/sections_list',
                     templateUrl: 'js/app_specific/sections/sections.list.html',
+                    params: {
+                        'parentSurvey': 0
+                    },
                     controller: 'sectionsListCtrl as vm'
                 })
                 .state('sections_detail', {
@@ -65,7 +68,7 @@
                     url: '/sections_add',
                     templateUrl: 'js/app_specific/sections/sections.add.html',
                     params: {
-                        'selected': 0
+                        'parentSurvey': 0
                     },
                     controller: 'sectionsAddCtrl as vm'
                 })

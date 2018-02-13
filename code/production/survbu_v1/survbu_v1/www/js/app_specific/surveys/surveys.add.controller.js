@@ -27,8 +27,12 @@
                 }
             });
 
-        vm.createSurvey = function(surveyTitle,surveyDescription) {
-            surveysSrvc.createSurveyService(surveyTitle,surveyDescription).then(function (response) {
+        vm.createSurvey = function() {
+            /*surveysSrvc.createSurveyService(surveyTitle,surveyDescription).then(function (response) {
+                //Returns the promised object
+                return listSections(response);
+            }); */
+            surveysSrvc.createSurveyService(vm.survey.introductionMessage,vm.survey.completionMessage).then(function (response) {
                 //Returns the promised object
                 return listSections(response);
             });
@@ -38,6 +42,7 @@
         //possible needs to be renamed to more appropriate name.
         var listSections = function(surveyObject)
         {
+            console.log(surveyObject);
             sectionsSrvc.isWaiting(false);
             $state.go('sections_list');
 

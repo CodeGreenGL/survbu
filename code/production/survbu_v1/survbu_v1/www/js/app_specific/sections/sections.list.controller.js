@@ -9,18 +9,24 @@
     control.$inject = [
         '$state',
         'sectionsSrvc',
-        'questionsSrvc'
+        'questionsSrvc',
+        '$stateParams'
     ];
 
     function control(
         $state,
         sectionsSrvc,
-        questionsSrvc
+        questionsSrvc,
+        $stateParams,
     ) {
-        var vm = angular.extend(this, {
-            sections: [],
-            stillWaits: sectionsSrvc.isItWaiting()
-        });
+        var params = $stateParams,
+            vm = angular.extend(this, {
+                parentSurvey : params.parentSurvey,
+                sections: [],
+                stillWaits: sectionsSrvc.isItWaiting()
+            });
+
+            console.log("Inside parent " + vm.parentSurvey['sectionIds']);
 
         vm.selectDetail = function ($event, index) {
             $event.stopPropagation();
@@ -66,7 +72,9 @@
         };
 
         vm.addSection = function (){
-            $state.go('sections_add');
+            $state.go('sections_add', {
+                parentSurvey: vm.parentSurvey
+                });
         };
 
         vm.sections = sectionsSrvc.getSections();

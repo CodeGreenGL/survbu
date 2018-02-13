@@ -29,7 +29,7 @@
             $state.go('surveys_list');
         };
 
-        vm.survey = surveysSrvc.getSectionAt(params.selected);
+        vm.survey = surveysSrvc.getSurveyAt(params.selected);
 
     }
 }());

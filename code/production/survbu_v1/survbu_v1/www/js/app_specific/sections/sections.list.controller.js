@@ -8,12 +8,14 @@
 
     control.$inject = [
         '$state',
+        '$ionicPopup',
         'sectionsSrvc',
         'questionsSrvc'
     ];
 
     function control(
         $state,
+        $ionicPopup,
         sectionsSrvc,
         questionsSrvc
     ) {
@@ -56,6 +58,22 @@
                 } else {
                     questionsSrvc.isWaiting(false);
                 }
+            },
+            showDeleteAlert: function ($event, index) {
+                $event.stopPropagation();
+                var selectedSection = sectionsSrvc.getSectionAt(index),
+                    confirmPopup = $ionicPopup.confirm({
+                    title: 'Delete Section',
+                    template: 'Are you sure you want to delete \'' + selectedSection.heading + '\'?'
+                });
+
+                confirmPopup.then(function (response) {
+                    if (response) {
+                        console.log('User confirmed action');
+                    } else {
+                        console.log('User pressed cancel');
+                    }
+                });
             }
         });
     }

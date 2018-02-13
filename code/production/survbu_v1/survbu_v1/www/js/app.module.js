@@ -4,10 +4,7 @@
 
     angular
         .module('surveyModule', [])
-        .config(function ($stateProvider, $locationProvider) {
-			
-            // use the HTML5 History API
-            //$locationProvider.html5Mode(true);
+        .config(function ($stateProvider) {
             $stateProvider
 			
 				// HOMEPAGE

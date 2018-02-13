@@ -8,11 +8,13 @@
 
     control.$inject = [
         '$state',
+        '$ionicPopup',
         'questionsSrvc'
     ];
 
     function control(
         $state,
+        $ionicPopup,
         questionsSrvc
     ) {
         var vm = angular.extend(this, {
@@ -33,6 +35,22 @@
             selectDetail: function selectDetail(index) {
                 $state.go('questions_detail', {
                     selected: index
+                });
+            },
+            showDeleteAlert: function ($event, index) {
+                $event.stopPropagation();
+                var selectedQuestion = questionsSrvc.getQuestionAt(index),
+                    confirmPopup = $ionicPopup.confirm({
+                    title: 'Delete Question',
+                    template: 'Are you sure you want to delete \'' + selectedQuestion.questionText + '\'?'
+                });
+
+                confirmPopup.then(function (response) {
+                    if (response) {
+                        console.log('User confirmed action');
+                    } else {
+                        console.log('User pressed cancel');
+                    }
                 });
             }
         });

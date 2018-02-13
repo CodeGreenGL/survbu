@@ -10,7 +10,7 @@
             <ion-list>
                 <ion-item ng-click="vm.selectDetail($index)" ng-repeat="question in vm.questions">{{question.questionText}}
                     <!-- Placeholder -->
-                    <button class="button button-small button-assertive contextButton">Delete</button>
+                    <button ng-click="vm.showDeleteAlert($event, $index)" class="button button-small button-assertive contextButton">Delete</button>
                 </ion-item>
             </ion-list>
         </div>

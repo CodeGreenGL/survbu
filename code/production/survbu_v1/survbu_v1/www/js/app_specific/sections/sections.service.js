@@ -19,7 +19,7 @@
         var sectionsArray = [],
             waitingState = false, // Set waitingstate to false so surveys load
             service = {},
-            getAllSections = function (surveySections) {
+            getSurveySections = function (surveySections) {
                 var deferred = $q.defer();
                 if (surveySections.length > 0) {
                     for (var i = 0, len = surveySections.length; i < len; i++) {
@@ -31,8 +31,8 @@
                                 "accept": "application/json"
                             }
                         }).then(function successCallback(response) {
-                            sectionsArray.splice(surveySections.indexOf(response.data['id']), 0, response.data);
-                            if (sectionsArray.length == surveySections.length) {
+                            sectionsArray.splice(surveySections.indexOf(response.data.id), 0, response.data);
+                            if (sectionsArray.length === surveySections.length) {
                                 deferred.resolve(sectionsArray);
                             }
                         }, function errorCallback(response) {
@@ -44,16 +44,42 @@
                     deferred.resolve(sectionsArray);
                 }
                 return deferred.promise;
+            },
+            getAllSections = function () {
+                var deferred = $q.defer();
+                $http({
+                    url: 'https://codegreen.restlet.net/v1/surveySections/',
+                    headers: {
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                        "content-type": "application/json",
+                        "accept": "application/json"
+                    }
+                }).then(function successCallback(response) {
+                    sectionsArray = response.data;
+                    deferred.resolve(sectionsArray);
+                }, function errorCallback(response) {
+                    console.error('Error while fetching questions');
+                    console.error(response);
+                });
+                return deferred.promise;
+            },
+            promiseToUpdateSections = function (surveySections) {
+                // returns a promise
+                return getSurveySections(surveySections);
+            },
+            promiseToUpdateAllSections = function () {
+                // returns a promise
+                return getAllSections();
             };
-
-        var promiseToUpdateSections = function (surveySections) {
-            // returns a promise
-            return getAllSections(surveySections);
-        };
 
         service.updateSections = function (surveySections) {
             sectionsArray = [];
             return promiseToUpdateSections(surveySections);
+        };
+        
+        service.updateAllSections = function () {
+            sectionsArray = [];
+            return promiseToUpdateAllSections();
         };
 
         service.getSections = function () {

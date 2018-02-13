@@ -8,16 +8,20 @@
 
     control.$inject = [
         '$state',
-        'surveysSrvc'
+        'surveysSrvc',
+        'sectionsSrvc',
+        'questionsSrvc'
     ];
 
     function control(
         $state,
-        surveysSrvc
+        surveysSrvc,
+        sectionsSrvc,
+        questionsSrvc
     ) {
         
         var vm = angular.extend(this, {
-            listSurveys: function () {
+            listAllSurveys: function () {
                 surveysSrvc.isWaiting(true);
                 $state.go('surveys_list');
                 
@@ -28,7 +32,31 @@
                         $state.reload();
                     }
                 });
-            } //end listSurveys function
+            }, //end listAllSurveys function
+            listAllSections: function () {
+                sectionsSrvc.isWaiting(true);
+                $state.go('sections_list');
+                
+                sectionsSrvc.updateAllSections().then(function () {
+                    sectionsSrvc.isWaiting(false);
+                    
+                    if (sectionsSrvc.getNumSections() > 0) {
+                        $state.reload();
+                    }
+                });
+            }, //end listAllSections function
+            listAllQuestions: function () {
+                questionsSrvc.isWaiting(true);
+                $state.go('questions_list');
+                
+                questionsSrvc.updateAllQuestions().then(function () {
+                    questionsSrvc.isWaiting(false);
+                    
+                    if (questionsSrvc.getNumQuestions() > 0) {
+                        $state.reload();
+                    }
+                });
+            } //end listAllQuestions function
         }); //end angular.extend
     } //end function control (controller)
 }());

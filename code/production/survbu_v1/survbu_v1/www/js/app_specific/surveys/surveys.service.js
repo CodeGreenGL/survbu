@@ -57,10 +57,14 @@
             return surveysArray.length;
         };
 
+        service.disposeSurveys = function () {
+            surveysArray = [];
+        };
+
         service.getSurveyAt = function (index) {
             return angular.copy(surveysArray[index]);
         };
-        
+
         service.isWaiting = function (iWait) {
             waitingState = iWait;
         };
@@ -68,7 +72,7 @@
         service.isItWaiting = function () {
             return waitingState;
         };
-            
+
         return service;
     }
 

@@ -79,7 +79,7 @@
             questionsArray = [];
             return promiseToUpdateQuestions(sectionQuestions);
         };
-        
+
         service.updateAllQuestions = function () {
             questionsArray = [];
             return promiseToUpdateAllQuestions();
@@ -91,6 +91,10 @@
 
         service.getNumQuestions = function () {
             return questionsArray.length;
+        };
+
+        service.disposeQuestions = function () {
+            questionsArray = [];
         };
 
         service.getQuestionAt = function (index) {

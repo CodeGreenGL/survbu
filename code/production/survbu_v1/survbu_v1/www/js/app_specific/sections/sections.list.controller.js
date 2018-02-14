@@ -9,6 +9,7 @@
     control.$inject = [
         '$state',
         '$ionicPopup',
+        'surveysSrvc',
         'sectionsSrvc',
         'questionsSrvc'
     ];
@@ -16,6 +17,7 @@
     function control(
         $state,
         $ionicPopup,
+        surveysSrvc,
         sectionsSrvc,
         questionsSrvc
     ) {
@@ -49,7 +51,7 @@
 
                 var selectedSection = sectionsSrvc.getSectionAt(index),
                     sectionQuestions = selectedSection.questionIds;
-            
+
                 if (sectionQuestions.length > 0) {
                     questionsSrvc.updateQuestions(sectionQuestions).then(function () {
                         $state.reload();
@@ -61,19 +63,25 @@
             },
             showDeleteAlert: function ($event, index) {
                 $event.stopPropagation();
-                var selectedSection = sectionsSrvc.getSectionAt(index),
-                    confirmPopup = $ionicPopup.confirm({
-                    title: 'Delete Section',
-                    template: 'Are you sure you want to delete \'' + selectedSection.heading + '\'?'
-                });
 
-                confirmPopup.then(function (response) {
-                    if (response) {
-                        console.log('User confirmed action');
-                    } else {
-                        console.log('User pressed cancel');
-                    }
-                });
+                if (surveysSrvc.getNumSurveys() === 0) {
+                    $ionicPopup.alert({
+                        title: 'Can\'t delete section from global list!',
+                        template: 'Sections can only be deleted via the relevant survey.'
+                    });
+                } else if (surveysSrvc.getNumSurveys() > 0) {
+                    var selectedSection = sectionsSrvc.getSectionAt(index);
+                    $ionicPopup.confirm({
+                        title: 'Delete Section',
+                        template: 'Are you sure you want to delete \'' + selectedSection.heading + '\'?'
+                    }).then(function (response) {
+                        if (response) {
+                            console.log('User confirmed action');
+                        } else {
+                            console.log('User pressed cancel');
+                        }
+                    });
+                }
             }
         });
     }

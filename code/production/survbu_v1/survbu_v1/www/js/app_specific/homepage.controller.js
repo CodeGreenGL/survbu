@@ -19,44 +19,48 @@
         sectionsSrvc,
         questionsSrvc
     ) {
-        
+
         var vm = angular.extend(this, {
-            listAllSurveys: function () {
-                surveysSrvc.isWaiting(true);
-                $state.go('surveys_list');
-                
-                surveysSrvc.updateSurveys().then(function () {
-                    surveysSrvc.isWaiting(false);
+                listAllSurveys: function () {
+                    surveysSrvc.isWaiting(true);
+                    $state.go('surveys_list');
+
+                    surveysSrvc.updateSurveys().then(function () {
+                        surveysSrvc.isWaiting(false);
+
+                        if (surveysSrvc.getSurveys().length > 0) {
+                            $state.reload();
+                        }
+                    });
+                }, //end listAllSurveys function
+                listAllSections: function () {
+                    surveysSrvc.disposeSurveys();
                     
-                    if (surveysSrvc.getSurveys().length > 0) {
-                        $state.reload();
-                    }
-                });
-            }, //end listAllSurveys function
-            listAllSections: function () {
-                sectionsSrvc.isWaiting(true);
-                $state.go('sections_list');
-                
-                sectionsSrvc.updateAllSections().then(function () {
-                    sectionsSrvc.isWaiting(false);
+                    sectionsSrvc.isWaiting(true);
+                    $state.go('sections_list');
+
+                    sectionsSrvc.updateAllSections().then(function () {
+                        sectionsSrvc.isWaiting(false);
+
+                        if (sectionsSrvc.getNumSections() > 0) {
+                            $state.reload();
+                        }
+                    });
+                }, //end listAllSections function
+                listAllQuestions: function () {
+                    sectionsSrvc.disposeSections();
                     
-                    if (sectionsSrvc.getNumSections() > 0) {
-                        $state.reload();
-                    }
-                });
-            }, //end listAllSections function
-            listAllQuestions: function () {
-                questionsSrvc.isWaiting(true);
-                $state.go('questions_list');
-                
-                questionsSrvc.updateAllQuestions().then(function () {
-                    questionsSrvc.isWaiting(false);
-                    
-                    if (questionsSrvc.getNumQuestions() > 0) {
-                        $state.reload();
-                    }
-                });
-            } //end listAllQuestions function
-        }); //end angular.extend
+                    questionsSrvc.isWaiting(true);
+                    $state.go('questions_list');
+
+                    questionsSrvc.updateAllQuestions().then(function () {
+                        questionsSrvc.isWaiting(false);
+
+                        if (questionsSrvc.getNumQuestions() > 0) {
+                            $state.reload();
+                        }
+                    });
+                } //end listAllQuestions function
+            }); //end angular.extend
     } //end function control (controller)
 }());

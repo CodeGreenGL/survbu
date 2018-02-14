@@ -89,6 +89,10 @@
         service.getNumSections = function () {
             return sectionsArray.length;
         };
+            
+        service.disposeSections = function () {
+            sectionsArray = [];
+        };
 
         service.getSectionAt = function (index) {
             return angular.copy(sectionsArray[index]);

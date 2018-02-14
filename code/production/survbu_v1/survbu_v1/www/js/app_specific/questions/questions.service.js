@@ -19,7 +19,6 @@
         //get all surveys from codegreen restlet; returns deferred promise
         var questionsArray = [],
             waitingState = false,
-            service = {},
             getSectionQuestions = function (sectionQuestions) {
                 var deferred = $q.defer(),
                     i = 0,
@@ -34,7 +33,7 @@
                                 "accept": "application/json"
                             }
                         }).then(function successCallback(response) {
-                        // Splice in question at order from sectionQuestions to preserve order, deleting 0 items
+                            // Splice in question at order from sectionQuestions to preserve order, deleting 0 items
                             questionsArray.splice(sectionQuestions.indexOf(response.data.id), 0, response.data);
                             if (questionsArray.length === sectionQuestions.length) {
                                 deferred.resolve(questionsArray);
@@ -73,42 +72,35 @@
             },
             promiseToUpdateAllQuestions = function () {
                 return getAllQuestions();
+            },
+            service = {
+                updateQuestions: function (sectionQuestions) {
+                    questionsArray = [];
+                    return promiseToUpdateQuestions(sectionQuestions);
+                },
+                updateAllQuestions: function () {
+                    questionsArray = [];
+                    return promiseToUpdateAllQuestions();
+                },
+                getQuestions: function () {
+                    return angular.copy(questionsArray);
+                },
+                getNumQuestions: function () {
+                    return questionsArray.length;
+                },
+                disposeQuestions: function () {
+                    questionsArray = [];
+                },
+                getQuestionAt: function (index) {
+                    return angular.copy(questionsArray[index]);
+                },
+                isWaiting: function (iWait) {
+                    waitingState = iWait;
+                },
+                isItWaiting: function () {
+                    return waitingState;
+                }
             };
-
-        service.updateQuestions = function (sectionQuestions) {
-            questionsArray = [];
-            return promiseToUpdateQuestions(sectionQuestions);
-        };
-
-        service.updateAllQuestions = function () {
-            questionsArray = [];
-            return promiseToUpdateAllQuestions();
-        };
-
-        service.getQuestions = function () {
-            return angular.copy(questionsArray);
-        };
-
-        service.getNumQuestions = function () {
-            return questionsArray.length;
-        };
-
-        service.disposeQuestions = function () {
-            questionsArray = [];
-        };
-
-        service.getQuestionAt = function (index) {
-            return angular.copy(questionsArray[index]);
-        };
-
-        service.isWaiting = function (iWait) {
-            waitingState = iWait;
-        };
-
-        service.isItWaiting = function () {
-            return waitingState;
-        };
-
         return service;
     }
 }());

@@ -18,10 +18,9 @@
         //get all surveys from codegreen restlet; returns deferred promise
         var surveysArray = [],
             waitingState = false, // Set waitingstate to false so surveys load
-            service = {},
             getAllSurveys = function () {
                 var deferred = $q.defer();
-                
+
                 $http({
                     url: 'https://codegreen.restlet.net/v1/surveys/',
                     headers: {
@@ -36,44 +35,36 @@
                     console.error('Error while fetching notes');
                     console.error(response);
                 });
-                
+
                 return deferred.promise;
+            },
+            promiseToUpdateSurveys = function () {
+                // returns a promise
+                return getAllSurveys();
+            },
+            service = {
+                updateSurveys: function () {
+                    return promiseToUpdateSurveys();
+                },
+                getSurveys: function () {
+                    return angular.copy(surveysArray);
+                },
+                getNumSurveys: function () {
+                    return surveysArray.length;
+                },
+                disposeSurveys: function () {
+                    surveysArray = [];
+                },
+                getSurveyAt: function (index) {
+                    return angular.copy(surveysArray[index]);
+                },
+                isWaiting: function (iWait) {
+                    waitingState = iWait;
+                },
+                isItWaiting: function () {
+                    return waitingState;
+                }
             };
-
-        var promiseToUpdateSurveys = function () {
-            // returns a promise
-            return getAllSurveys();
-        };
-
-        service.updateSurveys = function () {
-            return promiseToUpdateSurveys();
-        };
-
-        service.getSurveys = function () {
-            return angular.copy(surveysArray);
-        };
-
-        service.getNumSurveys = function () {
-            return surveysArray.length;
-        };
-
-        service.disposeSurveys = function () {
-            surveysArray = [];
-        };
-
-        service.getSurveyAt = function (index) {
-            return angular.copy(surveysArray[index]);
-        };
-
-        service.isWaiting = function (iWait) {
-            waitingState = iWait;
-        };
-
-        service.isItWaiting = function () {
-            return waitingState;
-        };
-
         return service;
     }
-
 }());

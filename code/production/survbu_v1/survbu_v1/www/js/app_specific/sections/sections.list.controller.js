@@ -49,6 +49,7 @@
                 questionsSrvc.isWaiting(true);
                 $state.go('questions_list');
 
+                sectionsSrvc.setCurrentSection(index);
                 var selectedSection = sectionsSrvc.getSectionAt(index),
                     sectionQuestions = selectedSection.questionIds;
 

@@ -7,6 +7,7 @@
         .controller('questionsAddCtrl', control);
 
     control.$inject = [
+        '$scope',
         '$state',
         '$stateParams',
         'surveysSrvc',
@@ -15,6 +16,7 @@
     ];
 
     function control(
+        $scope,
         $state,
         $stateParams,
         surveysSrvc,
@@ -23,33 +25,32 @@
     ) {
         var params = $stateParams,
             vm = angular.extend(this, {
+                questionChoices : [],
                 parentSection : params.parentSection,
                 parentSectionSurvey : params.parentSectionSurvey,
                 question: {
                     questionText: "",
                     questionType: ""
-                }
+                },
             });
 
-        var test = function(parentSectionSurvey){
-            console.log("this is parentSectionSurvey");
-            console.log(vm.parentSectionSurvey);
-            console.log(vm.parentSection);
-        };
 
-        test();
+        vm.displayAddQuestionChoices = function(questionType){
+          if(questionType === 'MULTIPLE_SELECT' || questionType === 'SINGLE_SELECT')
+            {return true;}
+        }
+
+        vm.addChoice = function(addChoice){
+            vm.questionChoices.push(addChoice);
+        }
 
 
         vm.createQuestion = function() {
-
-            questionsSrvc.createQuestionService(vm.question.questionText,vm.question.questionType).then(function(response){
+            questionsSrvc.createQuestionService(vm.question.questionText,vm.question.questionType, vm.questionChoices).then(function(response){
                 
                 var newQuestionID = response['id'];
 
-                console.log("Parent Sectiond ARRAY : TRUE STORY: !!!");
-                console.log(vm.parentSection['questionIds']);
-
-                vm.parentSection['questionIds'].push(newQuestionID); // NEEDS FURTHER ATTENCTION AS IT STILL BUGGY
+                vm.parentSection['questionIds'].push(newQuestionID);
                 
                 sectionsSrvc.updateSectionDetails(vm.parentSection).then(function(response){
                     reloadSections(response);

@@ -77,12 +77,12 @@
             return waitingState;
         };
 
-        service.createQuestionService = function(questionText, questionType) {
+        service.createQuestionService = function(questionText, questionType, questionChoices) {
             var questionObject = {
                 id : "",
                 questionType : questionType,
                 questionText : questionText,
-                questionChoices : []
+                questionChoices : questionChoices
             };
             return promiseToCreateQuestion(questionObject);
         };

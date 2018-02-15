@@ -65,28 +65,24 @@
                     i = 0;
                 $ionicPopup.show({
                     title: 'Delete ' + selectedSurvey.introductionMessage,
-                    cssClass: 'surveyDeletePopup',
+                    cssClass: 'extendedDeletePopup',
                     template: 'Would you like to keep, or delete the sections associated with this survey?<br/><br/>Questions will be kept.',
-                    buttons: [
-                        {
+                    buttons: [{
                             text: 'Cancel',
                             type: 'button-light'
-                        },
-                        {
+                        }, {
                             text: 'Keep Sections',
                             type: 'button-calm',
                             onTap: function () {
                                 return 0;
                             }
-                        },
-                        {
+                        }, {
                             text: 'Delete Sections',
                             type: 'button-assertive',
                             onTap: function () {
                                 return 1;
                             }
-                        }
-                    ]
+                        }]
                 }).then(function (response) {
                     if (response === 0) {
                         vm.surveys.splice(index, 1);

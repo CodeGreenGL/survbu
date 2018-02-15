@@ -63,6 +63,6 @@ ion-content[class*="homeContent"].scroll-content {
     height: 100% !important;
 }
 
-.surveyDeletePopup > .popup {
+.extendedDeletePopup > .popup {
     min-width: 18rem !important;
 }

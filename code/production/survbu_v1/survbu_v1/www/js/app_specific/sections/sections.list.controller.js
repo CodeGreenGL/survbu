@@ -73,14 +73,36 @@
                     });
                 } else if (surveysSrvc.getNumSurveys() > 0) {
                     var selectedSection = sectionsSrvc.getSectionAt(index);
-                    $ionicPopup.confirm({
-                        title: 'Delete Section',
-                        template: 'Are you sure you want to delete \'' + selectedSection.heading + '\'?'
+                    $ionicPopup.show({
+                        title: 'Delete ' + selectedSection.heading,
+                        cssClass: 'extendedDeletePopup',
+                        template: 'Section will be removed from survey. Would you like to delete section object too?<br/><br/>Questions will be kept.',
+                        buttons: [{
+                            text: 'Cancel',
+                            type: 'button-light'
+                        }, {
+                            text: 'Keep Section',
+                            type: 'button-calm',
+                            onTap: function () {
+                                return 0;
+                            }
+                        }, {
+                            text: 'Delete Section',
+                            type: 'button-assertive',
+                            onTap: function () {
+                                return 1;
+                            }
+                        }]
                     }).then(function (response) {
-                        if (response) {
+                        if (response === 0) {
+                            vm.sections.splice(index, 1);
+                            surveysSrvc.deleteSectionFromSurvey(selectedSection.id);
+                            console.log('Deleted Section, KEPT section object');
+                        } else if (response === 1) {
                             vm.sections.splice(index, 1);
                             sectionsSrvc.deleteSection(selectedSection.id);
                             surveysSrvc.deleteSectionFromSurvey(selectedSection.id);
+                            console.log('Deleted Survey, DELETED section object');
                         } else {
                             console.log('User pressed cancel');
                         }

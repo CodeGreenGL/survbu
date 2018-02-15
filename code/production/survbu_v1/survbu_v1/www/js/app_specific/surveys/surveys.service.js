@@ -17,6 +17,7 @@
     ) {
         //get all surveys from codegreen restlet; returns deferred promise
         var surveysArray = [],
+            currentSurvey,
             waitingState = false, // Set waitingstate to false so surveys load
             getAllSurveys = function () {
                 var deferred = $q.defer();
@@ -38,13 +39,47 @@
 
                 return deferred.promise;
             },
-            promiseToUpdateSurveys = function () {
+            deleteSectionFromSurvey = function (localSurvey) {
+                var deferred = $q.defer();
+                $http({
+                    method: 'PUT',
+                    url: 'https://codegreen.restlet.net/v1/surveys/' + localSurvey.id,
+                    headers: {
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                        "content-type": "application/json",
+                        "accept": "application/json"
+                    },
+                    data: localSurvey
+                }).then(function successCallback(response) {
+                    deferred.resolve(surveysArray);
+                }, function errorCallback(response) {
+                    console.error('Error while fetching questions');
+                    console.error(response);
+                });
+                return deferred.promise;
+            },
+            promiseToUpdateAllSurveys = function () {
                 // returns a promise
                 return getAllSurveys();
             },
+            promiseToDeleteSectionFromSurvey = function (localSurvey) {
+                // returns a promise
+                return deleteSectionFromSurvey(localSurvey);
+            },
             service = {
-                updateSurveys: function () {
-                    return promiseToUpdateSurveys();
+                updateAllSurveys: function () {
+                    surveysArray = [];
+                    return promiseToUpdateAllSurveys();
+                },
+                deleteSectionFromSurvey: function (sectionID) {
+                    var localSurvey = surveysArray[currentSurvey];
+                    localSurvey.sectionIds.splice(localSurvey.sectionIds.indexOf(sectionID), 1);
+                    surveysArray[currentSurvey] = localSurvey;
+                    
+                    return promiseToDeleteSectionFromSurvey(localSurvey);
+                },
+                setCurrentSurvey: function (index) {
+                    currentSurvey = parseInt(index, 10);
                 },
                 getSurveys: function () {
                     return angular.copy(surveysArray);

@@ -59,6 +59,7 @@
                         questionsSrvc.isWaiting(false);
                     });
                 } else {
+                    questionsSrvc.disposeQuestions();
                     questionsSrvc.isWaiting(false);
                 }
             },
@@ -77,7 +78,8 @@
                         template: 'Are you sure you want to delete \'' + selectedSection.heading + '\'?'
                     }).then(function (response) {
                         if (response) {
-                            console.log('User confirmed action');
+                            vm.sections.splice(index, 1);
+                            surveysSrvc.deleteSectionFromSurvey(selectedSection.id);
                         } else {
                             console.log('User pressed cancel');
                         }

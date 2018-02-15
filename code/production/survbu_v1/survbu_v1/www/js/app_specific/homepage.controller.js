@@ -25,7 +25,7 @@
                     surveysSrvc.isWaiting(true);
                     $state.go('surveys_list');
 
-                    surveysSrvc.updateSurveys().then(function () {
+                    surveysSrvc.updateAllSurveys().then(function () {
                         surveysSrvc.isWaiting(false);
 
                         if (surveysSrvc.getSurveys().length > 0) {

@@ -44,27 +44,27 @@
                 sectionsSrvc.isWaiting(true);
                 $state.go('sections_list');
 
+                surveysSrvc.setCurrentSurvey(index);
                 var selectedSurvey = surveysSrvc.getSurveyAt(index),
                     surveySections = selectedSurvey.sectionIds;
-                
+
                 if (surveySections.length > 0) {
                     sectionsSrvc.updateSections(surveySections).then(function () {
                         $state.reload();
                         sectionsSrvc.isWaiting(false);
                     });
                 } else {
+                    sectionsSrvc.disposeSections();
                     sectionsSrvc.isWaiting(false);
                 }
             },
             showDeleteAlert: function ($event, index) {
                 $event.stopPropagation();
-                var selectedSurvey = surveysSrvc.getSurveyAt(index),
-                    confirmPopup = $ionicPopup.confirm({
+                var selectedSurvey = surveysSrvc.getSurveyAt(index);
+                $ionicPopup.confirm({
                     title: 'Delete Survey',
                     template: 'Are you sure you want to delete \'' + selectedSurvey.introductionMessage + '\'?'
-                });
-
-                confirmPopup.then(function (response) {
+                }).then(function (response) {
                     if (response) {
                         console.log('User confirmed action');
                     } else {

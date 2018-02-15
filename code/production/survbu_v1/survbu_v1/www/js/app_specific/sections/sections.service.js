@@ -63,11 +63,11 @@
                 });
                 return deferred.promise;
             },
-            deleteQuestionFromSection = function (sectionID, localSection) {
+            deleteQuestionFromSection = function (localSection) {
                 var deferred = $q.defer();
                 $http({
                     method: 'PUT',
-                    url: 'https://codegreen.restlet.net/v1/surveySections/' + sectionID,
+                    url: 'https://codegreen.restlet.net/v1/surveySections/' + localSection.id,
                     headers: {
                         "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
                         "content-type": "application/json",
@@ -90,9 +90,9 @@
                 // returns a promise
                 return getAllSections();
             },
-            promiseToDeleteQuestionFromSection = function (sectionID, localSection) {
+            promiseToDeleteQuestionFromSection = function (localSection) {
                 // returns a promise
-                return deleteQuestionFromSection(sectionID, localSection);
+                return deleteQuestionFromSection(localSection);
             },
             service = {
                 updateSections: function (surveySections) {
@@ -107,14 +107,11 @@
                     var localSection = sectionsArray[currentSection];
                     localSection.questionIds.splice(localSection.questionIds.indexOf(questionID), 1);
                     sectionsArray[currentSection] = localSection;
-
-                    return promiseToDeleteQuestionFromSection(localSection.id, localSection);
-                },
-                getCurrentSection: function () {
-                    return currentSection;
+                    
+                    return promiseToDeleteQuestionFromSection(localSection);
                 },
                 setCurrentSection: function (index) {
-                    currentSection = parseInt(index);
+                    currentSection = parseInt(index, 10);
                 },
                 getSections: function () {
                     return angular.copy(sectionsArray);

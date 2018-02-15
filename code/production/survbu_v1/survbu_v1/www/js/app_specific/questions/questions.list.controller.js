@@ -56,7 +56,6 @@
                         if (response) {
                             vm.questions.splice(index, 1);
                             sectionsSrvc.deleteQuestionFromSection(selectedQuestion.id);
-                            console.log(sectionsSrvc.getSections());
                         } else {
                             console.log('User pressed cancel');
                         }

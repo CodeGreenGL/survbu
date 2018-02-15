@@ -8,9 +8,11 @@
         
         <div ng-hide="vm.hideList()">
             <ion-list>
-                <ion-item ng-click="vm.selectDetail($index)" ng-repeat="question in vm.questions">{{question.questionText}}
-                    <!-- Placeholder -->
-                    <button ng-click="vm.showDeleteAlert($event, $index)" class="button button-small button-assertive contextButton">Delete</button>
+                <ion-item ng-click="vm.selectDetail($index)" ng-repeat="question in vm.questions" class="item-button-right">{{question.questionText}}
+                    <!-- Placeholder
+                    <button ng-click="vm.showDeleteAlert($event, $index)" class="button button-small button-assertive contextButton">Delete</button> -->
+                    
+                    <button ng-click="vm.showDeleteAlert($event, $index)" class="button button-icon icon ion-ios-close actionMenuButton" style="color:#ff3344f;"></button>
                 </ion-item>
             </ion-list>
         </div>
@@ -28,13 +30,6 @@
                 <ion-spinner icon="ios" class="spinner-light"/>
             </div>
         </div>
-        
-        <!--<span ng-hide="vm.stillWaiting()">Still Waiting is false</span><br>
-        <span ng-hide="!vm.stillWaiting()">Still Waiting is true</span><br>
-        <span ng-hide="!vm.stillWaiting() && !vm.noQuestions()">Still Waiting == true && NoQuestion == true</span><br>
-        <span ng-hide="vm.stillWaiting() && vm.noQuestions()">Still Waiting == false && NoQuestions == false</span><br>
-        <span ng-hide="!vm.stillWaiting() && vm.noQuestions()">Still Waiting == true && NoQuestions == false</span><br>
-        <span ng-hide="vm.stillWaiting() && !vm.noQuestions()">Still Waiting == false && NoQuestions == true</span>-->
         
     </ion-content>
     

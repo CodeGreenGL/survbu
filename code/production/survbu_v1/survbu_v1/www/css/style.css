@@ -8,6 +8,22 @@
     padding: 0px;
 }
 
+.actionMenuButton {
+    display: inline-block !important;
+    transition: opacity .25s ease-in-out;
+    text-align: right;
+    top: -1px !important;
+    right: 0px !important;
+    padding-top: 5px;
+    padding-bottom: 4px;
+    padding-right: 25px;
+    padding-left: 40px;
+}
+
+.actionMenuButton:hover {
+    opacity: 0.7;
+}
+
 .contextButton {
     float: right;
     width: 60px;

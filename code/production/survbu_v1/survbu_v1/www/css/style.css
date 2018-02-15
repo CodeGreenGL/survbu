@@ -64,5 +64,5 @@ ion-content[class*="homeContent"].scroll-content {
 }
 
 .extendedDeletePopup > .popup {
-    min-width: 18rem !important;
+    min-width: 19rem !important;
 }

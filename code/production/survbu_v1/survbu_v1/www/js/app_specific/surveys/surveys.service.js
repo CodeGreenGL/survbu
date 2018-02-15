@@ -55,7 +55,7 @@
                 });
                 return deferred.promise;
             },
-            deleteSectionFromSurvey = function (localSurvey) {
+            updateSurvey = function (localSurvey) {
                 var deferred = $q.defer();
                 $http({
                     method: 'PUT',
@@ -82,9 +82,9 @@
                 // returns a promise
                 return deleteSurveyID(surveyID);
             },
-            promiseToDeleteSectionFromSurvey = function (localSurvey) {
+            promiseToUpdateSurvey = function (localSurvey) {
                 // returns a promise
-                return deleteSectionFromSurvey(localSurvey);
+                return updateSurvey(localSurvey);
             },
             service = {
                 updateAllSurveys: function () {
@@ -94,12 +94,12 @@
                 deleteSurvey: function (surveyID) {
                     return promiseToDeleteSurveyID(surveyID);
                 },
-                deleteSectionFromSurvey: function (sectionID) {
+                updateSurvey: function (sectionID) {
                     var localSurvey = surveysArray[currentSurvey];
                     localSurvey.sectionIds.splice(localSurvey.sectionIds.indexOf(sectionID), 1);
                     surveysArray[currentSurvey] = localSurvey;
 
-                    return promiseToDeleteSectionFromSurvey(localSurvey);
+                    return promiseToUpdateSurvey(localSurvey);
                 },
                 setCurrentSurvey: function (index) {
                     currentSurvey = parseInt(index, 10);

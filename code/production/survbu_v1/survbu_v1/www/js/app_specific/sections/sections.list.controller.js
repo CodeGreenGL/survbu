@@ -71,12 +71,13 @@
                         title: 'Can\'t delete section from global list!',
                         template: 'Sections can only be deleted via the relevant survey.'
                     });
-                } else if (surveysSrvc.getNumSurveys() > 0) {
-                    var selectedSection = sectionsSrvc.getSectionAt(index);
+                } else {
+                    var selectedSection = sectionsSrvc.getSectionAt(index),
+                        hasQuestions = (!Array.isArray(selectedSection.questionIds) || !selectedSection.questionIds.length) ? 'This section has no associated questions.' : 'Questions will be kept.';//TRUE=empty array
                     $ionicPopup.show({
-                        title: 'Delete ' + selectedSection.heading,
+                        title: 'Delete \'' + selectedSection.heading + '\'',
                         cssClass: 'extendedDeletePopup',
-                        template: 'Section will be removed from survey. Would you like to delete section object too?<br/><br/>Questions will be kept.',
+                        template: 'Section will be removed from survey. Would you like to delete section object too?<br/><br/>' + hasQuestions,
                         buttons: [{
                             text: 'Cancel',
                             type: 'button-light'
@@ -96,12 +97,12 @@
                     }).then(function (response) {
                         if (response === 0) {
                             vm.sections.splice(index, 1);
-                            surveysSrvc.deleteSectionFromSurvey(selectedSection.id);
+                            surveysSrvc.updateSurvey(selectedSection.id);
                             console.log('Deleted Section, KEPT section object');
                         } else if (response === 1) {
                             vm.sections.splice(index, 1);
                             sectionsSrvc.deleteSection(selectedSection.id);
-                            surveysSrvc.deleteSectionFromSurvey(selectedSection.id);
+                            surveysSrvc.updateSurvey(selectedSection.id);
                             console.log('Deleted Survey, DELETED section object');
                         } else {
                             console.log('User pressed cancel');

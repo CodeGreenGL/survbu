@@ -4,10 +4,12 @@
         <ion-nav-back-button/>
     </ion-nav-bar>
     
+    <! -- Needs to be re-design according to the design -->
+    <button class="button button-float button-positive" ng-click="vm.addSection()">
+        <i class="icon ion-plus-round"></i>
+    </button>
+    
     <ion-content class="has-header">
-
-        <! -- Needs to be re-design according to the design -->
-        <button class="button button-positive" ng-click="vm.addSection()">+</button>
         
         <div ng-hide="vm.hideList()">
             <ion-list>

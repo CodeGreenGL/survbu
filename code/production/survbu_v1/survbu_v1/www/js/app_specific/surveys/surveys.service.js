@@ -21,7 +21,6 @@
             waitingState = false, // Set waitingstate to false so surveys load
             getAllSurveys = function () {
                 var deferred = $q.defer();
-
                 $http({
                     url: 'https://codegreen.restlet.net/v1/surveys/',
                     headers: {
@@ -33,10 +32,27 @@
                     surveysArray = response.data;
                     deferred.resolve(surveysArray);
                 }, function errorCallback(response) {
-                    console.error('Error while fetching notes');
+                    console.error('Error while fetching all surveys');
                     console.error(response);
                 });
-
+                return deferred.promise;
+            },
+            deleteSurveyID = function (surveyID) {
+                var deferred = $q.defer();
+                $http({
+                    method: 'DELETE',
+                    url: 'https://codegreen.restlet.net/v1/surveys/' + surveyID,
+                    headers: {
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                        "content-type": "application/json",
+                        "accept": "application/json"
+                    }
+                }).then(function successCallback(response) {
+                    deferred.resolve(surveysArray);
+                }, function errorCallback(response) {
+                    console.error('Error while deleting surveyID');
+                    console.error(response);
+                });
                 return deferred.promise;
             },
             deleteSectionFromSurvey = function (localSurvey) {
@@ -53,7 +69,7 @@
                 }).then(function successCallback(response) {
                     deferred.resolve(surveysArray);
                 }, function errorCallback(response) {
-                    console.error('Error while fetching questions');
+                    console.error('Error while deleting section from survey');
                     console.error(response);
                 });
                 return deferred.promise;
@@ -61,6 +77,10 @@
             promiseToUpdateAllSurveys = function () {
                 // returns a promise
                 return getAllSurveys();
+            },
+            promiseToDeleteSurveyID = function (surveyID) {
+                // returns a promise
+                return deleteSurveyID(surveyID);
             },
             promiseToDeleteSectionFromSurvey = function (localSurvey) {
                 // returns a promise
@@ -71,11 +91,14 @@
                     surveysArray = [];
                     return promiseToUpdateAllSurveys();
                 },
+                deleteSurvey: function (surveyID) {
+                    return promiseToDeleteSurveyID(surveyID);
+                },
                 deleteSectionFromSurvey: function (sectionID) {
                     var localSurvey = surveysArray[currentSurvey];
                     localSurvey.sectionIds.splice(localSurvey.sectionIds.indexOf(sectionID), 1);
                     surveysArray[currentSurvey] = localSurvey;
-                    
+
                     return promiseToDeleteSectionFromSurvey(localSurvey);
                 },
                 setCurrentSurvey: function (index) {

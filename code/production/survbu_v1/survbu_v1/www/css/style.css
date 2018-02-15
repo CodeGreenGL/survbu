@@ -46,7 +46,7 @@
 }
 
 .popup-head {
-    background-color: lightslategrey;
+    background-color: aliceblue;
 }
 
 .popup-body {}
@@ -61,4 +61,8 @@ ion-content[class*="homeContent"].scroll-content {
     display: table !important;
     width: 100% !important;
     height: 100% !important;
+}
+
+.surveyDeletePopup > .popup {
+    min-width: 18rem !important;
 }

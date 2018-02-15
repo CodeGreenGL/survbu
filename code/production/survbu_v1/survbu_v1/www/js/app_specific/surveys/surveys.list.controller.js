@@ -60,13 +60,45 @@
             },
             showDeleteAlert: function ($event, index) {
                 $event.stopPropagation();
-                var selectedSurvey = surveysSrvc.getSurveyAt(index);
-                $ionicPopup.confirm({
-                    title: 'Delete Survey',
-                    template: 'Are you sure you want to delete \'' + selectedSurvey.introductionMessage + '\'?'
+                var selectedSurvey = surveysSrvc.getSurveyAt(index),
+                    len,
+                    i = 0;
+                $ionicPopup.show({
+                    title: 'Delete ' + selectedSurvey.introductionMessage,
+                    cssClass: 'surveyDeletePopup',
+                    template: 'Would you like to keep, or delete the sections associated with this survey?<br/><br/>Questions will be kept.',
+                    buttons: [
+                        {
+                            text: 'Cancel',
+                            type: 'button-light'
+                        },
+                        {
+                            text: 'Keep Sections',
+                            type: 'button-calm',
+                            onTap: function () {
+                                return 0;
+                            }
+                        },
+                        {
+                            text: 'Delete Sections',
+                            type: 'button-assertive',
+                            onTap: function () {
+                                return 1;
+                            }
+                        }
+                    ]
                 }).then(function (response) {
-                    if (response) {
-                        console.log('User confirmed action');
+                    if (response === 0) {
+                        vm.surveys.splice(index, 1);
+                        surveysSrvc.deleteSurvey(selectedSurvey.id);
+                        console.log('Deleted Survey, KEPT associated sections');
+                    } else if (response === 1) {
+                        for (len = selectedSurvey.sectionIds.length; i < len; i = i + 1) {
+                            sectionsSrvc.deleteSection(selectedSurvey.sectionIds[i]);
+                        }
+                        vm.surveys.splice(index, 1);
+                        surveysSrvc.deleteSurvey(selectedSurvey.id);
+                        console.log('Deleted Survey, DELETED associated sections');
                     } else {
                         console.log('User pressed cancel');
                     }

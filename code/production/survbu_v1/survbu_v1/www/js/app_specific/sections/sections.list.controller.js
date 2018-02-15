@@ -79,6 +79,7 @@
                     }).then(function (response) {
                         if (response) {
                             vm.sections.splice(index, 1);
+                            sectionsSrvc.deleteSection(selectedSection.id);
                             surveysSrvc.deleteSectionFromSurvey(selectedSection.id);
                         } else {
                             console.log('User pressed cancel');

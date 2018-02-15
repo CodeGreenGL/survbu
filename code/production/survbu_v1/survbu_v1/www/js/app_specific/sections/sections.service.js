@@ -63,6 +63,24 @@
                 });
                 return deferred.promise;
             },
+            deleteSectionID = function (sectionID) {
+                var deferred = $q.defer();
+                $http({
+                    method: 'DELETE',
+                    url: 'https://codegreen.restlet.net/v1/surveySections/' + sectionID,
+                    headers: {
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                        "content-type": "application/json",
+                        "accept": "application/json"
+                    },
+                }).then(function successCallback(response) {
+                    deferred.resolve(sectionsArray);
+                }, function errorCallback(response) {
+                    console.error('Error while deleting section');
+                    console.error(response);
+                });
+                return deferred.promise;
+            },
             deleteQuestionFromSection = function (localSection) {
                 var deferred = $q.defer();
                 $http({
@@ -90,6 +108,10 @@
                 // returns a promise
                 return getAllSections();
             },
+            promiseToDeleteSectionID = function (sectionID) {
+                // returns a promise
+                return deleteSectionID(sectionID);
+            },
             promiseToDeleteQuestionFromSection = function (localSection) {
                 // returns a promise
                 return deleteQuestionFromSection(localSection);
@@ -102,6 +124,9 @@
                 updateAllSections: function () {
                     sectionsArray = [];
                     return promiseToUpdateAllSections();
+                },
+                deleteSection: function (sectionID) {
+                    return promiseToDeleteSectionID(sectionID);
                 },
                 deleteQuestionFromSection: function (questionID) {
                     var localSection = sectionsArray[currentSection];

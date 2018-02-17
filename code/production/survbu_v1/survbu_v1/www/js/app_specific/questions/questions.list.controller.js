@@ -43,7 +43,7 @@
                 questionsSrvc.isWaiting(true);
                 $state.go('questions_addfe');
 
-                questionsSrvc.updateAllQuestions().then(function () {
+                questionsSrvc.updateRemainingQuestions().then(function () {
                     $state.reload();
                     questionsSrvc.isWaiting(false);
                 });

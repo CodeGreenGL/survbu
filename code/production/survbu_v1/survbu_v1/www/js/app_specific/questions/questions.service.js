@@ -19,6 +19,7 @@
         //get all surveys from codegreen restlet; returns deferred promise
         var questionsArray = [],
             allQuestionsArray = [],
+            remainingQuestionsArray = [],
             waitingState = false,
             getSectionQuestions = function (sectionQuestions) {
                 var deferred = $q.defer(),
@@ -74,6 +75,22 @@
             promiseToUpdateAllQuestions = function () {
                 return getAllQuestions();
             },
+            removeAlreadyAdded = function () {
+                var deferred = $q.defer();
+                service.updateAllQuestions().then(function() {
+                    remainingQuestionsArray = angular.copy(allQuestionsArray); 
+                    if (questionsArray.length > 0) {
+                        for (var i = 0; i < questionsArray.length; i++) {
+                            remainingQuestionsArray.splice(questionsArray[i], 1);
+                        };
+                        for (var i = 0; i < remainingQuestionsArray; i++) {
+                            remainingQuestionsArray.adding = false;
+                        };
+                    };
+                    deferred.resolve(remainingQuestionsArray);
+                });
+                return deferred.promise;
+            },
             service = {
                 updateQuestions: function (sectionQuestions) {
                     questionsArray = [];
@@ -89,8 +106,11 @@
                 getAllQuestions: function () {
                     return angular.copy(allQuestionsArray);
                 },
-                getNumQuestions: function () {
+                getNumQuestions: function () { //this needs reviewing which array length it should return
                     return questionsArray.length;
+                },
+                getNumAllQuestions: function () {
+                    return allQuestionsArray.length;
                 },
                 disposeQuestions: function () {
                     questionsArray = [];
@@ -103,6 +123,12 @@
                 },
                 isItWaiting: function () {
                     return waitingState;
+                },
+                updateRemainingQuestions: function () {
+                    return removeAlreadyAdded ();
+                },
+                getRemainingQuestions: function () {
+                    return angular.copy(remainingQuestionsArray);
                 }
             };
         return service;

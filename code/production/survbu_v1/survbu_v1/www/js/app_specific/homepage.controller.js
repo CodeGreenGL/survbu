@@ -56,7 +56,7 @@
                     questionsSrvc.updateAllQuestions().then(function () {
                         questionsSrvc.isWaiting(false);
 
-                        if (questionsSrvc.getNumQuestions() > 0) {
+                        if (questionsSrvc.getNumAllQuestions() > 0) {
                             $state.reload();
                         }
                     });

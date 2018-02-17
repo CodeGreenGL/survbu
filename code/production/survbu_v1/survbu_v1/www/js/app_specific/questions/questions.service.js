@@ -78,14 +78,18 @@
             removeAlreadyAdded = function () {
                 var deferred = $q.defer();
                 service.updateAllQuestions().then(function() {
-                    remainingQuestionsArray = angular.copy(allQuestionsArray); 
+                    remainingQuestionsArray = angular.copy(allQuestionsArray);
+                    console.log(questionsArray);
                     if (questionsArray.length > 0) {
+                        console.log(remainingQuestionsArray);
                         for (var i = 0; i < questionsArray.length; i++) {
-                            remainingQuestionsArray.splice(questionsArray[i], 1);
+                            var removeIndex = remainingQuestionsArray.map(function(question) { return question.id; }).indexOf(questionsArray[i].id);
+                            console.log(removeIndex + ": " + questionsArray[i].id);
+                            remainingQuestionsArray.splice(removeIndex, 1);
                         };
-                        for (var i = 0; i < remainingQuestionsArray; i++) {
-                            remainingQuestionsArray.adding = false;
-                        };
+                    };
+                    for (var i = 0; i < remainingQuestionsArray.length; i++) {
+                        remainingQuestionsArray[i].adding = false;
                     };
                     deferred.resolve(remainingQuestionsArray);
                 });

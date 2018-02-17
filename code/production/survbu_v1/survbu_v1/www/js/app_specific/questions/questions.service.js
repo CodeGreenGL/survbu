@@ -36,9 +36,9 @@
                             }
                         }).then(function successCallback(response) {
                             // Splice in question at order from sectionQuestions to preserve order, deleting 0 items
-                            questionsArray.splice(sectionQuestions.indexOf(response.data.id), 0, response.data);
+                            questionsArray.splice(sectionQuestions.indexOf(response.data.id), 0, response.data); //how about .push here ??
                             if (questionsArray.length === sectionQuestions.length) {
-                                deferred.resolve(questionsArray);
+                                deferred.resolve(questionsArray); // could/should this be moved after 'for' loop ??
                             }
                         }, function errorCallback(response) {
                             console.error('Error while fetching questions');
@@ -79,12 +79,9 @@
                 var deferred = $q.defer();
                 service.updateAllQuestions().then(function() {
                     remainingQuestionsArray = angular.copy(allQuestionsArray);
-                    console.log(questionsArray);
                     if (questionsArray.length > 0) {
-                        console.log(remainingQuestionsArray);
                         for (var i = 0; i < questionsArray.length; i++) {
                             var removeIndex = remainingQuestionsArray.map(function(question) { return question.id; }).indexOf(questionsArray[i].id);
-                            console.log(removeIndex + ": " + questionsArray[i].id);
                             remainingQuestionsArray.splice(removeIndex, 1);
                         };
                     };

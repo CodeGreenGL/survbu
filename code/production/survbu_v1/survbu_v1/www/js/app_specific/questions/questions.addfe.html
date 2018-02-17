@@ -10,7 +10,7 @@
             <ion-list>
                 <ion-item  ng-repeat="question in vm.questions" class="item-button-right">
                     {{question.questionText}}, adding: {{question.adding}}
-                    <span style="float: right;"><input type="checkbox" ng-model="question.adding"/></span>
+                    <span style="float: right;"><input type="checkbox" style="height: 20px; width: 20px;" ng-model="question.adding"/></span>
                 </ion-item>
             </ion-list>
         </div>

@@ -5,8 +5,8 @@
     </ion-nav-bar>
     
     <ion-content class="has-header">
-        
-    <button ng-click="vm.addFromExisting()" class="button button-icon icon actionMenuButton" style="color:#ff3344f;">Add from existing</button>
+       
+        <button ng-click="vm.addFromExisting()"  style="color: #ff3344f;">Add from existing</button>
         <div ng-hide="vm.hideList()">
             <ion-list>
                 <ion-item ng-click="vm.selectDetail($index)" ng-repeat="question in vm.questions" class="item-button-right">{{question.questionText}}

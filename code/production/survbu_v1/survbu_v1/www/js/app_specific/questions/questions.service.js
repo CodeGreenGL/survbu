@@ -18,6 +18,7 @@
     ) {
         //get all surveys from codegreen restlet; returns deferred promise
         var questionsArray = [],
+            allQuestionsArray = [],
             waitingState = false,
             getSectionQuestions = function (sectionQuestions) {
                 var deferred = $q.defer(),
@@ -58,8 +59,8 @@
                         "accept": "application/json"
                     }
                 }).then(function successCallback(response) {
-                    questionsArray = response.data;
-                    deferred.resolve(questionsArray);
+                    allQuestionsArray = response.data;
+                    deferred.resolve(allQuestionsArray);
                 }, function errorCallback(response) {
                     console.error('Error while fetching questions');
                     console.error(response);
@@ -79,11 +80,14 @@
                     return promiseToUpdateQuestions(sectionQuestions);
                 },
                 updateAllQuestions: function () {
-                    questionsArray = [];
+                    allQuestionsArray = [];
                     return promiseToUpdateAllQuestions();
                 },
                 getQuestions: function () {
                     return angular.copy(questionsArray);
+                },
+                getAllQuestions: function () {
+                    return angular.copy(allQuestionsArray);
                 },
                 getNumQuestions: function () {
                     return questionsArray.length;

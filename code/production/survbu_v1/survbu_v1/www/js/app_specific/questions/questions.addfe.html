@@ -6,14 +6,10 @@
     
     <ion-content class="has-header">
         
-    <button ng-click="vm.addFromExisting()" class="button button-icon icon actionMenuButton" style="color:#ff3344f;">Add from existing</button>
         <div ng-hide="vm.hideList()">
             <ion-list>
-                <ion-item ng-click="vm.selectDetail($index)" ng-repeat="question in vm.questions" class="item-button-right">{{question.questionText}}
-                    <!-- Placeholder
-                    <button ng-click="vm.showDeleteAlert($event, $index)" class="button button-small button-assertive contextButton">Delete</button> -->
-                    
-                    <button ng-click="vm.showDeleteAlert($event, $index)" class="button button-icon icon ion-ios-close actionMenuButton" style="color:#ff3344f;"></button>
+                <ion-item ng-click="vm.addQuestion()" ng-repeat="question in vm.questions" class="item-button-right">
+                {{question.questionText}}
                 </ion-item>
             </ion-list>
         </div>

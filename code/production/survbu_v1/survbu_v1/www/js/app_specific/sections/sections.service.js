@@ -135,6 +135,17 @@
                     
                     return promiseToDeleteQuestionFromSection(localSection);
                 },
+                addQuestionsToSection: function (questionsArray) {
+                    var localSection = sectionsArray[currentSection];
+
+                    for (var i = 0; i < questionsArray.length; i++) {
+                        localSection.questionIds.push(questionsArray[i]);
+                    };
+                    
+                    sectionsArray[currentSection] = localSection;
+                    
+                    return promiseToDeleteQuestionFromSection(localSection);
+                },
                 setCurrentSection: function (index) {
                     currentSection = parseInt(index, 10);
                 },
@@ -155,6 +166,9 @@
                 },
                 isItWaiting: function () {
                     return waitingState;
+                },
+                getCurrentSection: function () {
+                    return currentSection;
                 }
             };
         return service;

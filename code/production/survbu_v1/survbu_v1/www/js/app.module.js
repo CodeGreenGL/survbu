@@ -64,6 +64,12 @@
                         'selected': 0
                     },
                     controller: 'questionsDetailCtrl as vm'
+                })
+				.state('questions_addfe', {
+                    cache: false,
+                    url: '/questions_addfe',
+                    templateUrl: 'js/app_specific/questions/questions.addfe.html',
+                    controller: 'questionsAddfeCtrl as vm'
                 });
         });
 }());

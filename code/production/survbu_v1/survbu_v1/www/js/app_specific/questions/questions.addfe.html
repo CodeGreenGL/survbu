@@ -5,15 +5,12 @@
     </ion-nav-bar>
     
     <ion-content class="has-header">
-       
-        <button ng-click="vm.addFromExisting()"  style="color: #ff3344f;">Add from existing</button>
+        
         <div ng-hide="vm.hideList()">
             <ion-list>
-                <ion-item ng-click="vm.selectDetail($index)" ng-repeat="question in vm.questions" class="item-button-right">{{question.questionText}}
-                    <!-- Placeholder
-                    <button ng-click="vm.showDeleteAlert($event, $index)" class="button button-small button-assertive contextButton">Delete</button> -->
-                    
-                    <button ng-click="vm.showDeleteAlert($event, $index)" class="button button-icon icon ion-ios-close actionMenuButton" style="color:#ff3344f;"></button>
+                <ion-item  ng-repeat="question in vm.questions" class="item-button-right">
+                    {{question.questionText}}, adding: {{question.adding}}
+                    <span style="float: right;"><input type="checkbox" style="height: 20px; width: 20px;" ng-model="question.adding"/></span>
                 </ion-item>
             </ion-list>
         </div>
@@ -35,7 +32,7 @@
     </ion-content>
     
     <ion-footer-bar class="bar bar-dark bar-footer row">
-        <i class="col-20"></i>
+        <i class="col-20"><button ng-click="vm.addQuestions()">Add questions</button></i>
     </ion-footer-bar>
     
 </ion-view>

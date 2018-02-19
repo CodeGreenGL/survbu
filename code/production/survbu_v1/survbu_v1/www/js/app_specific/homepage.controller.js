@@ -51,12 +51,12 @@
                     sectionsSrvc.disposeSections();
                     
                     questionsSrvc.isWaiting(true);
-                    $state.go('questions_list');
+                    $state.go('questions_list'); //this needs sorting; it's going to be separate (global) list; this will have additional functionality
 
                     questionsSrvc.updateAllQuestions().then(function () {
                         questionsSrvc.isWaiting(false);
 
-                        if (questionsSrvc.getNumQuestions() > 0) {
+                        if (questionsSrvc.getNumAllQuestions() > 0) {
                             $state.reload();
                         }
                     });

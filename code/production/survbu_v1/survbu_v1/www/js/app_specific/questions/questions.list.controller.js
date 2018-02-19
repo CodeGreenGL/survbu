@@ -39,6 +39,15 @@
                     selected: index
                 });
             },
+            addFromExisting: function () {
+                questionsSrvc.isWaiting(true);
+                $state.go('questions_addfe');
+
+                questionsSrvc.updateRemainingQuestions().then(function () {
+                    $state.reload();
+                    questionsSrvc.isWaiting(false);
+                });
+            },
             showDeleteAlert: function ($event, index) {
                 $event.stopPropagation();
 

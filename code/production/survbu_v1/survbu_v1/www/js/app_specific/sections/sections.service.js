@@ -52,7 +52,6 @@
         };
 
         service.updateSections = function (surveySections) {
-            console.log("SUrvey sections : !!! ");
             console.log(surveySections);
             sectionsArray = [];
             return promiseToUpdateSections(surveySections);

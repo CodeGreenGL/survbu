@@ -82,3 +82,193 @@ ion-content[class*="homeContent"].scroll-content {
 .extendedDeletePopup > .popup {
     min-width: 19rem !important;
 }
+
+.button-float {
+    max-width: 55px !important;
+    max-height: 55px !important;
+    color: white !important;
+    z-index: 12 !important;
+    position: absolute !important;
+    bottom: 54px !important;
+    right: 10px !important;
+    border-radius: 50% !important;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26) !important;
+    transform: translate3d(0, 0, 0) !important;
+    transition: all 0.3s ease-in-out !important;
+}
+
+.button-float:hover {
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22) !important;
+    transform: translateZ(10px) !important;
+}
+
+/* Fancy Button Menu START */
+
+#floating-button {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22) !important;
+    transition: all 0.3s ease-in-out !important;
+}
+
+.plus {
+    display: block;
+    animation: plus-out 0.3s;
+    transition: all 0.3s;
+}
+
+#container-floating {
+    position: fixed;
+    width: 92px;
+    height: 72px;
+    bottom: 30px;
+    right: 10px;
+    z-index: 50;
+}
+
+#container-floating:hover {
+    height: 400px;
+    width: 122px;
+    padding: 30px;
+}
+
+#container-floating:hover .plus {
+    animation: plus-in 0.15s linear;
+    animation-fill-mode: forwards;
+}
+
+.edit {
+    position: absolute;
+    top: 4px;
+    display: block;
+    bottom: 4px;
+    left: 4px;
+    right: 4px;
+    padding: 0;
+    opacity: 0;
+    margin: auto;
+    transform: rotateZ(-70deg);
+    transition: all 0.3s;
+    animation: edit-out 0.3s;
+}
+
+#container-floating:hover .edit {
+    animation: edit-in 0.2s;
+    animation-delay: 0.1s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes edit-in {
+    from {
+        opacity: 0;
+        transform: rotateZ(-70deg);
+    }
+    to {
+        opacity: 1;
+        transform: rotateZ(0deg);
+    }
+}
+
+@keyframes edit-out {
+    from {
+        opacity: 1;
+        transform: rotateZ(0deg);
+    }
+    to {
+        opacity: 0;
+        transform: rotateZ(-70deg);
+    }
+}
+
+@keyframes plus-in {
+    from {
+        opacity: 1;
+        transform: rotateZ(0deg);
+    }
+    to {
+        opacity: 0;
+        transform: rotateZ(180deg);
+    }
+}
+
+@keyframes plus-out {
+    from {
+        opacity: 0;
+        transform: rotateZ(180deg);
+    }
+    to {
+        opacity: 1;
+        transform: rotateZ(0deg);
+    }
+}
+
+.nds {
+    width: 45px;
+    height: 45px;
+    right: 34px;
+    border-radius: 50%;
+    position: fixed;
+    z-index: 300;
+    transform: scale(0);
+    cursor: pointer;
+    animation-fill-mode: forwards;
+}
+
+.nd1 {
+    border-color: transparent;
+    background-color: #44CC33;
+    color: #fff;
+    bottom: 100px;
+    animation-delay: 0.2s;
+    animation: bounce-out-nds 0.3s linear;
+}
+
+.nd2 {
+    border-color: transparent;
+    background-color: #387EF5;
+    color: #fff;
+    bottom: 160px;
+    animation-delay: 0.15s;
+    animation: bounce-out-nds 0.15s linear;
+}
+
+@keyframes bounce-nds {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes bounce-out-nds {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0);
+    }
+}
+
+#container-floating:hover .nds {
+    animation: bounce-nds 0.1s linear;
+    animation-fill-mode: forwards;
+}
+
+#container-floating:hover .nd2 {
+    animation-delay: 0.08s;
+}
+
+.noborder {
+    outline: none !important;
+    border: 0 !important;
+}
+
+/* Fancy Button Menu END */

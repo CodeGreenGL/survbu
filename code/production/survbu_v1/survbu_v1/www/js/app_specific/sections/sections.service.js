@@ -81,7 +81,7 @@
                 });
                 return deferred.promise;
             },
-            deleteQuestionFromSection = function (localSection) {
+            updateSection = function (localSection) {
                 var deferred = $q.defer();
                 $http({
                     method: 'PUT',
@@ -100,11 +100,36 @@
                 });
                 return deferred.promise;
             },
-            promiseToUpdateSections = function (surveySections) {
+            createSection = function (sectionObject) {
+                var addedSections,
+                    deferred = $q.defer();
+
+                $http({
+                    method: "POST",
+                    url: 'https://codegreen.restlet.net:443/v1/surveySections/',
+                    data: sectionObject,
+                    headers: {
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                        "content-type": "application/json",
+                        "accept": "application/json"
+                    }
+                }).then(function successCallback(response) {
+                    addedSections = response.data;    
+                    //Add sections to our sectionArray
+                    sectionsArray.push(addedSections);
+                    deferred.resolve(addedSections);
+                    
+                }, function errorCallback(response) {
+                    console.error('Error while fetching notes');
+                    console.error(response);
+                });
+                return deferred.promise;
+            },
+            promiseToGetSurveySections = function (surveySections) {
                 // returns a promise
                 return getSurveySections(surveySections);
             },
-            promiseToUpdateAllSections = function () {
+            promiseToGetAllSections = function () {
                 // returns a promise
                 return getAllSections();
             },
@@ -112,44 +137,51 @@
                 // returns a promise
                 return deleteSectionID(sectionID);
             },
-            promiseToDeleteQuestionFromSection = function (localSection) {
+            promiseToUpdateSection = function (localSection) {
                 // returns a promise
-                return deleteQuestionFromSection(localSection);
+                return updateSection(localSection);
+            },
+            promiseToCreateSection = function (sectionObject) {
+                // returns a promise
+                return createSection(sectionObject);
             },
             service = {
                 updateSections: function (surveySections) {
                     sectionsArray = [];
-                    return promiseToUpdateSections(surveySections);
+                    return promiseToGetSurveySections(surveySections);
                 },
-                updateAllSections: function () {
+                getAllSections: function () {
                     sectionsArray = [];
-                    return promiseToUpdateAllSections();
+                    return promiseToGetAllSections();
                 },
                 deleteSection: function (sectionID) {
                     return promiseToDeleteSectionID(sectionID);
                 },
-                deleteQuestionFromSection: function (questionID) {
+                updateSection: function (questionID) {
                     var localSection = sectionsArray[currentSection];
                     localSection.questionIds.splice(localSection.questionIds.indexOf(questionID), 1);
                     sectionsArray[currentSection] = localSection;
                     
-                    return promiseToDeleteQuestionFromSection(localSection);
+                    return promiseToUpdateSection(localSection);
+                },
+                updateCreateSection: function (localSection) {
+                    return promiseToUpdateSection(localSection);
                 },
                 addQuestionsToSection: function (questionsArray) {
                     var localSection = sectionsArray[currentSection];
 
                     for (var i = 0; i < questionsArray.length; i++) {
                         localSection.questionIds.push(questionsArray[i]);
-                    };
+                    }
                     
                     sectionsArray[currentSection] = localSection;
                     
-                    return promiseToDeleteQuestionFromSection(localSection);
+                    return promiseToUpdateSection(localSection);
                 },
                 setCurrentSection: function (index) {
                     currentSection = parseInt(index, 10);
                 },
-                getSections: function () {
+                returnSections: function () {
                     return angular.copy(sectionsArray);
                 },
                 getNumSections: function () {
@@ -160,6 +192,15 @@
                 },
                 getSectionAt: function (index) {
                     return angular.copy(sectionsArray[index]);
+                },
+                createSectionService: function(sectionHeading, sectionIntroductionMessage) {
+                    var sectionObject = {
+                        id: "",
+                        introductionMessage: sectionIntroductionMessage,
+                        questionIds: [],
+                        heading: sectionHeading
+                    }
+                    return promiseToCreateSection(sectionObject);
                 },
                 isWaiting: function (iWait) {
                     waitingState = iWait;

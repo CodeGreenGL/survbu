@@ -1,0 +1,19 @@
+<ion-view view-title="Add Section" can-swipe-back="false">
+
+    <ion-nav-bar class="bar-dark" align-title="center">
+        <ion-nav-back-button/>
+    </ion-nav-bar>
+    
+    <ion-content class="has-header">
+          <form ng-submit="vm.createSection()">
+              <input type="text" placeholder="Section heading" ng-model="vm.section.sectionHeading"/>
+              <input type="text" placeholder="Introduction message" ng-model="vm.section.sectionIntroductionMessage"/>
+              <input value="CREATE SECTION" type="submit"/>
+          </form>
+    </ion-content>
+
+    <ion-footer-bar class="bar bar-dark bar-footer row">
+        <i class="col-20"></i>
+    </ion-footer-bar>
+
+</ion-view>

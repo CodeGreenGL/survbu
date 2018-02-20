@@ -68,26 +68,57 @@
                 });
                 return deferred.promise;
             },
+            createQuestion = function (questionObject) {
+                var addedQuestion,
+                    deferred = $q.defer();
+
+                $http({
+                    method: "POST",
+                    url: 'https://codegreen.restlet.net:443/v1/questions/',
+                    data: questionObject,
+                    headers: {
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                        "content-type": "application/json",
+                        "accept": "application/json"
+                    }
+                }).then(function successCallback(response) {
+                    addedQuestion = response.data;
+                    //Add sections to our sectionArray
+                    questionsArray.push(addedQuestion);
+                    deferred.resolve(addedQuestion);
+
+                    
+                }, function errorCallback(response) {
+                    console.error('Error while fetching notes');
+                    console.error(response);
+                });
+
+                return deferred.promise;
+            },
             promiseToUpdateQuestions = function (sectionQuestions) {
                 // returns a promise
                 return getSectionQuestions(sectionQuestions);
             },
-            promiseToUpdateAllQuestions = function () {
+            promiseToGetAllQuestions = function () {
                 return getAllQuestions();
             },
+            promiseToCreateQuestion = function (questionObject) {
+                return createQuestion(questionObject);
+            },
             removeAlreadyAdded = function () {
-                var deferred = $q.defer();
-                service.updateAllQuestions().then(function() {
+                var deferred = $q.defer(),
+                    i;
+                service.getAllQuestions().then(function () {
                     remainingQuestionsArray = angular.copy(allQuestionsArray);
                     if (questionsArray.length > 0) {
-                        for (var i = 0; i < questionsArray.length; i++) {
-                            var removeIndex = remainingQuestionsArray.map(function(question) { return question.id; }).indexOf(questionsArray[i].id);
+                        for (i = 0; i < questionsArray.length; i = i + 1) {
+                            var removeIndex = remainingQuestionsArray.map(function (question) { return question.id; }).indexOf(questionsArray[i].id);
                             remainingQuestionsArray.splice(removeIndex, 1);
-                        };
-                    };
-                    for (var i = 0; i < remainingQuestionsArray.length; i++) {
+                        }
+                    }
+                    for (i = 0; i < remainingQuestionsArray.length; i = i + 1) {
                         remainingQuestionsArray[i].adding = false;
-                    };
+                    }
                     deferred.resolve(remainingQuestionsArray);
                 });
                 return deferred.promise;
@@ -97,14 +128,14 @@
                     questionsArray = [];
                     return promiseToUpdateQuestions(sectionQuestions);
                 },
-                updateAllQuestions: function () {
+                getAllQuestions: function () {
                     allQuestionsArray = [];
-                    return promiseToUpdateAllQuestions();
+                    return promiseToGetAllQuestions();
                 },
                 getQuestions: function () {
                     return angular.copy(questionsArray);
                 },
-                getAllQuestions: function () {
+                returnAllQuestions: function () {
                     return angular.copy(allQuestionsArray);
                 },
                 getNumQuestions: function () { //this needs reviewing which array length it should return
@@ -119,6 +150,16 @@
                 getQuestionAt: function (index) {
                     return angular.copy(questionsArray[index]);
                 },
+                createQuestionService: function (paramType, paramText, paramQuestionChoices) {
+                    console.log(paramType);
+                    var questionObject = {
+                        id: "",
+                        questionType: paramType,
+                        questionText: paramText,
+                        questionChoices: paramQuestionChoices
+                    };
+                    return promiseToCreateQuestion(questionObject);
+                },
                 isWaiting: function (iWait) {
                     waitingState = iWait;
                 },
@@ -126,7 +167,7 @@
                     return waitingState;
                 },
                 updateRemainingQuestions: function () {
-                    return removeAlreadyAdded ();
+                    return removeAlreadyAdded();
                 },
                 getRemainingQuestions: function () {
                     return angular.copy(remainingQuestionsArray);

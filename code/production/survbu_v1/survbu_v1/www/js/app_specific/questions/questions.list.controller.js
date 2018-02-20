@@ -8,6 +8,7 @@
 
     control.$inject = [
         '$state',
+        '$stateParams',
         '$ionicPopup',
         'sectionsSrvc',
         'questionsSrvc'
@@ -15,12 +16,15 @@
 
     function control(
         $state,
+        $stateParams,
         $ionicPopup,
         sectionsSrvc,
         questionsSrvc
     ) {
         var vm = angular.extend(this, {
-            questions: questionsSrvc.getQuestions(),
+            parentSection: $stateParams.parentSection,
+            parentSectionSurvey: $stateParams.parentSectionSurvey,
+            questions: ($stateParams.parentSection) ? questionsSrvc.getQuestions() : questionsSrvc.returnAllQuestions(),
             stillWaits: questionsSrvc.isItWaiting(),
             stillWaiting: function () {
                 return vm.stillWaits;
@@ -37,6 +41,12 @@
             selectDetail: function selectDetail(index) {
                 $state.go('questions_detail', {
                     selected: index
+                });
+            },
+            addQuestion: function () {
+                $state.go('questions_add', {
+                    parentSection: vm.parentSection,
+                    parentSectionSurvey: vm.parentSectionSurvey
                 });
             },
             addFromExisting: function () {
@@ -64,13 +74,16 @@
                     }).then(function (response) {
                         if (response) {
                             vm.questions.splice(index, 1);
-                            sectionsSrvc.deleteQuestionFromSection(selectedQuestion.id);
+                            sectionsSrvc.updateSection(selectedQuestion.id);
                         } else {
                             console.log('User pressed cancel');
                         }
                     });
                 }
             }
+           
         });
+            console.log("ParentSection survey");
+            console.log(vm.parentSectionSurvey);
     }
 }());

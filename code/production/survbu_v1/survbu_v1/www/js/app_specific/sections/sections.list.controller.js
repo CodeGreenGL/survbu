@@ -8,6 +8,7 @@
 
     control.$inject = [
         '$state',
+        '$stateParams',
         '$ionicActionSheet',
         '$ionicPopup',
         'surveysSrvc',
@@ -17,6 +18,7 @@
 
     function control(
         $state,
+        $stateParams,
         $ionicActionSheet,
         $ionicPopup,
         surveysSrvc,
@@ -24,7 +26,8 @@
         questionsSrvc
     ) {
         var vm = angular.extend(this, {
-            sections: sectionsSrvc.getSections(),
+            parentSurvey: $stateParams.parentSurvey,
+            sections: sectionsSrvc.returnSections(),
             stillWaits: sectionsSrvc.isItWaiting(),
             stillWaiting: function () {
                 return vm.stillWaits;
@@ -39,7 +42,9 @@
                 return (vm.stillWaiting() || !vm.noContent());
             },
             addSection: function addSection() {
-                $state.go('sections_add');
+                $state.go('sections_add', {
+                    parentSurvey: vm.parentSurvey
+                });
             },
             selectDetail: function (index) {
                 $state.go('sections_detail', {
@@ -48,11 +53,16 @@
             },
             listQuestions: function (index) {
                 questionsSrvc.isWaiting(true);
-                $state.go('questions_list');
-
-                sectionsSrvc.setCurrentSection(index);
+                
                 var selectedSection = sectionsSrvc.getSectionAt(index),
                     sectionQuestions = selectedSection.questionIds;
+                
+                $state.go('questions_list', {
+                    parentSection: selectedSection,
+                    parentSectionSurvey: vm.parentSurvey
+                });
+
+                sectionsSrvc.setCurrentSection(index); // needs to be removed with implementation of $stateParams
 
                 if (sectionQuestions.length > 0) {
                     questionsSrvc.updateQuestions(sectionQuestions).then(function () {
@@ -128,5 +138,8 @@
                 });
             }
         });
+            
+            console.log("Parent survey");
+            console.log(vm.parentSurvey);
     }
 }());

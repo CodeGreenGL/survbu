@@ -41,13 +41,22 @@
                     selected: index
                 });
             },
+            addSurvey: function () {
+                $state.go('surveys_add', {
+                    // PARAMS HERE
+                });
+            },
             listSections: function (index) { //take you to the sections list and updates the list
                 sectionsSrvc.isWaiting(true);
-                $state.go('sections_list');
-
-                surveysSrvc.setCurrentSurvey(index);
+                
                 var selectedSurvey = surveysSrvc.getSurveyAt(index),
                     surveySections = selectedSurvey.sectionIds;
+                
+                $state.go('sections_list', {
+                    parentSurvey: selectedSurvey
+                });
+
+                surveysSrvc.setCurrentSurvey(index); // needs to be removed with implementation of $stateParams
 
                 if (surveySections.length > 0) {
                     sectionsSrvc.updateSections(surveySections).then(function () {

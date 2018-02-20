@@ -31,12 +31,24 @@
                     },
                     controller: 'surveysDetailCtrl as vm'
                 })
+                .state('surveys_add', {
+                    cache: false,
+                    url: '/surveys_add',
+                    templateUrl: 'js/app_specific/surveys/surveys.add.html',
+                    params: {
+                        'selected': 0
+                    },
+                    controller: 'surveysAddCtrl as vm'
+                })
 				
 				// SECTIONS
 				.state('sections_list', {
                     cache: false,
                     url: '/sections_list',
                     templateUrl: 'js/app_specific/sections/sections.list.html',
+                    params: {
+                        'parentSurvey': 0
+                    },
                     controller: 'sectionsListCtrl as vm'
                 })
                 .state('sections_detail', {
@@ -48,12 +60,25 @@
                     },
                     controller: 'sectionsDetailCtrl as vm'
                 })
+                .state('sections_add', {
+                    cache: false,
+                    url: '/sections_add',
+                    templateUrl: 'js/app_specific/sections/sections.add.html',
+                    params: {
+                        'parentSurvey': 0
+                    },
+                    controller: 'sectionsAddCtrl as vm'
+                })
 				
 				// QUESTIONS
 				.state('questions_list', {
                     cache: false,
                     url: '/questions_list',
                     templateUrl: 'js/app_specific/questions/questions.list.html',
+                    params: {
+                        'parentSection': 0,
+                        'parentSectionSurvey': 0
+                    },
                     controller: 'questionsListCtrl as vm'
                 })
                 .state('questions_detail', {
@@ -64,6 +89,16 @@
                         'selected': 0
                     },
                     controller: 'questionsDetailCtrl as vm'
+                })
+                .state('questions_add', {
+                    cache: false,
+                    url: '/questions_add',
+                    templateUrl: 'js/app_specific/questions/questions.add.html',
+                    params: {
+                        'parentSection': 0,
+                        'parentSectionSurvey': 0
+                    },
+                    controller: 'questionsAddCtrl as vm'
                 })
 				.state('questions_addfe', {
                     cache: false,

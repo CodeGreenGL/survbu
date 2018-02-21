@@ -74,7 +74,7 @@
                     }).then(function (response) {
                         if (response) {
                             vm.questions.splice(index, 1);
-                            sectionsSrvc.updateSection(selectedQuestion.id);
+                            sectionsSrvc.updateSectionFromQuestionID(selectedQuestion.id);
                         } else {
                             console.log('User pressed cancel');
                         }

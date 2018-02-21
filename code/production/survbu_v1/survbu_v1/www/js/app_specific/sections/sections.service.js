@@ -81,7 +81,7 @@
                 });
                 return deferred.promise;
             },
-            updateSection = function (localSection) {
+            updateSections = function (localSection) {
                 var deferred = $q.defer();
                 $http({
                     method: 'PUT',
@@ -137,9 +137,9 @@
                 // returns a promise
                 return deleteSectionID(sectionID);
             },
-            promiseToUpdateSection = function (localSection) {
+            promiseToUpdateSections = function (localSection) {
                 // returns a promise
-                return updateSection(localSection);
+                return updateSections(localSection);
             },
             promiseToCreateSection = function (sectionObject) {
                 // returns a promise
@@ -157,15 +157,15 @@
                 deleteSection: function (sectionID) {
                     return promiseToDeleteSectionID(sectionID);
                 },
-                updateSection: function (questionID) {
+                updateSectionsFromQuestionID: function (questionID) {
                     var localSection = sectionsArray[currentSection];
                     localSection.questionIds.splice(localSection.questionIds.indexOf(questionID), 1);
                     sectionsArray[currentSection] = localSection;
                     
-                    return promiseToUpdateSection(localSection);
+                    return promiseToUpdateSections(localSection);
                 },
                 updateCreateSection: function (localSection) {
-                    return promiseToUpdateSection(localSection);
+                    return promiseToUpdateSections(localSection);
                 },
                 addQuestionsToSection: function (questionsArray) {
                     var localSection = sectionsArray[currentSection];
@@ -176,7 +176,7 @@
                     
                     sectionsArray[currentSection] = localSection;
                     
-                    return promiseToUpdateSection(localSection);
+                    return promiseToUpdateSections(localSection);
                 },
                 setCurrentSection: function (index) {
                     currentSection = parseInt(index, 10);

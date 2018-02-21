@@ -1,4 +1,4 @@
-/*global angular, console */
+/*global angular, console, Promise */
 /* eslint-disable no-console */
 (function () {
     'use strict';
@@ -23,11 +23,12 @@
             waitingState = false,
             getSectionQuestions = function (sectionQuestions) {
                 var deferred = $q.defer(),
+                    httpPromises = [],
                     i = 0,
                     len;
-                if (sectionQuestions.length > 0) {
+                if (sectionQuestions.length > 0) { // Only perform requests if there are any in the sectionQuestions array
                     for (len = sectionQuestions.length; i < len; i = i + 1) {
-                        $http({
+                        httpPromises[i] = $http({
                             url: 'https://codegreen.restlet.net/v1/questions/' + sectionQuestions[i],
                             headers: {
                                 "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
@@ -36,16 +37,17 @@
                             }
                         }).then(function successCallback(response) {
                             // Splice in question at order from sectionQuestions to preserve order, deleting 0 items
-                            questionsArray.splice(sectionQuestions.indexOf(response.data.id), 0, response.data); //how about .push here ??
-                            if (questionsArray.length === sectionQuestions.length) {
-                                deferred.resolve(questionsArray); // could/should this be moved after 'for' loop ??
-                            }
+                            questionsArray.splice(sectionQuestions.indexOf(response.data.id), 0, response.data); //how about .push here ?? will be in random order every time, not sure if an issue
+                            Promise.resolve();
                         }, function errorCallback(response) {
                             console.error('Error while fetching questions');
                             console.error(response);
                         });
                     }
-                } else {
+                    Promise.all(httpPromises).then(function () {// Create a promise that completes when all httpPromises have resolved, thereby not blocking the function
+                        deferred.resolve(questionsArray);       // resolve the promise 'deferred', to stop "Updating" from being shown on questions list
+                    });
+                } else { // If no requests have to be performed (empty sectionQuestions), then resolve the empty array that was set from the parent's parent's function
                     deferred.resolve(questionsArray);
                 }
                 return deferred.promise;

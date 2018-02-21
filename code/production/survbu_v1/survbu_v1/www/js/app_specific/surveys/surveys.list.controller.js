@@ -58,20 +58,18 @@
 
                 surveysSrvc.setCurrentSurvey(index); // needs to be removed with implementation of $stateParams
 
-                if (surveySections.length > 0) {
-                    sectionsSrvc.updateSections(surveySections).then(function () {
+                sectionsSrvc.updateSections(surveySections).then(function () {
+                    if (surveySections.length > 0) {
                         $state.reload();
-                        sectionsSrvc.isWaiting(false);
-                    });
-                } else {
-                    sectionsSrvc.disposeSections();
+                    }
                     sectionsSrvc.isWaiting(false);
-                }
+                });
+
             },
             showActionMenu: function ($event, index) {
                 $event.stopPropagation();
                 var selectedSurvey = surveysSrvc.getSurveyAt(index);
-                
+
                 $ionicActionSheet.show({
                     titleText: 'Modify \'' + selectedSurvey.introductionMessage + '\'',
                     cancelText: 'Cancel',

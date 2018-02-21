@@ -9,6 +9,7 @@
     control.$inject = [
         '$state',
         '$stateParams',
+        '$ionicHistory',
         'surveysSrvc',
         'sectionsSrvc',
         'questionsSrvc'
@@ -17,6 +18,7 @@
     function control(
         $state,
         $stateParams,
+        $ionicHistory,
         surveysSrvc,
         sectionsSrvc,
         questionsSrvc
@@ -43,17 +45,16 @@
             listQuestions = function (newSection) {
                 questionsSrvc.isWaiting(true);
 
-                var sectionQuestions = [];
-
+                // Returns user to blank question list before updating questions to improve percieved responsiveness
                 $state.go('questions_list', {
-                    parentSection: newSection,
-                    parentSectionSurvey: vm.parentSurvey
+                    parentSection: $stateParams.parentSection,
+                    parentSectionSurvey: $stateParams.parentSectionSurvey
+                }).then(function () {
+                    $ionicHistory.removeBackView(); // Delete trace of add page (previous page) from ionic history
                 });
 
-                questionsSrvc.updateQuestions(sectionQuestions).then(function () {
-                    if (sectionQuestions.length > 0) {
-                        $state.reload();
-                    }
+                // Update Question array with empty array.
+                questionsSrvc.updateQuestions([]).then(function () {
                     questionsSrvc.isWaiting(false);
                 });
             };

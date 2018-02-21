@@ -157,7 +157,7 @@
                 deleteSection: function (sectionID) {
                     return promiseToDeleteSectionID(sectionID);
                 },
-                updateSectionFromQuestionID: function (questionID) {
+                updateSection: function (questionID) {
                     var localSection = sectionsArray[currentSection];
                     localSection.questionIds.splice(localSection.questionIds.indexOf(questionID), 1);
                     sectionsArray[currentSection] = localSection;

@@ -74,7 +74,7 @@
                     }).then(function (response) {
                         if (response) {
                             vm.questions.splice(index, 1);
-                            sectionsSrvc.updateSectionFromQuestionID(selectedQuestion.id);
+                            sectionsSrvc.updateSection(selectedQuestion.id);
                         } else {
                             console.log('User pressed cancel');
                         }
@@ -83,7 +83,7 @@
             }
            
         });
-            console.log("ParentSection survey: ");
+            console.log("ParentSection survey");
             console.log(vm.parentSectionSurvey);
     }
 }());

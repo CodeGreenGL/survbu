@@ -39,21 +39,19 @@
         var listSections = function(surveyObject) {
             sectionsSrvc.isWaiting(true);
             var createdSurvey = surveyObject;
-            sectionsSrvc.disposeSections();
 
             $state.go('sections_list', {
                 parentSurvey: createdSurvey
             });
             sectionsSrvc.isWaiting(false);
 
-            /*var surveySections = [];
+            var surveySections = [];
                         
             sectionsSrvc.updateSections(surveySections).then(function () {
-                
                 if (surveySections.length > 0) {
                     $state.reload();
                 };
-            }); */
+            });
         };
     }
 }());

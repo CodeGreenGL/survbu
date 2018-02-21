@@ -64,15 +64,12 @@
 
                 sectionsSrvc.setCurrentSection(index); // needs to be removed with implementation of $stateParams
 
-                if (sectionQuestions.length > 0) {
-                    questionsSrvc.updateQuestions(sectionQuestions).then(function () {
+                questionsSrvc.updateQuestions(sectionQuestions).then(function () {
+                    if(sectionQuestions.length > 0){
                         $state.reload();
-                        questionsSrvc.isWaiting(false);
-                    });
-                } else {
-                    questionsSrvc.disposeQuestions();
+                    }     
                     questionsSrvc.isWaiting(false);
-                }
+                });
             },
             showActionMenu: function ($event, index) {
                 $event.stopPropagation();

@@ -7,7 +7,6 @@
     <ion-content class="has-header">
           <form ng-submit="vm.createQuestion()">
               <input type="text" placeholder="Question Text" ng-model="vm.question.questionText"/>
-              <!--<input type="text" placeholder="Question Type" ng-model="vm.question.questionType">-->
               <select ng-model="vm.question.questionType" name="questionType">
                 <option value="FREE_TEXT">Free Text</option>
                 <option value="BOOLEAN">Boolean</option>
@@ -19,21 +18,15 @@
                 <option value="NUMBER">Number</option>
               </select>
               <input value="CREATE QUESTION" type="submit"/>
-            <!-- <select ng-model="questionType" ng-options="t.name for t in vm.question.questionTypes"></select>
-
-              <div ng-include src="questionType.url">
-                
-              </div> -->
-              
           </form>
 
-          <div ng-show="vm.displayAddQuestionChoices(vm.question.questionType)">
+          <div ng-show="vm.displayAddQuestionChoices()">
 
             <input ng-model="choice" type="text" placeholder="Add Choice"/>
             <button ng-click="vm.addChoice(choice)">ADD</button>
               <ion-list>
-                <ion-item ng-repeat="question in vm.questionChoices">
-                  {{question}}
+                <ion-item ng-repeat="choice in vm.question.questionChoices">
+                  {{choice}}
                 </ion-item>
             </ion-list>
           </div>

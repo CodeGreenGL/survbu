@@ -22,7 +22,7 @@
             getSurveySections = function (surveySections) {
                 var deferred = $q.defer();
                 if (surveySections.length > 0) {
-                    for (var i = 0, len = surveySections.length; i < len; i++) {
+                    for (var i = 0; i < surveySections.length; i++) {
                         $http({
                             url: 'https://codegreen.restlet.net/v1/surveySections/' + surveySections[i],
                             headers: {
@@ -157,14 +157,14 @@
                 deleteSection: function (sectionID) {
                     return promiseToDeleteSectionID(sectionID);
                 },
-                updateSection: function (questionID) {
+                /*updateSection: function (questionID) {
                     var localSection = sectionsArray[currentSection];
                     localSection.questionIds.splice(localSection.questionIds.indexOf(questionID), 1);
                     sectionsArray[currentSection] = localSection;
                     
                     return promiseToUpdateSection(localSection);
-                },
-                updateCreateSection: function (localSection) {
+                },*/
+                updateSection: function (localSection) {
                     return promiseToUpdateSection(localSection);
                 },
                 addQuestionsToSection: function (questionsArray) {
@@ -178,7 +178,7 @@
                     
                     return promiseToUpdateSection(localSection);
                 },
-                setCurrentSection: function (index) {
+                setCurrentSection: function (index) { // NEEDS FURTHER ATTENTION
                     currentSection = parseInt(index, 10);
                 },
                 returnSections: function () {
@@ -186,9 +186,6 @@
                 },
                 getNumSections: function () {
                     return sectionsArray.length;
-                },
-                disposeSections: function () {
-                    sectionsArray = [];
                 },
                 getSectionAt: function (index) {
                     return angular.copy(sectionsArray[index]);

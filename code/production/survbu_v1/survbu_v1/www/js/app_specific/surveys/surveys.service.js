@@ -148,9 +148,6 @@
                 getNumSurveys: function () {
                     return surveysArray.length;
                 },
-                disposeSurveys: function () {
-                    surveysArray = [];
-                },
                 getSurveyAt: function (index) {
                     return angular.copy(surveysArray[index]);
                 },

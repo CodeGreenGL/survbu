@@ -34,12 +34,13 @@
                     });
                 }, //end listAllSurveys function
                 listAllSections: function () {
-                    surveysSrvc.disposeSurveys();
                     
                     sectionsSrvc.isWaiting(true);
-                    $state.go('sections_list');
+                    $state.go('sections_list',{
+                        parentSurvey : 0
+                    });
                     
-                    sectionsSrvc.getAllSections("pete").then(function () {
+                    sectionsSrvc.getAllSections().then(function () {
                         sectionsSrvc.isWaiting(false);
                         
                         if (sectionsSrvc.getNumSections() > 0) {

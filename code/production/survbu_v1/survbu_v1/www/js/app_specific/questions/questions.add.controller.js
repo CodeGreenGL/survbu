@@ -10,6 +10,7 @@
         '$scope',
         '$state',
         '$stateParams',
+        '$ionicHistory',
         'surveysSrvc',
         'sectionsSrvc',
         'questionsSrvc'
@@ -19,6 +20,7 @@
         $scope,
         $state,
         $stateParams,
+        $ionicHistory,
         surveysSrvc,
         sectionsSrvc,
         questionsSrvc
@@ -41,15 +43,27 @@
             },
             createQuestion: function () {
                 questionsSrvc.createQuestionService(vm.question.questionType, vm.question.questionText, vm.questionChoices).then(function (response) {
+                    questionsSrvc.isWaiting(true);
+                    sectionsSrvc.isWaiting(true);
+                    $ionicHistory.removeBackView();     // Remove question list (previous page) from ionic history
+
+                    $state.go('questions_list', {       // Returns user to blank question list before updating questions to improve percieved responsiveness
+                        parentSection: vm.parentSection,
+                        parentSectionSurvey: vm.parentSectionSurvey
+                    }).then(function () {
+                        $ionicHistory.removeBackView(); // Remove add page (previous page) from ionic history, so user returns to sections list on back
+                        $state.reload();                // Refresh the state so back button doesn't display old data
+                    });
 
                     var newQuestionID = response.id;
                     vm.parentSection.questionIds.push(newQuestionID);
+                    questionsSrvc.isWaiting(false); // once new questionID added to array, allow user to view
 
-                    sectionsSrvc.updateCreateSection(vm.parentSection).then(function (response) {
-                        var parentSectionSurveySections = vm.parentSectionSurvey['sectionIds'];
-                        sectionsSrvc.updateSections(parentSectionSurveySections).then(function () {
-                            //surveysSrvc.isWaiting(false);
-                            //$state.reload();
+                    // PUTs the new parentSection to API
+                    sectionsSrvc.updateCreateSection(vm.parentSection).then(function () {
+                        // Given an array of sectionIds, updates the section array with the retrieves section objects.
+                        sectionsSrvc.updateSections(vm.parentSectionSurvey.sectionIds).then(function () {
+                            sectionsSrvc.isWaiting(false);
                         });
                     });
                 });

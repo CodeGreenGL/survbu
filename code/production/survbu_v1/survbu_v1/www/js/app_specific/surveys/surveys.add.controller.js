@@ -9,6 +9,7 @@
     control.$inject = [
         '$state',
         '$stateParams',
+        '$ionicHistory',
         'surveysSrvc',
         'sectionsSrvc'
     ];
@@ -16,51 +17,33 @@
     function control(
         $state,
         $stateParams,
+        $ionicHistory,
         surveysSrvc,
         sectionsSrvc
     ) {
-        var params = $stateParams,
-            vm = angular.extend(this, {
+        var vm = angular.extend(this, {
                 surveys: [],
                 survey: {
                     introductionMessage: "",
                     completionMessage: ""
+                },
+                createSurvey: function () {
+                    surveysSrvc.createSurveyService(vm.survey.introductionMessage, vm.survey.completionMessage).then(function (response) {
+                        var newSurvey = response;
+                        sectionsSrvc.isWaiting(true);
+
+                        $state.go('sections_list', { // Returns user to blank section list before updating sections to improve percieved responsiveness
+                            parentSurvey: newSurvey
+                        }).then(function () {
+                            $ionicHistory.removeBackView(); // Remove add page (previous page) from ionic history, so user returns to sections list on back
+                            $state.reload(); // Refresh the state so back button doesn't display old data
+                        });
+
+                        sectionsSrvc.updateSections([]).then(function () { // Pass in empty array to update sections list with
+                            sectionsSrvc.isWaiting(false);
+                        });
+                    });
                 }
             });
-
-        vm.createSurvey = function() {
-            /*surveysSrvc.createSurveyService(surveyTitle,surveyDescription).then(function (response) {
-                //Returns the promised object
-                return listSections(response);
-            }); */
-            surveysSrvc.createSurveyService(vm.survey.introductionMessage,vm.survey.completionMessage).then(function (response) {
-                //Returns the promised object
-                
-                return listSections(response);
-            });
-            
-        };
-
-        //possible needs to be renamed to more appropriate name.
-        var listSections = function(surveyObject) {
-            sectionsSrvc.isWaiting(true);
-            var selectedSurvey = surveyObject;
-
-            $state.go('sections_list', {
-                parentSurvey: selectedSurvey
-            });
-
-            var surveySections = [];
-                        
-            sectionsSrvc.updateSections(surveySections).then(function () {
-                sectionsSrvc.isWaiting(false);
-                if (surveySections.length > 0) {
-                    $state.reload();
-                };
-            });
-        };
-
-        //vm.survey = surveysSrvc.getSectionAt(params.selected);
-
     }
 }());

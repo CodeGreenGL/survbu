@@ -70,9 +70,8 @@
             },
             showActionMenu: function ($event, index) {
                 $event.stopPropagation();
-                var selectedSurvey = surveysSrvc.getSurveyAt(index),
-                    len,
-                    i = 0;
+                var selectedSurvey = surveysSrvc.getSurveyAt(index);
+                
                 $ionicActionSheet.show({
                     titleText: 'Modify \'' + selectedSurvey.introductionMessage + '\'',
                     cancelText: 'Cancel',
@@ -121,7 +120,7 @@
                                     surveysSrvc.deleteSurvey(selectedSurvey.id);
                                     console.log('Deleted Survey, KEPT associated sections');
                                 } else if (response === 1) {
-                                    for (len = selectedSurvey.sectionIds.length; i < len; i = i + 1) {
+                                    for (var i = 0; i < selectedSurvey.sectionIds.length; i++) {
                                         sectionsSrvc.deleteSection(selectedSurvey.sectionIds[i]);
                                     }
                                     vm.surveys.splice(index, 1);

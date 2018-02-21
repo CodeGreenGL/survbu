@@ -50,10 +50,12 @@
                     
                 }, //end listAllSections function
                 listAllQuestions: function () {
-                    sectionsSrvc.disposeSections();
-                    
+                
                     questionsSrvc.isWaiting(true);
-                    $state.go('questions_list'); //this needs sorting; it's going to be separate (global) list; this will have additional functionality
+                    $state.go('questions_list',{
+                        parentSection : 0,
+                        parentSectionSurvey : 0
+                    }); //this needs sorting; it's going to be separate (global) list; this will have additional functionality
 
                     questionsSrvc.getAllQuestions().then(function () {
                         console.log(questionsSrvc.returnAllQuestions());

@@ -88,6 +88,8 @@
                     destructiveText: 'Delete',
                     destructiveButtonClicked: function () {
                         if (surveysSrvc.getNumSurveys() === 0) {
+                            console.log("surveysSrvc getNumSurveys is :");
+                            console.log(surveysSrvc.getNumSurveys());
                             $ionicPopup.alert({
                                 title: 'Can\'t delete section from global list!',
                                 template: 'Sections can only be deleted via the relevant survey.'

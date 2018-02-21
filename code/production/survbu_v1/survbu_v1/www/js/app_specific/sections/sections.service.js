@@ -187,9 +187,6 @@
                 getNumSections: function () {
                     return sectionsArray.length;
                 },
-                disposeSections: function () {
-                    sectionsArray = [];
-                },
                 getSectionAt: function (index) {
                     return angular.copy(sectionsArray[index]);
                 },

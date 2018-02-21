@@ -24,8 +24,8 @@
         var vm = angular.extend(this, {
                 parentSurvey: $stateParams.parentSurvey,
                 section: {
-                    sectionHeading: "no text",
-                    sectionIntroductionMessage: "no type"
+                    sectionHeading: "",
+                    sectionIntroductionMessage: ""
                 },
                 createSection: function () {
                     sectionsSrvc.createSectionService(vm.section.sectionHeading, vm.section.sectionIntroductionMessage).then(function (response) {

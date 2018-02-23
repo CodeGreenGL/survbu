@@ -17,8 +17,8 @@
         $stateParams,
         sectionsSrvc
     ) {
-        angular.extend(this, {
-            section: sectionsSrvc.getSectionAt($stateParams.selected),
+        var vm = angular.extend(this, {
+            section: $stateParams.section,
             submitButton: function () {
                 $state.go('sections_list');
             }

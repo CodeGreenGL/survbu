@@ -17,7 +17,7 @@
     ) {
         //get all sections from codegreen restlet; returns deferred promise
         var sectionsArray = [],
-            waitingState = false, // Set waitingstate to false so surveys load
+            waitingState = false,
             getSurveySections = function (surveySections) {
                 var deferred = $q.defer();
                 if (surveySections.length > 0) {
@@ -73,26 +73,26 @@
                         "accept": "application/json"
                     },
                 }).then(function successCallback(response) {
-                    deferred.resolve(sectionsArray);
+                    deferred.resolve();
                 }, function errorCallback(response) {
                     console.error('Error while deleting section');
                     console.error(response);
                 });
                 return deferred.promise;
             },
-            updateSection = function (localSection) {
+            updateSection = function (section) {
                 var deferred = $q.defer();
                 $http({
                     method: 'PUT',
-                    url: 'https://codegreen.restlet.net/v1/surveySections/' + localSection.id,
+                    url: 'https://codegreen.restlet.net/v1/surveySections/' + section.id,
                     headers: {
                         "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
                         "content-type": "application/json",
                         "accept": "application/json"
                     },
-                    data: localSection
+                    data: section
                 }).then(function successCallback(response) {
-                    deferred.resolve(sectionsArray);
+                    deferred.resolve();
                 }, function errorCallback(response) {
                     console.error('Error while fetching questions');
                     console.error(response);
@@ -156,26 +156,15 @@
                 deleteSection: function (sectionID) {
                     return promiseToDeleteSectionID(sectionID);
                 },
-                /*updateSection: function (questionID) {
-                    var localSection = sectionsArray[currentSection];
-                    localSection.questionIds.splice(localSection.questionIds.indexOf(questionID), 1);
-                    sectionsArray[currentSection] = localSection;
-                    
-                    return promiseToUpdateSection(localSection);
-                },*/
-                updateSection: function (localSection) {
-                    return promiseToUpdateSection(localSection);
+                updateSection: function (section) {
+                    return promiseToUpdateSection(section);
                 },
                 addQuestionsToSection: function (questionsArray) {
-                    var localSection = sectionsArray[currentSection]; //remove and use parentSection
-
+                //move below logic to 'Addfe'; pass the whole object to updateSection
                     for (var i = 0; i < questionsArray.length; i++) {
-                        localSection.questionIds.push(questionsArray[i]);
+                        section.questionIds.push(questionsArray[i]);
                     }
-                    
-                    sectionsArray[currentSection] = localSection; //remove
-                    
-                    return promiseToUpdateSection(localSection);
+                    return promiseToUpdateSection(section);
                 },
                 returnSections: function () {
                     return angular.copy(sectionsArray);
@@ -183,17 +172,14 @@
                 getNumSections: function () {
                     return sectionsArray.length;
                 },
-                getSectionAt: function (index) {
-                    return angular.copy(sectionsArray[index]);
-                },
-                createSectionService: function(sectionHeading, sectionIntroductionMessage) {
-                    var sectionObject = {
+                createSection: function(heading, introductionMessage) {
+                    var section = {
                         id: "",
-                        introductionMessage: sectionIntroductionMessage,
+                        introductionMessage: introductionMessage,
                         questionIds: [],
-                        heading: sectionHeading
+                        heading: heading
                     }
-                    return promiseToCreateSection(sectionObject);
+                    return promiseToCreateSection(section);
                 },
                 isWaiting: function (iWait) {
                     waitingState = iWait;

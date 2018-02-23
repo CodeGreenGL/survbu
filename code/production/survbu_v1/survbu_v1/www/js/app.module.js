@@ -35,9 +35,9 @@
                     cache: false,
                     url: '/surveys_add',
                     templateUrl: 'js/app_specific/surveys/surveys.add.html',
-                    params: {
+                   /* params: {
                         'selected': 0
-                    },
+                    },*/
                     controller: 'surveysAddCtrl as vm'
                 })
 				
@@ -56,7 +56,7 @@
                     url: '/sections_detail',
                     templateUrl: 'js/app_specific/sections/sections.detail.html',
                     params: {
-                        'selected': 0
+                        'section': 0
                     },
                     controller: 'sectionsDetailCtrl as vm'
                 })
@@ -77,7 +77,7 @@
                     templateUrl: 'js/app_specific/questions/questions.list.html',
                     params: {
                         'parentSection': 0,
-                        'parentSectionSurvey': 0
+                        'parentSurvey': 0
                     },
                     controller: 'questionsListCtrl as vm'
                 })
@@ -86,7 +86,7 @@
                     url: '/questions_detail',
                     templateUrl: 'js/app_specific/questions/questions.detail.html',
                     params: {
-                        'selected': 0
+                        'question': 0
                     },
                     controller: 'questionsDetailCtrl as vm'
                 })
@@ -96,7 +96,7 @@
                     templateUrl: 'js/app_specific/questions/questions.add.html',
                     params: {
                         'parentSection': 0,
-                        'parentSectionSurvey': 0
+                        'parentSurvey': 0
                     },
                     controller: 'questionsAddCtrl as vm'
                 })
@@ -104,6 +104,10 @@
                     cache: false,
                     url: '/questions_addfe',
                     templateUrl: 'js/app_specific/questions/questions.addfe.html',
+                    params: {
+                        'parentSection': 0,
+                        'parentSurvey': 0
+                    },
                     controller: 'questionsAddfeCtrl as vm'
                 });
         });

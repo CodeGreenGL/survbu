@@ -24,11 +24,11 @@
         var vm = angular.extend(this, {
                 parentSurvey: $stateParams.parentSurvey,
                 section: {
-                    sectionHeading: "",
-                    sectionIntroductionMessage: ""
+                    heading: "",
+                    introductionMessage: ""
                 },
                 createSection: function () {
-                    sectionsSrvc.createSectionService(vm.section.sectionHeading, vm.section.sectionIntroductionMessage).then(function (response) {
+                    sectionsSrvc.createSection(vm.section.heading, vm.section.introductionMessage).then(function (response) {
 
                         var newSection = response;
                         vm.parentSurvey.sectionIds.push(newSection.id);

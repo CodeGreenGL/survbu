@@ -23,8 +23,8 @@
         
         <div ng-hide="vm.hideList()">
             <ion-list>
-                <ion-item ng-click="vm.listQuestions($index)" ng-repeat="section in vm.sections" class="item-button-right">{{section.heading}}
-                    <button ng-click="vm.showActionMenu($event, $index)" class="button button-icon icon ion-navicon actionMenuButton"></button>
+                <ion-item ng-click="vm.listQuestions(section)" ng-repeat="section in vm.sections" class="item-button-right">{{section.heading}}
+                    <button ng-click="vm.showActionMenu($event, section)" class="button button-icon icon ion-navicon actionMenuButton"></button>
                 </ion-item>
             </ion-list>
         </div>

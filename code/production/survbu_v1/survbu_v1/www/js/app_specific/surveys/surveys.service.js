@@ -47,7 +47,7 @@
                         "accept": "application/json"
                     }
                 }).then(function successCallback(response) {
-                    deferred.resolve(surveysArray);
+                    deferred.resolve();
                 }, function errorCallback(response) {
                     console.error('Error while deleting surveyID');
                     console.error(response);
@@ -67,7 +67,7 @@
                     },
                     data: survey
                 }).then(function successCallback(response) {
-                    deferred.resolve(surveysArray);
+                    deferred.resolve();
                 }, function errorCallback(response) {
                     console.error('Error while deleting section from survey');
                     console.error(response);
@@ -129,9 +129,6 @@
                 },
                 getNumSurveys: function () {
                     return surveysArray.length;
-                },
-                getSurveyAt: function (index) {
-                    return angular.copy(surveysArray[index]);
                 },
                 createSurvey: function (introMessage, completionMessage) {
                     var survey = {

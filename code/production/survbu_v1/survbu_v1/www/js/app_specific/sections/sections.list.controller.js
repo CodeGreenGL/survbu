@@ -46,20 +46,21 @@
                     parentSurvey: vm.parentSurvey
                 });
             },
-            selectDetail: function (index) {
+            selectDetail: function (section) {
                 $state.go('sections_detail', {
-                    selected: index
+                    section: section
                 });
             },
-            listQuestions: function (index) {
+            listQuestions: function (section) {
                 questionsSrvc.isWaiting(true);
                 
-                var selectedSection = sectionsSrvc.getSectionAt(index),
-                    sectionQuestions = selectedSection.questionIds;
+               /* var selectedSection = sectionsSrvc.getSectionAt(index),
+                    sectionQuestions = selectedSection.questionIds;*/
+                var sectionQuestions = section.questionIds;
                 
                 $state.go('questions_list', {
-                    parentSection: selectedSection,
-                    parentSectionSurvey: vm.parentSurvey
+                    parentSection: section,
+                    parentSurvey: vm.parentSurvey
                 });
 
                // sectionsSrvc.setCurrentSection(index); // needs to be removed with implementation of $stateParams
@@ -71,10 +72,10 @@
                     questionsSrvc.isWaiting(false);
                 });
             },
-            showActionMenu: function ($event, index) {
+            showActionMenu: function ($event, section) {
                 $event.stopPropagation();
 
-                var selectedSection = sectionsSrvc.getSectionAt(index),
+                var selectedSection = section,
                     hasQuestions = (!Array.isArray(selectedSection.questionIds) || !selectedSection.questionIds.length) ? 'This section has no associated questions.' : 'Questions will be kept.'; //TRUE=empty array
                 $ionicActionSheet.show({
                     titleText: 'Modify \'' + selectedSection.heading + '\'',
@@ -114,23 +115,26 @@
                                 }]
                             }).then(function (response) {
                                 if (response === 0) {
-                                    //vm.sections.splice(index, 1);
-                                    // remove the section from parentSurvey's sectionIds array
-                                    vm.parentSurvey.sectionIds.splice(index, 1); //should this be by id maybe ???
+                                    vm.parentSurvey.sectionIds.splice(vm.parentSurvey.sectionIds.indexOf(selectedSection.id), 1);
                                     surveysSrvc.updateSurvey(vm.parentSurvey).then(function (){
                                         surveysSrvc.updateAllSurveys();
                                     });
-                                    sectionsSrvc.updateSections(vm.parentSurvey.sectionIds);
-                                    $state.reload();
+                                    sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
+                                        $state.reload();
+                                    });
                                 } else if (response === 1) {
-                                    //vm.sections.splice(index, 1);
-                                    vm.parentSurvey.sectionIds.splice(index, 1); //should this be by id maybe ???
+                                    console.log(vm.parentSurvey.sectionIds);
+                                    vm.parentSurvey.sectionIds.splice(vm.parentSurvey.sectionIds.indexOf(selectedSection.id), 1);
+                                    console.log(vm.parentSurvey.sectionIds);
+
                                     sectionsSrvc.deleteSection(selectedSection.id);
                                     surveysSrvc.updateSurvey(vm.parentSurvey).then(function (){
                                         surveysSrvc.updateAllSurveys();
                                     });
-                                    sectionsSrvc.updateSections(vm.parentSurvey.sectionIds);
-                                    $state.reload();
+                                    //below may need moving above above embedded promises
+                                    sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
+                                        $state.reload();
+                                    });
                                 } else {
                                     console.log('User pressed cancel');
                                 }
@@ -139,7 +143,7 @@
                     },
                     buttonClicked: function (buttonIndex) {
                         if (buttonIndex === 0) {
-                            vm.selectDetail(index);
+                            vm.selectDetail(selectedSection);
                         }
                         return true; // Close action menu
                     }

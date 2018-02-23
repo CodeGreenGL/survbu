@@ -83,7 +83,5 @@
             }
            
         });
-            console.log("ParentSection survey");
-            console.log(vm.parentSectionSurvey);
     }
 }());

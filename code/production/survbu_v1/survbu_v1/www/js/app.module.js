@@ -27,7 +27,7 @@
                     url: '/surveys_detail',
                     templateUrl: 'js/app_specific/surveys/surveys.detail.html',
                     params: {
-                        'selected': 0
+                        'survey': 0
                     },
                     controller: 'surveysDetailCtrl as vm'
                 })

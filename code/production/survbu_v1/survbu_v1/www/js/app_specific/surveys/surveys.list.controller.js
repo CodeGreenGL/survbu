@@ -36,27 +36,25 @@
             hideNoItems: function () {
                 return (vm.stillWaiting() || !vm.noContent());
             },
-            selectDetail: function (index) {
+            selectDetail: function (survey) {
                 
                 $state.go('surveys_detail', {
-                    selected: index
+                    survey: survey
                 });
             },
             addSurvey: function () { //no need to pass params since we have the values already avaliable in survey.add.controller
                 $state.go('surveys_add');
             },
-            listSections: function (index) { //take you to the sections list and updates the list
-                console.log(index);
+            listSections: function (survey) { //take you to the sections list and updates the list; this was index
                 sectionsSrvc.isWaiting(true);
                 
-                var selectedSurvey = surveysSrvc.getSurveyAt(index),
-                    surveySections = selectedSurvey.sectionIds;
+               // var selectedSurvey = surveysSrvc.getSurveyAt(index),
+               // surveySections = index.sectionIds;
+                  var surveySections = survey.sectionIds;
                 
                 $state.go('sections_list', {
-                    parentSurvey: selectedSurvey
+                    parentSurvey: survey //selectedSurvey;
                 });
-
-              //  surveysSrvc.setCurrentSurvey(index); // needs to be removed with implementation of $stateParams
 
                 sectionsSrvc.updateSections(surveySections).then(function () {
                     if (surveySections.length > 0) {
@@ -65,9 +63,9 @@
                     sectionsSrvc.isWaiting(false);
                 });
             },
-            showActionMenu: function ($event, index) {
+            showActionMenu: function ($event, survey) { //this was index
                 $event.stopPropagation();
-                var selectedSurvey = surveysSrvc.getSurveyAt(index);
+                var selectedSurvey = survey; // surveysSrvc.getSurveyAt(index);
 
                 $ionicActionSheet.show({
                     titleText: 'Modify \'' + selectedSurvey.introductionMessage + '\'',
@@ -84,7 +82,7 @@
                                 template: 'Are you sure you want to permanently delete this survey?<br/><br/>This survey has no associated sections.'
                             }).then(function (response) {
                                 if (response) {
-                                    vm.surveys.splice(index, 1);
+                                    vm.surveys.splice(vm.surveys.indexOf(selectedSurvey), 1);
                                     surveysSrvc.deleteSurvey(selectedSurvey.id);
                                 } else {
                                     console.log('User pressed cancel');
@@ -113,14 +111,14 @@
                                 }]
                             }).then(function (response) {
                                 if (response === 0) {
-                                    vm.surveys.splice(index, 1);
+                                    vm.surveys.splice(vm.surveys.indexOf(selectedSurvey), 1);
                                     surveysSrvc.deleteSurvey(selectedSurvey.id);
                                     console.log('Deleted Survey, KEPT associated sections');
                                 } else if (response === 1) {
                                     for (var i = 0; i < selectedSurvey.sectionIds.length; i++) {
                                         sectionsSrvc.deleteSection(selectedSurvey.sectionIds[i]);
                                     }
-                                    vm.surveys.splice(index, 1);
+                                    vm.surveys.splice(vm.surveys.indexOf(selectedSurvey), 1);
                                     surveysSrvc.deleteSurvey(selectedSurvey.id);
                                     console.log('Deleted Survey, DELETED associated sections');
                                 } else {
@@ -131,7 +129,7 @@
                     },
                     buttonClicked: function (buttonIndex) {
                         if (buttonIndex === 0) {
-                            vm.selectDetail(index);
+                            vm.selectDetail(selectedSurvey);
                         }
                         return true; // Close action menu
                     }

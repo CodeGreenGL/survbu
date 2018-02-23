@@ -41,10 +41,8 @@
                     selected: index
                 });
             },
-            addSurvey: function () {
-                $state.go('surveys_add', {
-                    // PARAMS HERE
-                });
+            addSurvey: function () { //no need to pass params since we have the values already avaliable in survey.add.controller
+                $state.go('surveys_add');
             },
             listSections: function (index) { //take you to the sections list and updates the list
                 sectionsSrvc.isWaiting(true);

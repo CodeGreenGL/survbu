@@ -35,7 +35,6 @@
             
         };
 
-        //possible needs to be renamed to more appropriate name.
         var listSections = function(surveyObject) {
             sectionsSrvc.isWaiting(true);
             var createdSurvey = surveyObject;

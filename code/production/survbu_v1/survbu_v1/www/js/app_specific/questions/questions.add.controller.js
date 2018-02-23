@@ -48,10 +48,13 @@
                     questionChoices: vm.questionChoices,
                     referenceCount: ((vm.parentSection === 0) ? 0 : 1) // Set referenceCount to 0 if there is no parentSection, i.e from global list
                 };
+                
+                questionsSrvc.isWaiting(true);
+                sectionsSrvc.isWaiting(true);
+                
                 questionsSrvc.postQuestion(questionObject).then(function (response) {
                     var newQuestionID = response.id;
-                    questionsSrvc.isWaiting(true);
-                    sectionsSrvc.isWaiting(true);
+                    
                     $ionicHistory.removeBackView(); // Remove question list (previous page) from ionic history
 
                     $state.go('questions_list', { // Returns user to blank question list before updating questions to improve percieved responsiveness
@@ -62,13 +65,13 @@
 
                         if (vm.parentSection === 0) { // stop list from showing updating if no parent section, i.e global list
                             questionsSrvc.isWaiting(false);
-                        } else if (vm.parentSection !== 0) { // --- this section needs to be revised ---
+                        } else if (vm.parentSection !== 0) {
                             vm.parentSection.questionIds.push(newQuestionID);
                             questionsSrvc.isWaiting(false); // once new questionID added to array, allow user to view
 
                             // PUTs the new parentSection to API
-                            sectionsSrvc.updateCreateSection(vm.parentSection).then(function () {
-                                // Given an array of sectionIds, updates the section array with the retrieves section objects.
+                            sectionsSrvc.putSection(vm.parentSection).then(function () {
+                                // Given an array of sectionIds, updates the section array with the retrieved section objects.
                                 sectionsSrvc.updateSections(vm.parentSectionSurvey.sectionIds).then(function () {
                                     sectionsSrvc.isWaiting(false);
                                 });

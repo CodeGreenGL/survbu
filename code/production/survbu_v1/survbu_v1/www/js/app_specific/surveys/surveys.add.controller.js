@@ -8,7 +8,6 @@
 
     control.$inject = [
         '$state',
-        '$stateParams',
         '$ionicHistory',
         'surveysSrvc',
         'sectionsSrvc'
@@ -16,7 +15,6 @@
 
     function control(
         $state,
-        $stateParams,
         $ionicHistory,
         surveysSrvc,
         sectionsSrvc

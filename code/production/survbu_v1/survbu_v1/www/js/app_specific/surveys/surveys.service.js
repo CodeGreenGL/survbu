@@ -48,10 +48,10 @@
                 });
                 return deferred.promise;
             },
-            updateSurvey = function (localSurvey) {
+            putSurvey = function (surveyObject) {
                 var deferred = $q.defer();
-                console.log(localSurvey.id);
-                $http.put(surveysUrl + localSurvey.id, localSurvey, configObject).then(function successCallback(response) {
+                console.log(surveyObject.id);
+                $http.put(surveysUrl + surveyObject.id, surveyObject, configObject).then(function successCallback(response) {
                     deferred.resolve(surveysArray);
                 }, function errorCallback(response) {
                     console.error('Error while updating survey!');
@@ -97,11 +97,11 @@
                     surveysArray[currentSurvey] = localSurvey;
 
                     // returns a promise
-                    return updateSurvey(localSurvey);
+                    return putSurvey(localSurvey);
                 },
-                updateCreateSurvey: function (localSurvey) {
+                putSurvey: function (surveyObject) {
                     // returns a promise
-                    return updateSurvey(localSurvey);
+                    return putSurvey(surveyObject);
                 },
                 setCurrentSurvey: function (index) {
                     currentSurvey = parseInt(index, 10);

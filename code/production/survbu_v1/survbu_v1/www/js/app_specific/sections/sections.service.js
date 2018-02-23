@@ -59,7 +59,7 @@
             },
             deleteSectionID = function (sectionID) {
                 var deferred = $q.defer();
-                $http.delete(sectionsUrl, configObject).then(function successCallback(response) {
+                $http.delete(sectionsUrl + sectionID, configObject).then(function successCallback(response) {
                     deferred.resolve(sectionsArray);
                 }, function errorCallback(response) {
                     console.error('Error while deleting section');
@@ -67,9 +67,9 @@
                 });
                 return deferred.promise;
             },
-            updateSections = function (localSection) {
+            putSection = function (sectionObject) {
                 var deferred = $q.defer();
-                $http.put(sectionsUrl + localSection.id, localSection, configObject).then(function successCallback(response) {
+                $http.put(sectionsUrl + sectionObject.id, sectionObject, configObject).then(function successCallback(response) {
                     deferred.resolve(sectionsArray);
                 }, function errorCallback(response) {
                     console.error('Error while fetching questions');
@@ -77,7 +77,7 @@
                 });
                 return deferred.promise;
             },
-            createSection = function (sectionObject) {
+            postSection = function (sectionObject) {
                 var addedSections,
                     deferred = $q.defer();
                 console.log(sectionObject);
@@ -109,16 +109,16 @@
                     return deleteSectionID(sectionID);
                 },
                 updateSectionsFromQuestionID: function (questionID) {
-                    var localSection = sectionsArray[currentSection];
-                    localSection.questionIds.splice(localSection.questionIds.indexOf(questionID), 1);
-                    sectionsArray[currentSection] = localSection;
+                    var sectionObject = sectionsArray[currentSection];
+                    sectionObject.questionIds.splice(sectionObject.questionIds.indexOf(questionID), 1);
+                    sectionsArray[currentSection] = sectionObject;
 
                     // returns a promise
-                    return updateSections(localSection);
+                    return putSection(sectionObject);
                 },
-                updateCreateSection: function (localSection) {
+                putSection: function (sectionObject) {
                     // returns a promise
-                    return updateSections(localSection);
+                    return putSection(sectionObject);
                 },
                 addQuestionsToSection: function (questionsArray) {
                     var localSection = sectionsArray[currentSection];
@@ -147,15 +147,8 @@
                 getSectionAt: function (index) {
                     return angular.copy(sectionsArray[index]);
                 },
-                createSectionService: function (sectionHeading, sectionIntroductionMessage) {
-                    var sectionObject = {
-                        introductionMessage: sectionIntroductionMessage,
-                        questionIds: [],
-                        heading: sectionHeading,
-                        referenceCount: 1
-                    }
-                    // returns a promise
-                    return createSection(sectionObject);
+                postSection: function (sectionObject) {
+                    return postSection(sectionObject);
                 },
                 isWaiting: function (iWait) {
                     waitingState = iWait;

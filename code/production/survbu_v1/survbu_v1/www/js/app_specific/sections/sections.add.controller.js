@@ -32,7 +32,7 @@
 
                         var newSection = response;
                         vm.parentSurvey.sectionIds.push(newSection.id);
-                        surveysSrvc.updateCreateSurvey(vm.parentSurvey).then(function (response) {
+                        surveysSrvc.updateSurvey(vm.parentSurvey).then(function (response) {
                             console.log(response);
                             surveysSrvc.updateAllSurveys();
                             return listQuestions(newSection);

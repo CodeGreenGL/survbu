@@ -37,6 +37,7 @@
                 return (vm.stillWaiting() || !vm.noContent());
             },
             selectDetail: function (index) {
+                
                 $state.go('surveys_detail', {
                     selected: index
                 });
@@ -45,6 +46,7 @@
                 $state.go('surveys_add');
             },
             listSections: function (index) { //take you to the sections list and updates the list
+                console.log(index);
                 sectionsSrvc.isWaiting(true);
                 
                 var selectedSurvey = surveysSrvc.getSurveyAt(index),
@@ -54,7 +56,7 @@
                     parentSurvey: selectedSurvey
                 });
 
-                surveysSrvc.setCurrentSurvey(index); // needs to be removed with implementation of $stateParams
+              //  surveysSrvc.setCurrentSurvey(index); // needs to be removed with implementation of $stateParams
 
                 sectionsSrvc.updateSections(surveySections).then(function () {
                     if (surveySections.length > 0) {
@@ -62,7 +64,6 @@
                     }
                     sectionsSrvc.isWaiting(false);
                 });
-
             },
             showActionMenu: function ($event, index) {
                 $event.stopPropagation();

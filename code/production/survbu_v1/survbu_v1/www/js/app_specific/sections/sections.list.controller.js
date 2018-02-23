@@ -62,7 +62,7 @@
                     parentSectionSurvey: vm.parentSurvey
                 });
 
-                sectionsSrvc.setCurrentSection(index); // needs to be removed with implementation of $stateParams
+               // sectionsSrvc.setCurrentSection(index); // needs to be removed with implementation of $stateParams
 
                 questionsSrvc.updateQuestions(sectionQuestions).then(function () {
                     if(sectionQuestions.length > 0){
@@ -114,14 +114,23 @@
                                 }]
                             }).then(function (response) {
                                 if (response === 0) {
-                                    vm.sections.splice(index, 1);
-                                    surveysSrvc.updateSurvey(selectedSection.id);
-                                    console.log('Deleted Section, KEPT section object');
+                                    //vm.sections.splice(index, 1);
+                                    // remove the section from parentSurvey's sectionIds array
+                                    vm.parentSurvey.sectionIds.splice(index, 1); //should this be by id maybe ???
+                                    surveysSrvc.updateSurvey(vm.parentSurvey).then(function (){
+                                        surveysSrvc.updateAllSurveys();
+                                    });
+                                    sectionsSrvc.updateSections(vm.parentSurvey.sectionIds);
+                                    $state.reload();
                                 } else if (response === 1) {
-                                    vm.sections.splice(index, 1);
+                                    //vm.sections.splice(index, 1);
+                                    vm.parentSurvey.sectionIds.splice(index, 1); //should this be by id maybe ???
                                     sectionsSrvc.deleteSection(selectedSection.id);
-                                    surveysSrvc.updateSurvey(selectedSection.id);
-                                    console.log('Deleted Survey, DELETED section object');
+                                    surveysSrvc.updateSurvey(vm.parentSurvey).then(function (){
+                                        surveysSrvc.updateAllSurveys();
+                                    });
+                                    sectionsSrvc.updateSections(vm.parentSurvey.sectionIds);
+                                    $state.reload();
                                 } else {
                                     console.log('User pressed cancel');
                                 }
@@ -137,8 +146,5 @@
                 });
             }
         });
-            
-            console.log("Parent survey");
-            console.log(vm.parentSurvey);
     }
 }());

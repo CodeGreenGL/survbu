@@ -28,16 +28,16 @@
             });
 
         vm.createSurvey = function() {
-            surveysSrvc.createSurveyService(vm.survey.introductionMessage,vm.survey.completionMessage).then(function (response) {
+            surveysSrvc.createSurvey(vm.survey.introductionMessage,vm.survey.completionMessage).then(function (response) {
                 //Returns the promised object   
                 return listSections(response);
             });
             
         };
 
-        var listSections = function(surveyObject) {
+        var listSections = function(survey) {
             sectionsSrvc.isWaiting(true);
-            var createdSurvey = surveyObject;
+            var createdSurvey = survey;
 
             $state.go('sections_list', {
                 parentSurvey: createdSurvey

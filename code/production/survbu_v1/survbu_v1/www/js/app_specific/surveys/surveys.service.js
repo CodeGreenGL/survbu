@@ -17,8 +17,7 @@
     ) {
         //get all surveys from codegreen restlet; returns deferred promise
         var surveysArray = [],
-            currentSurvey,
-            waitingState = false, // Set waitingstate to false so surveys load
+            waitingState = false,
             getAllSurveys = function () {
                 var deferred = $q.defer();
                 $http({
@@ -37,11 +36,11 @@
                 });
                 return deferred.promise;
             },
-            deleteSurveyID = function (surveyID) {
+            deleteSurveyID = function (surveyID) { //pass an object ??
                 var deferred = $q.defer();
                 $http({
                     method: 'DELETE',
-                    url: 'https://codegreen.restlet.net/v1/surveys/' + surveyID,
+                    url: 'https://codegreen.restlet.net/v1/surveys/' + surveyID, //change to survey.id??
                     headers: {
                         "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
                         "content-type": "application/json",
@@ -55,18 +54,18 @@
                 });
                 return deferred.promise;
             },
-            updateSurvey = function (localSurvey) {
+            updateSurvey = function (survey) {
                 var deferred = $q.defer();
-                console.log(localSurvey.id);
+                console.log(survey.id);
                 $http({
                     method: 'PUT',
-                    url: 'https://codegreen.restlet.net/v1/surveys/' + localSurvey.id,
+                    url: 'https://codegreen.restlet.net/v1/surveys/' + survey.id,
                     headers: {
                         "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
                         "content-type": "application/json",
                         "accept": "application/json"
                     },
-                    data: localSurvey
+                    data: survey
                 }).then(function successCallback(response) {
                     deferred.resolve(surveysArray);
                 }, function errorCallback(response) {
@@ -75,14 +74,14 @@
                 });
                 return deferred.promise;
             },
-            createSurvey = function (surveyObject) {
+            createSurvey = function (survey) {
                 var addedSurvey,
                     deferred = $q.defer();
 
                 $http({
                     method: "POST",
                     url: 'https://codegreen.restlet.net/v1/surveys/',
-                    data: surveyObject,
+                    data: survey,
                     headers: {
                         "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
                         "content-type": "application/json",
@@ -92,18 +91,11 @@
                     addedSurvey = response.data;
                     //Add the survey to our surveyArray               
                     surveysArray.push(addedSurvey);
-
-                    //console.log("RESPONSE DATA ID IS :");
-                    //console.log(addedSurvey.id);
                     deferred.resolve(addedSurvey);
-                    
                 }, function errorCallback(response) {
-                    console.error('Error while fetching notes');
+                    console.error('Error while creating survey');
                     console.error(response);
                 });
-                
-                //console.log(surveysArray);       
-                //return surveysArray.length-1;
                 return deferred.promise;
             },
             promiseToUpdateAllSurveys = function () {
@@ -114,12 +106,12 @@
                 // returns a promise
                 return deleteSurveyID(surveyID);
             },
-            promiseToUpdateSurvey = function (localSurvey) {
+            promiseToUpdateSurvey = function (survey) {
                 // returns a promise
-                return updateSurvey(localSurvey);
+                return updateSurvey(survey);
             },
-            promiseToCreateSurvey = function (surveyObject) {
-                return createSurvey(surveyObject);
+            promiseToCreateSurvey = function (survey) {
+                return createSurvey(survey);
             },
             service = {
                 updateAllSurveys: function () {
@@ -129,18 +121,8 @@
                 deleteSurvey: function (surveyID) {
                     return promiseToDeleteSurveyID(surveyID);
                 },
-                updateSurvey: function (sectionID) {
-                    var localSurvey = surveysArray[currentSurvey];
-                    localSurvey.sectionIds.splice(localSurvey.sectionIds.indexOf(sectionID), 1);
-                    surveysArray[currentSurvey] = localSurvey;
-
-                    return promiseToUpdateSurvey(localSurvey);
-                },
-                updateCreateSurvey: function (localSurvey) {
-                    return promiseToUpdateSurvey(localSurvey);
-                },
-                setCurrentSurvey: function (index) {
-                    currentSurvey = parseInt(index, 10);
+                updateSurvey: function (survey) {
+                    return promiseToUpdateSurvey(survey);
                 },
                 getSurveys: function () {
                     return angular.copy(surveysArray);
@@ -151,14 +133,14 @@
                 getSurveyAt: function (index) {
                     return angular.copy(surveysArray[index]);
                 },
-                createSurveyService: function (surveyTitle, surveyDescription) {
-                    var surveyObject = {
+                createSurvey: function (introMessage, completionMessage) {
+                    var survey = {
                         id: "",
-                        introductionMessage: surveyTitle,
-                        completionMessage: surveyDescription,
+                        introductionMessage: introMessage,
+                        completionMessage: completionMessage,
                         sectionIds: []
                     };
-                    return promiseToCreateSurvey(surveyObject);
+                    return promiseToCreateSurvey(survey);
                 },
                 isWaiting: function (iWait) {
                     waitingState = iWait;

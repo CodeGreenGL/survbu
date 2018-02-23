@@ -17,7 +17,6 @@
     ) {
         //get all sections from codegreen restlet; returns deferred promise
         var sectionsArray = [],
-            currentSection,
             waitingState = false, // Set waitingstate to false so surveys load
             getSurveySections = function (surveySections) {
                 var deferred = $q.defer();
@@ -168,18 +167,15 @@
                     return promiseToUpdateSection(localSection);
                 },
                 addQuestionsToSection: function (questionsArray) {
-                    var localSection = sectionsArray[currentSection];
+                    var localSection = sectionsArray[currentSection]; //remove and use parentSection
 
                     for (var i = 0; i < questionsArray.length; i++) {
                         localSection.questionIds.push(questionsArray[i]);
                     }
                     
-                    sectionsArray[currentSection] = localSection;
+                    sectionsArray[currentSection] = localSection; //remove
                     
                     return promiseToUpdateSection(localSection);
-                },
-                setCurrentSection: function (index) { // NEEDS FURTHER ATTENTION
-                    currentSection = parseInt(index, 10);
                 },
                 returnSections: function () {
                     return angular.copy(sectionsArray);
@@ -204,9 +200,6 @@
                 },
                 isItWaiting: function () {
                     return waitingState;
-                },
-                getCurrentSection: function () {
-                    return currentSection;
                 }
             };
         return service;

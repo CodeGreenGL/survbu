@@ -1,4 +1,4 @@
-/*global angular */
+/*global angular, Promise */
 (function () {
     'use strict';
 
@@ -28,20 +28,24 @@
             currentSection,
             waitingState = false, // Set waitingstate to false so surveys load
             getSurveySections = function (surveySections) {
-                var deferred = $q.defer();
+                var deferred = $q.defer(),
+                    httpPromises = [],
+                    i = 0,
+                    len;
                 if (surveySections.length > 0) {
-                    for (var i = 0, len = surveySections.length; i < len; i++) {
-                        $http.get(sectionsUrl + surveySections[i], configObject).then(function successCallback(response) {
+                    for (len = surveySections.length; i < len; i = i + 1) {
+                        httpPromises[i] = $http.get(sectionsUrl + surveySections[i], configObject).then(function successCallback(response) {
                             sectionsArray.splice(surveySections.indexOf(response.data.id), 0, response.data);
-                            if (sectionsArray.length === surveySections.length) {
-                                deferred.resolve(sectionsArray);
-                            }
+                            Promise.resolve();
                         }, function errorCallback(response) {
                             console.error('Error while fetching sections');
                             console.error(response);
                         });
                     }
-                } else {
+                    Promise.all(httpPromises).then(function () { // Create a promise that completes when all httpPromises have resolved, thereby not blocking the function
+                        deferred.resolve(sectionsArray); // resolve the promise 'deferred', to stop "Updating" from being shown on questions list
+                    });
+                } else { // If no requests have to be performed (empty surveySections), then resolve the empty array that was set from the parent's parent's function
                     deferred.resolve(sectionsArray);
                 }
                 return deferred.promise;

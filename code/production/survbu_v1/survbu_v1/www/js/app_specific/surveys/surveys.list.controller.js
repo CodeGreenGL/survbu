@@ -23,9 +23,8 @@
     ) {
         var vm = angular.extend(this, {
             surveys: surveysSrvc.getSurveys(),
-            stillWaits: surveysSrvc.isItWaiting(),
             stillWaiting: function () {
-                return vm.stillWaits;
+                return surveysSrvc.isItWaiting();
             },
             noContent: function () {
                 return vm.surveys.length === 0;

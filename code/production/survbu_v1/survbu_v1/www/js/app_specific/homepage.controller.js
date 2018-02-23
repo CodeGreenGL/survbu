@@ -39,7 +39,7 @@
                     sectionsSrvc.isWaiting(true);
                     $state.go('sections_list');
                     
-                    sectionsSrvc.getAllSections("pete").then(function () {
+                    sectionsSrvc.getAllSections().then(function () {
                         sectionsSrvc.isWaiting(false);
                         
                         if (sectionsSrvc.getNumSections() > 0) {
@@ -52,10 +52,9 @@
                     sectionsSrvc.disposeSections();
                     
                     questionsSrvc.isWaiting(true);
-                    $state.go('questions_list'); //this needs sorting; it's going to be separate (global) list; this will have additional functionality
+                    $state.go('questions_list');
 
                     questionsSrvc.getAllQuestions().then(function () {
-                        console.log(questionsSrvc.returnAllQuestions());
                         questionsSrvc.isWaiting(false);
 
                         if (questionsSrvc.getNumAllQuestions() > 0) {

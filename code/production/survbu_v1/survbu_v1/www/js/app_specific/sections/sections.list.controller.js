@@ -8,7 +8,6 @@
 
     control.$inject = [
         '$state',
-        '$stateParams',
         '$ionicActionSheet',
         '$ionicPopup',
         'surveysSrvc',
@@ -18,19 +17,18 @@
 
     function control(
         $state,
-        $stateParams,
         $ionicActionSheet,
         $ionicPopup,
         surveysSrvc,
         sectionsSrvc,
         questionsSrvc
     ) {
-        var vm = angular.extend(this, {
-            parentSurvey: $stateParams.parentSurvey,
+        var stateParams = $state.params,
+            vm = angular.extend(this, {
+            parentSurvey: stateParams.parentSurvey,
             sections: sectionsSrvc.returnSections(),
-            stillWaits: sectionsSrvc.isItWaiting(),
             stillWaiting: function () {
-                return vm.stillWaits;
+                return sectionsSrvc.isItWaiting();
             },
             noContent: function () {
                 return vm.sections.length === 0;
@@ -138,8 +136,5 @@
                 });
             }
         });
-            
-            console.log("Parent survey");
-            console.log(vm.parentSurvey);
     }
 }());

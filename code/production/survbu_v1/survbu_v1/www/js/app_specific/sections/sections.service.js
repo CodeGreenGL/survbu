@@ -16,21 +16,22 @@
         $http
     ) {
         //get all sections from codegreen restlet; returns deferred promise
-        var sectionsArray = [],
+        var sectionsUrl = "https://codegreen.restlet.net/v2/surveySections/",
+            configObject = {
+                headers: {
+                    "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==",
+                    "content-type": "application/json",
+                    "accept": "application/json"
+                }
+            },
+            sectionsArray = [],
             currentSection,
             waitingState = false, // Set waitingstate to false so surveys load
             getSurveySections = function (surveySections) {
                 var deferred = $q.defer();
                 if (surveySections.length > 0) {
                     for (var i = 0, len = surveySections.length; i < len; i++) {
-                        $http({
-                            url: 'https://codegreen.restlet.net/v1/surveySections/' + surveySections[i],
-                            headers: {
-                                "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
-                                "content-type": "application/json",
-                                "accept": "application/json"
-                            }
-                        }).then(function successCallback(response) {
+                        $http.get(sectionsUrl + surveySections[i], configObject).then(function successCallback(response) {
                             sectionsArray.splice(surveySections.indexOf(response.data.id), 0, response.data);
                             if (sectionsArray.length === surveySections.length) {
                                 deferred.resolve(sectionsArray);
@@ -47,14 +48,7 @@
             },
             getAllSections = function () {
                 var deferred = $q.defer();
-                $http({
-                    url: 'https://codegreen.restlet.net/v1/surveySections/',
-                    headers: {
-                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
-                        "content-type": "application/json",
-                        "accept": "application/json"
-                    }
-                }).then(function successCallback(response) {
+                $http.get(sectionsUrl, configObject).then(function successCallback(response) {
                     sectionsArray = response.data;
                     deferred.resolve(sectionsArray);
                 }, function errorCallback(response) {
@@ -65,15 +59,7 @@
             },
             deleteSectionID = function (sectionID) {
                 var deferred = $q.defer();
-                $http({
-                    method: 'DELETE',
-                    url: 'https://codegreen.restlet.net/v1/surveySections/' + sectionID,
-                    headers: {
-                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
-                        "content-type": "application/json",
-                        "accept": "application/json"
-                    },
-                }).then(function successCallback(response) {
+                $http.delete(sectionsUrl, configObject).then(function successCallback(response) {
                     deferred.resolve(sectionsArray);
                 }, function errorCallback(response) {
                     console.error('Error while deleting section');
@@ -83,16 +69,7 @@
             },
             updateSections = function (localSection) {
                 var deferred = $q.defer();
-                $http({
-                    method: 'PUT',
-                    url: 'https://codegreen.restlet.net/v1/surveySections/' + localSection.id,
-                    headers: {
-                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
-                        "content-type": "application/json",
-                        "accept": "application/json"
-                    },
-                    data: localSection
-                }).then(function successCallback(response) {
+                $http.put(sectionsUrl + localSection.id, localSection, configObject).then(function successCallback(response) {
                     deferred.resolve(sectionsArray);
                 }, function errorCallback(response) {
                     console.error('Error while fetching questions');
@@ -103,69 +80,45 @@
             createSection = function (sectionObject) {
                 var addedSections,
                     deferred = $q.defer();
-
-                $http({
-                    method: "POST",
-                    url: 'https://codegreen.restlet.net:443/v1/surveySections/',
-                    data: sectionObject,
-                    headers: {
-                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
-                        "content-type": "application/json",
-                        "accept": "application/json"
-                    }
-                }).then(function successCallback(response) {
-                    addedSections = response.data;    
+                console.log(sectionObject);
+                $http.post(sectionsUrl, sectionObject, configObject).then(function successCallback(response) {
+                    addedSections = response.data;
                     //Add sections to our sectionArray
                     sectionsArray.push(addedSections);
                     deferred.resolve(addedSections);
-                    
+
                 }, function errorCallback(response) {
-                    console.error('Error while fetching notes');
+                    console.error('Error while fetching nodes');
                     console.error(response);
                 });
                 return deferred.promise;
             },
-            promiseToGetSurveySections = function (surveySections) {
-                // returns a promise
-                return getSurveySections(surveySections);
-            },
-            promiseToGetAllSections = function () {
-                // returns a promise
-                return getAllSections();
-            },
-            promiseToDeleteSectionID = function (sectionID) {
-                // returns a promise
-                return deleteSectionID(sectionID);
-            },
-            promiseToUpdateSections = function (localSection) {
-                // returns a promise
-                return updateSections(localSection);
-            },
-            promiseToCreateSection = function (sectionObject) {
-                // returns a promise
-                return createSection(sectionObject);
-            },
             service = {
                 updateSections: function (surveySections) {
                     sectionsArray = [];
-                    return promiseToGetSurveySections(surveySections);
+                    // returns a promise
+                    return getSurveySections(surveySections);
                 },
                 getAllSections: function () {
                     sectionsArray = [];
-                    return promiseToGetAllSections();
+                    // returns a promise
+                    return getAllSections();
                 },
                 deleteSection: function (sectionID) {
-                    return promiseToDeleteSectionID(sectionID);
+                    // returns a promise
+                    return deleteSectionID(sectionID);
                 },
                 updateSectionsFromQuestionID: function (questionID) {
                     var localSection = sectionsArray[currentSection];
                     localSection.questionIds.splice(localSection.questionIds.indexOf(questionID), 1);
                     sectionsArray[currentSection] = localSection;
-                    
-                    return promiseToUpdateSections(localSection);
+
+                    // returns a promise
+                    return updateSections(localSection);
                 },
                 updateCreateSection: function (localSection) {
-                    return promiseToUpdateSections(localSection);
+                    // returns a promise
+                    return updateSections(localSection);
                 },
                 addQuestionsToSection: function (questionsArray) {
                     var localSection = sectionsArray[currentSection];
@@ -173,10 +126,11 @@
                     for (var i = 0; i < questionsArray.length; i++) {
                         localSection.questionIds.push(questionsArray[i]);
                     }
-                    
+
                     sectionsArray[currentSection] = localSection;
-                    
-                    return promiseToUpdateSections(localSection);
+
+                    // returns a promise
+                    return updateSections(localSection);
                 },
                 setCurrentSection: function (index) {
                     currentSection = parseInt(index, 10);
@@ -193,14 +147,15 @@
                 getSectionAt: function (index) {
                     return angular.copy(sectionsArray[index]);
                 },
-                createSectionService: function(sectionHeading, sectionIntroductionMessage) {
+                createSectionService: function (sectionHeading, sectionIntroductionMessage) {
                     var sectionObject = {
-                        id: "",
                         introductionMessage: sectionIntroductionMessage,
                         questionIds: [],
-                        heading: sectionHeading
+                        heading: sectionHeading,
+                        referenceCount: 1
                     }
-                    return promiseToCreateSection(sectionObject);
+                    // returns a promise
+                    return createSection(sectionObject);
                 },
                 isWaiting: function (iWait) {
                     waitingState = iWait;

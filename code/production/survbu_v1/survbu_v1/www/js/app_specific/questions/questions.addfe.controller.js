@@ -19,10 +19,8 @@
     ) {
         var vm = angular.extend(this, {
             questions: questionsSrvc.getRemainingQuestions(),
-
-            stillWaits: questionsSrvc.isItWaiting(),
             stillWaiting: function () {
-                return vm.stillWaits;
+                return questionsSrvc.isItWaiting();
             },
             noContent: function () {
                 return vm.questions.length === 0;

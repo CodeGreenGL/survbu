@@ -1,4 +1,4 @@
-/*global angular, Promise */
+/*global angular*/
 (function () {
     'use strict';
 
@@ -29,20 +29,17 @@
             waitingState = false, // Set waitingstate to false so surveys load
             getSurveySections = function (surveySections) {
                 var deferred = $q.defer(),
-                    httpPromises = [],
-                    i = 0,
-                    len;
+                    httpPromises = [];
                 if (surveySections.length > 0) {
-                    for (len = surveySections.length; i < len; i = i + 1) {
+                    for (var i = 0, len = surveySections.length; i < len; i = i + 1) {
                         httpPromises[i] = $http.get(sectionsUrl + surveySections[i], configObject).then(function successCallback(response) {
                             sectionsArray.splice(surveySections.indexOf(response.data.id), 0, response.data);
-                            Promise.resolve();
                         }, function errorCallback(response) {
-                            console.error('Error while fetching sections');
+                            console.error('Error ' + response.status + ' while fetching sections');
                             console.error(response);
                         });
                     }
-                    Promise.all(httpPromises).then(function () { // Create a promise that completes when all httpPromises have resolved, thereby not blocking the function
+                    $q.all(httpPromises).then(function () { // Create a promise that completes when all httpPromises have resolved, thereby not blocking the function
                         deferred.resolve(sectionsArray); // resolve the promise 'deferred', to stop "Updating" from being shown on questions list
                     });
                 } else { // If no requests have to be performed (empty surveySections), then resolve the empty array that was set from the parent's parent's function

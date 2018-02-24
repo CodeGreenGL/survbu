@@ -1,4 +1,4 @@
-/*global angular, console, Promise */
+/*global angular, console*/
 /* eslint-disable no-console */
 (function () {
     'use strict';
@@ -31,21 +31,17 @@
             waitingState = false,
             getSectionQuestions = function (sectionQuestions) {
                 var deferred = $q.defer(),
-                    httpPromises = [],
-                    i = 0,
-                    len;
+                    httpPromises = [];
                 if (sectionQuestions.length > 0) { // Only perform requests if there are any in the sectionQuestions array
-                    for (len = sectionQuestions.length; i < len; i = i + 1) {
+                    for (var i = 0, len = sectionQuestions.length; i < len; i = i + 1) { // Keep len variable, otherwise it checks length every iteration
                         httpPromises[i] = $http.get(questionsUrl + sectionQuestions[i], configObject).then(function successCallback(response) {
-                            // Splice in question at order from sectionQuestions to preserve order, deleting 0 items
-                            questionsArray.splice(sectionQuestions.indexOf(response.data.id), 0, response.data); //how about .push here ?? will be in random order every time, not sure if an issue
-                            Promise.resolve();
+                            questionsArray.splice(sectionQuestions.indexOf(response.data.id), 0, response.data);
                         }, function errorCallback(response) {
-                            console.error('Error while fetching questions');
+                            console.error('Error ' + response.status + ' while fetching questions');
                             console.error(response);
                         });
                     }
-                    Promise.all(httpPromises).then(function () { // Create a promise that completes when all httpPromises have resolved, thereby not blocking the function
+                    $q.all(httpPromises).then(function () { // Create a promise that completes when all httpPromises have resolved, thereby not blocking the function
                         deferred.resolve(questionsArray); // resolve the promise 'deferred', to stop "Updating" from being shown on questions list
                     });
                 } else { // If no requests have to be performed (empty sectionQuestions), then resolve the empty array that was set from the parent's parent's function

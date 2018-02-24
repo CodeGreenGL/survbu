@@ -8,7 +8,6 @@
 
     control.$inject = [
         '$state',
-        '$ionicActionSheet',
         '$ionicPopup',
         'surveysSrvc',
         'sectionsSrvc'
@@ -16,7 +15,6 @@
 
     function control(
         $state,
-        $ionicActionSheet,
         $ionicPopup,
         surveysSrvc,
         sectionsSrvc
@@ -36,7 +34,8 @@
             hideNoItems: function () {
                 return (vm.stillWaiting() || !vm.noContent());
             },
-            selectDetail: function (index) {
+            selectDetail: function ($event, index) {
+                $event.stopPropagation();
                 $state.go('surveys_detail', {
                     selected: index
                 });
@@ -59,76 +58,45 @@
                     sectionsSrvc.isWaiting(false);
                 }
             },
-            showActionMenu: function ($event, index) {
+            showDeleteAlert: function ($event, index) {
                 $event.stopPropagation();
                 var selectedSurvey = surveysSrvc.getSurveyAt(index),
                     len,
                     i = 0;
-                $ionicActionSheet.show({
-                    titleText: 'Modify \'' + selectedSurvey.introductionMessage + '\'',
-                    cancelText: 'Cancel',
+                $ionicPopup.show({
+                    title: 'Delete ' + selectedSurvey.introductionMessage,
+                    cssClass: 'extendedDeletePopup',
+                    template: 'Would you like to keep, or delete the sections associated with this survey?<br/><br/>Questions will be kept.',
                     buttons: [{
-                        text: 'Edit survey details'
-                    }],
-                    destructiveText: 'Delete',
-                    destructiveButtonClicked: function () {
-                        if (!Array.isArray(selectedSurvey.sectionIds) || !selectedSurvey.sectionIds.length) {
-                            $ionicPopup.confirm({
-                                title: 'Delete \'' + selectedSurvey.introductionMessage + '\'',
-                                cssClass: 'extendedDeletePopup',
-                                template: 'Are you sure you want to permanently delete this survey?<br/><br/>This survey has no associated sections.'
-                            }).then(function (response) {
-                                if (response) {
-                                    vm.surveys.splice(index, 1);
-                                    surveysSrvc.deleteSurvey(selectedSurvey.id);
-                                } else {
-                                    console.log('User pressed cancel');
-                                }
-                            });
-                        } else {
-                            $ionicPopup.show({
-                                title: 'Delete \'' + selectedSurvey.introductionMessage + '\'',
-                                cssClass: 'extendedDeletePopup',
-                                template: 'Would you like to keep, or delete the sections associated with this survey?<br/><br/>Questions will be kept.',
-                                buttons: [{
-                                    text: 'Cancel',
-                                    type: 'button-light'
-                                }, {
-                                    text: 'Keep Sections',
-                                    type: 'button-calm',
-                                    onTap: function () {
-                                        return 0;
-                                    }
-                                }, {
-                                    text: 'Delete Sections',
-                                    type: 'button-assertive',
-                                    onTap: function () {
-                                        return 1;
-                                    }
-                                }]
-                            }).then(function (response) {
-                                if (response === 0) {
-                                    vm.surveys.splice(index, 1);
-                                    surveysSrvc.deleteSurvey(selectedSurvey.id);
-                                    console.log('Deleted Survey, KEPT associated sections');
-                                } else if (response === 1) {
-                                    for (len = selectedSurvey.sectionIds.length; i < len; i = i + 1) {
-                                        sectionsSrvc.deleteSection(selectedSurvey.sectionIds[i]);
-                                    }
-                                    vm.surveys.splice(index, 1);
-                                    surveysSrvc.deleteSurvey(selectedSurvey.id);
-                                    console.log('Deleted Survey, DELETED associated sections');
-                                } else {
-                                    console.log('User pressed cancel');
-                                }
-                            });
+                            text: 'Cancel',
+                            type: 'button-light'
+                        }, {
+                            text: 'Keep Sections',
+                            type: 'button-calm',
+                            onTap: function () {
+                                return 0;
+                            }
+                        }, {
+                            text: 'Delete Sections',
+                            type: 'button-assertive',
+                            onTap: function () {
+                                return 1;
+                            }
+                        }]
+                }).then(function (response) {
+                    if (response === 0) {
+                        vm.surveys.splice(index, 1);
+                        surveysSrvc.deleteSurvey(selectedSurvey.id);
+                        console.log('Deleted Survey, KEPT associated sections');
+                    } else if (response === 1) {
+                        for (len = selectedSurvey.sectionIds.length; i < len; i = i + 1) {
+                            sectionsSrvc.deleteSection(selectedSurvey.sectionIds[i]);
                         }
-                    },
-                    buttonClicked: function (buttonIndex) {
-                        if (buttonIndex === 0) {
-                            vm.selectDetail(index);
-                        }
-                        return true; // Close action menu
+                        vm.surveys.splice(index, 1);
+                        surveysSrvc.deleteSurvey(selectedSurvey.id);
+                        console.log('Deleted Survey, DELETED associated sections');
+                    } else {
+                        console.log('User pressed cancel');
                     }
                 });
             }

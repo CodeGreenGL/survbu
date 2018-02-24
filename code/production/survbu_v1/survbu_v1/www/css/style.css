@@ -82,3 +82,13 @@ ion-content[class*="homeContent"].scroll-content {
 .extendedDeletePopup > .popup {
     min-width: 19rem !important;
 }
+
+.SearchBar {
+     position: center;
+     top: 355px;
+     left: 575px;
+}
+.SearchBar input {
+     height: 30px;
+     width: 5000px;
+}

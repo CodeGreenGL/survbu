@@ -129,4 +129,5 @@
             }
         });
     }
+    $scope.show_me = true;
 }());

@@ -4,13 +4,6 @@
 
     angular
         .module('surveyModule', [])
-        .run(function ($http) { // Sets default http headers for all requests
-            $http.defaults.headers.common = {
-                Authorization: "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==",
-                Accept: "application/json",
-                'Content-Type': "application/json"
-            };
-        })
         .config(function ($stateProvider) {
             $stateProvider
 

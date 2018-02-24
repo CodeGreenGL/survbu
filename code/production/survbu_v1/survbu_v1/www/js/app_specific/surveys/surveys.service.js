@@ -17,19 +17,12 @@
     ) {
         //get all surveys from codegreen restlet; returns deferred promise
         var surveysUrl = "https://codegreen.restlet.net/v2/surveys/",
-            configObject = {
-                headers: {
-                    "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==",
-                    "content-type": "application/json",
-                    "accept": "application/json"
-                }
-            },
             surveysArray = [],
             currentSurvey,
             waitingState = false, // Set waitingstate to false so surveys load
             getAllSurveys = function () {
                 var deferred = $q.defer();
-                $http.get(surveysUrl, configObject).then(function successCallback(response) {
+                $http.get(surveysUrl).then(function successCallback(response) {
                     surveysArray = response.data;
                     deferred.resolve(surveysArray);
                 }, function errorCallback(response) {
@@ -40,7 +33,7 @@
             },
             deleteSurveyID = function (surveyID) {
                 var deferred = $q.defer();
-                $http.delete(surveysUrl + surveyID, configObject).then(function successCallback(response) {
+                $http.delete(surveysUrl + surveyID).then(function successCallback(response) {
                     deferred.resolve(surveysArray);
                 }, function errorCallback(response) {
                     console.error('Error while deleting surveyID');
@@ -51,7 +44,7 @@
             putSurvey = function (surveyObject) {
                 var deferred = $q.defer();
                 console.log(surveyObject.id);
-                $http.put(surveysUrl + surveyObject.id, surveyObject, configObject).then(function successCallback(response) {
+                $http.put(surveysUrl + surveyObject.id, surveyObject).then(function successCallback(response) {
                     deferred.resolve(surveysArray);
                 }, function errorCallback(response) {
                     console.error('Error while updating survey!');
@@ -63,7 +56,7 @@
                 var deferred = $q.defer(),
                     addedSurvey;
 
-                $http.post(surveysUrl, surveyObject, configObject).then(function successCallback(response) {
+                $http.post(surveysUrl, surveyObject).then(function successCallback(response) {
                     addedSurvey = response.data;
                     //Add the survey to our surveyArray               
                     surveysArray.push(addedSurvey);

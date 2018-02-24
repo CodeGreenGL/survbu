@@ -4,18 +4,25 @@
 
     angular
         .module('surveyModule', [])
+        .run(function ($http) { // Sets default http headers for all requests
+            $http.defaults.headers.common = {
+                Authorization: "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==",
+                Accept: "application/json",
+                'Content-Type': "application/json"
+            };
+        })
         .config(function ($stateProvider) {
             $stateProvider
-			
-				// HOMEPAGE
+
+                // HOMEPAGE
                 .state('homepage', {
                     cache: false,
                     url: '/',
                     templateUrl: 'js/app_specific/homepage.html',
                     controller: 'homepageCtrl as vm'
                 })
-				
-				// SURVEYS
+
+                // SURVEYS
                 .state('surveys_list', {
                     cache: false,
                     url: '/surveys_list',
@@ -40,9 +47,9 @@
                     },
                     controller: 'surveysAddCtrl as vm'
                 })
-				
-				// SECTIONS
-				.state('sections_list', {
+
+                // SECTIONS
+                .state('sections_list', {
                     cache: false,
                     url: '/sections_list',
                     templateUrl: 'js/app_specific/sections/sections.list.html',
@@ -69,9 +76,9 @@
                     },
                     controller: 'sectionsAddCtrl as vm'
                 })
-				
-				// QUESTIONS
-				.state('questions_list', {
+
+                // QUESTIONS
+                .state('questions_list', {
                     cache: false,
                     url: '/questions_list',
                     templateUrl: 'js/app_specific/questions/questions.list.html',
@@ -100,7 +107,7 @@
                     },
                     controller: 'questionsAddCtrl as vm'
                 })
-				.state('questions_addfe', {
+                .state('questions_addfe', {
                     cache: false,
                     url: '/questions_addfe',
                     templateUrl: 'js/app_specific/questions/questions.addfe.html',

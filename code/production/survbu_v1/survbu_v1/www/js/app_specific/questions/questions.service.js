@@ -18,13 +18,6 @@
     ) {
         //get all surveys from codegreen restlet; returns deferred promise
         var questionsUrl = "https://codegreen.restlet.net/v2/questions/",
-            configObject = {
-                headers: {
-                    "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==",
-                    "content-type": "application/json",
-                    "accept": "application/json"
-                }
-            },
             questionsArray = [],
             allQuestionsArray = [],
             remainingQuestionsArray = [],
@@ -34,7 +27,7 @@
                     httpPromises = [];
                 if (sectionQuestions.length > 0) { // Only perform requests if there are any in the sectionQuestions array
                     for (var i = 0, len = sectionQuestions.length; i < len; i = i + 1) { // Keep len variable, otherwise it checks length every iteration
-                        httpPromises[i] = $http.get(questionsUrl + sectionQuestions[i], configObject).then(function successCallback(response) {
+                        httpPromises[i] = $http.get(questionsUrl + sectionQuestions[i]).then(function successCallback(response) {
                             questionsArray.splice(sectionQuestions.indexOf(response.data.id), 0, response.data);
                         }, function errorCallback(response) {
                             console.error('Error ' + response.status + ' while fetching questions');
@@ -51,7 +44,7 @@
             },
             getAllQuestions = function () {
                 var deferred = $q.defer();
-                $http.get(questionsUrl, configObject).then(function successCallback(response) {
+                $http.get(questionsUrl).then(function successCallback(response) {
                     allQuestionsArray = response.data;
                     deferred.resolve(allQuestionsArray);
                 }, function errorCallback(response) {
@@ -64,7 +57,7 @@
                 var addedQuestion,
                     deferred = $q.defer();
 
-                $http.post(questionsUrl, questionObject, configObject).then(function successCallback(response) {
+                $http.post(questionsUrl, questionObject).then(function successCallback(response) {
                     addedQuestion = response.data;
                     //Add sections to our sectionArray
                     questionsArray.push(addedQuestion);
@@ -81,7 +74,7 @@
             deleteQuestion = function (questionID) {
                 var deferred = $q.defer();
 
-                $http.delete(questionsUrl + questionID, configObject).then(function successCallback(response) {
+                $http.delete(questionsUrl + questionID).then(function successCallback(response) {
                     // Resolve the promise with response from the server, i.e 204
                     deferred.resolve(response);
                 }, function errorCallback(response) {

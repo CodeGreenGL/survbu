@@ -17,13 +17,6 @@
     ) {
         //get all sections from codegreen restlet; returns deferred promise
         var sectionsUrl = "https://codegreen.restlet.net/v2/surveySections/",
-            configObject = {
-                headers: {
-                    "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==",
-                    "content-type": "application/json",
-                    "accept": "application/json"
-                }
-            },
             sectionsArray = [],
             currentSection,
             waitingState = false, // Set waitingstate to false so surveys load
@@ -32,7 +25,7 @@
                     httpPromises = [];
                 if (surveySections.length > 0) {
                     for (var i = 0, len = surveySections.length; i < len; i = i + 1) {
-                        httpPromises[i] = $http.get(sectionsUrl + surveySections[i], configObject).then(function successCallback(response) {
+                        httpPromises[i] = $http.get(sectionsUrl + surveySections[i]).then(function successCallback(response) {
                             sectionsArray.splice(surveySections.indexOf(response.data.id), 0, response.data);
                         }, function errorCallback(response) {
                             console.error('Error ' + response.status + ' while fetching sections');
@@ -49,7 +42,7 @@
             },
             getAllSections = function () {
                 var deferred = $q.defer();
-                $http.get(sectionsUrl, configObject).then(function successCallback(response) {
+                $http.get(sectionsUrl).then(function successCallback(response) {
                     sectionsArray = response.data;
                     deferred.resolve(sectionsArray);
                 }, function errorCallback(response) {
@@ -60,7 +53,7 @@
             },
             deleteSectionID = function (sectionID) {
                 var deferred = $q.defer();
-                $http.delete(sectionsUrl + sectionID, configObject).then(function successCallback(response) {
+                $http.delete(sectionsUrl + sectionID).then(function successCallback(response) {
                     deferred.resolve(sectionsArray);
                 }, function errorCallback(response) {
                     console.error('Error while deleting section');
@@ -70,7 +63,7 @@
             },
             putSection = function (sectionObject) {
                 var deferred = $q.defer();
-                $http.put(sectionsUrl + sectionObject.id, sectionObject, configObject).then(function successCallback(response) {
+                $http.put(sectionsUrl + sectionObject.id, sectionObject).then(function successCallback(response) {
                     deferred.resolve(sectionsArray);
                 }, function errorCallback(response) {
                     console.error('Error while fetching questions');
@@ -82,7 +75,7 @@
                 var addedSections,
                     deferred = $q.defer();
                 console.log(sectionObject);
-                $http.post(sectionsUrl, sectionObject, configObject).then(function successCallback(response) {
+                $http.post(sectionsUrl, sectionObject).then(function successCallback(response) {
                     addedSections = response.data;
                     //Add sections to our sectionArray
                     sectionsArray.push(addedSections);

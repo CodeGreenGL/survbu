@@ -4,7 +4,16 @@
 
     angular
         .module('surveyModule', [])
-        .config(function ($stateProvider) {
+        .run(function ($http) { // Sets default http headers for all requests
+            $http.defaults.headers.common = {
+                Authorization: "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==",
+                Accept: "application/json",
+                'Content-Type': "application/json"
+            };
+        })
+        .config(function ($stateProvider, $urlRouterProvider) {
+            $urlRouterProvider.otherwise("/");
+
             $stateProvider
 
                 // HOMEPAGE
@@ -20,7 +29,15 @@
                     cache: false,
                     url: '/surveys_list',
                     templateUrl: 'js/app_specific/surveys/surveys.list.html',
-                    controller: 'surveysListCtrl as vm'
+                    controller: 'surveysListCtrl as vm',
+                    resolve: {
+                        paramPromise: function (surveysSrvc) {
+                            surveysSrvc.isWaiting(true);
+                            return surveysSrvc.updateAllSurveys().then(function () {
+                                surveysSrvc.isWaiting(false);
+                            });
+                        }
+                    }
                 })
                 .state('surveys_detail', {
                     cache: false,
@@ -49,7 +66,19 @@
                     params: {
                         'parentSurvey': 0
                     },
-                    controller: 'sectionsListCtrl as vm'
+                    controller: 'sectionsListCtrl as vm',
+                    resolve: {
+                        paramPromise: function (sectionsSrvc, $stateParams) {
+                            sectionsSrvc.isWaiting(true);
+                            if ($stateParams.parentSurvey === 0) {
+                                return sectionsSrvc.getAllSections().then(function () {
+                                    sectionsSrvc.isWaiting(false);
+                                });
+                            } else {
+                                sectionsSrvc.isWaiting(false);
+                            }
+                        }
+                    }
                 })
                 .state('sections_detail', {
                     cache: false,
@@ -79,7 +108,19 @@
                         'parentSection': 0,
                         'parentSectionSurvey': 0
                     },
-                    controller: 'questionsListCtrl as vm'
+                    controller: 'questionsListCtrl as vm',
+                    resolve: {
+                        paramPromise: function (questionsSrvc, $stateParams) {
+                            questionsSrvc.isWaiting(true);
+                            if ($stateParams.parentSection === 0) {
+                                return questionsSrvc.getAllQuestions().then(function () {
+                                    questionsSrvc.isWaiting(false);
+                                });
+                            } else {
+                                questionsSrvc.isWaiting(false);
+                            }
+                        }
+                    }
                 })
                 .state('questions_detail', {
                     cache: false,

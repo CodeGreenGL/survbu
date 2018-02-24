@@ -6,15 +6,9 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', [
     'ionic',
+    'ui.router',
     'surveyModule'
 ])
-    .run(function ($http) { // Sets default http headers for all requests
-        $http.defaults.headers.common = {
-            Authorization: "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==",
-            Accept: "application/json",
-            'Content-Type': "application/json"
-        };
-    })
     .run(function ($ionicPlatform, $state, $rootScope) {
         'use strict';
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
@@ -35,7 +29,6 @@ angular.module('starter', [
                 StatusBar.styleDefault();
             }
             // ADDED START
-            $state.go("homepage");
             // ADDED END
 
         });

@@ -22,31 +22,10 @@
 
         var vm = angular.extend(this, {
                 listAllSurveys: function () {
-                    surveysSrvc.isWaiting(true);
                     $state.go('surveys_list');
-
-                    surveysSrvc.updateAllSurveys().then(function () {
-                        surveysSrvc.isWaiting(false);
-
-                        if (surveysSrvc.getSurveys().length > 0) {
-                            $state.reload();
-                        }
-                    });
                 }, //end listAllSurveys function
                 listAllSections: function () {
-                    surveysSrvc.disposeSurveys();
-                    
-                    sectionsSrvc.isWaiting(true);
                     $state.go('sections_list');
-                    
-                    sectionsSrvc.getAllSections().then(function () {
-                        sectionsSrvc.isWaiting(false);
-                        
-                        if (sectionsSrvc.getNumSections() > 0) {
-                            $state.reload();
-                        }
-                    });
-                    
                 }, //end listAllSections function
                 listAllQuestions: function () {
                     sectionsSrvc.disposeSections();

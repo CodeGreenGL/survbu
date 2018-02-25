@@ -25,7 +25,7 @@
     ) {
         var vm = angular.extend(this, {
             parentSection: $stateParams.parentSection,
-            parentSectionSurvey: $stateParams.parentSectionSurvey,
+            parentSurvey: $stateParams.parentSurvey,
             question: {
                 questionText: "",
                 questionType: "",
@@ -46,10 +46,13 @@
                     vm.parentSection.questionIds.push(newQuestionID);
 
                     sectionsSrvc.updateSection(vm.parentSection).then(function (response) {
-                        var parentSectionSurveySections = vm.parentSectionSurvey['sectionIds'];
-                        sectionsSrvc.updateSections(parentSectionSurveySections).then(function () {
+                        var parentSurveySections = vm.parentSurvey.sectionIds;
+                        sectionsSrvc.updateSections(parentSurveySections).then(function () {
                             //surveysSrvc.isWaiting(false);
                             //$state.reload();
+                            $state.go('questions_list', {
+                                parentSection: vm.parentSection
+                            });
                        });
                     });
                 });

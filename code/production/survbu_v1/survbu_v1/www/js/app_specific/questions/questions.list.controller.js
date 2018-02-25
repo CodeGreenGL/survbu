@@ -23,7 +23,7 @@
     ) {
         var vm = angular.extend(this, {
             parentSection: $stateParams.parentSection,
-            parentSectionSurvey: $stateParams.parentSectionSurvey,
+            parentSurvey: $stateParams.parentSurvey,
             questions: ($stateParams.parentSection) ? questionsSrvc.getQuestions() : questionsSrvc.returnAllQuestions(),
             stillWaits: questionsSrvc.isItWaiting(),
             stillWaiting: function () {
@@ -46,13 +46,15 @@
             addQuestion: function () {
                 $state.go('questions_add', {
                     parentSection: vm.parentSection,
-                    parentSectionSurvey: vm.parentSectionSurvey
+                    parentSurvey: vm.parentSurvey
                 });
             },
             addFromExisting: function () {
                 questionsSrvc.isWaiting(true);
-                $state.go('questions_addfe');
-
+                $state.go('questions_addfe', {
+                    parentSection: vm.parentSection,
+                    parentSurvey: vm.parentSurvey
+                });
                 questionsSrvc.updateRemainingQuestions().then(function () {
                     $state.reload();
                     questionsSrvc.isWaiting(false);

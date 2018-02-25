@@ -47,7 +47,7 @@
                     url: '/sections_list',
                     templateUrl: 'js/app_specific/sections/sections.list.html',
                     params: {
-                        'parentSurvey': 0
+                        'parentSurveyId': 0
                     },
                     controller: 'sectionsListCtrl as vm'
                 })

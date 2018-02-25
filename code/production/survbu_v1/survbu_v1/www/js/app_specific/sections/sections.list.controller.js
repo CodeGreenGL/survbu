@@ -25,8 +25,9 @@
         sectionsSrvc,
         questionsSrvc
     ) {
-        var vm = angular.extend(this, {
-            parentSurvey: $stateParams.parentSurvey,
+        var parentSurveyId = $stateParams.parentSurveyId,
+            vm = angular.extend(this, {
+            parentSurvey: surveysSrvc.getSurveyAt(parentSurveyId),
             sections: sectionsSrvc.returnSections(),
             stillWaits: sectionsSrvc.isItWaiting(),
             stillWaiting: function () {
@@ -86,8 +87,6 @@
                     destructiveText: 'Delete',
                     destructiveButtonClicked: function () {
                         if (surveysSrvc.getNumSurveys() === 0) {
-                            console.log("surveysSrvc getNumSurveys is :");
-                            console.log(surveysSrvc.getNumSurveys());
                             $ionicPopup.alert({
                                 title: 'Can\'t delete section from global list!',
                                 template: 'Sections can only be deleted via the relevant survey.'
@@ -116,24 +115,30 @@
                             }).then(function (response) {
                                 if (response === 0) {
                                     vm.parentSurvey.sectionIds.splice(vm.parentSurvey.sectionIds.indexOf(selectedSection.id), 1);
-                                    surveysSrvc.updateSurvey(vm.parentSurvey).then(function (){
-                                        surveysSrvc.updateAllSurveys();
-                                    });
-                                    sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
-                                        $state.reload();
+                                    sectionsSrvc.updateSections(vm.parentSurvey.sectionIds)
+                                    .then(function (response) {
+                                        surveysSrvc.updateSurvey(vm.parentSurvey)
+                                        .then(function (response) {
+                                            surveysSrvc.updateAllSurveys()
+                                            .then(function (response) {
+                                                $state.reload();
+                                            });
+                                        });
                                     });
                                 } else if (response === 1) {
-                                    console.log(vm.parentSurvey.sectionIds);
                                     vm.parentSurvey.sectionIds.splice(vm.parentSurvey.sectionIds.indexOf(selectedSection.id), 1);
-                                    console.log(vm.parentSurvey.sectionIds);
-
-                                    sectionsSrvc.deleteSection(selectedSection.id);
-                                    surveysSrvc.updateSurvey(vm.parentSurvey).then(function (){
-                                        surveysSrvc.updateAllSurveys();
-                                    });
-                                    //below may need moving above above embedded promises
-                                    sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
-                                        $state.reload();
+                                    sectionsSrvc.deleteSection(selectedSection.id)
+                                    .then(function (response) {
+                                        sectionsSrvc.updateSections(vm.parentSurvey.sectionIds)
+                                        .then(function (response) {
+                                            surveysSrvc.updateSurvey(vm.parentSurvey)
+                                            .then(function (response) {
+                                                surveysSrvc.updateAllSurveys()
+                                                .then(function (response) {
+                                                    $state.reload();
+                                                });
+                                            });
+                                        });
                                     });
                                 } else {
                                     console.log('User pressed cancel');

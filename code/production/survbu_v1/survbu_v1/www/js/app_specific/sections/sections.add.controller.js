@@ -29,11 +29,9 @@
                 },
                 createSection: function () {
                     sectionsSrvc.createSection(vm.section.heading, vm.section.introductionMessage).then(function (response) {
-
                         var newSection = response;
                         vm.parentSurvey.sectionIds.push(newSection.id);
                         surveysSrvc.updateSurvey(vm.parentSurvey).then(function (response) {
-                            console.log(response);
                             surveysSrvc.updateAllSurveys();
                             return listQuestions(newSection);
                         });
@@ -47,7 +45,7 @@
 
                 $state.go('questions_list', {
                     parentSection: newSection,
-                    parentSectionSurvey: vm.parentSurvey
+                    parentSurvey: vm.parentSurvey
                 });
 
                 questionsSrvc.updateQuestions(sectionQuestions).then(function () {

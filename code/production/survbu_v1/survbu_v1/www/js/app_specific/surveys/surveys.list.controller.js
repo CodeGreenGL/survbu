@@ -37,7 +37,6 @@
                 return (vm.stillWaiting() || !vm.noContent());
             },
             selectDetail: function (survey) {
-                
                 $state.go('surveys_detail', {
                     survey: survey
                 });
@@ -45,15 +44,15 @@
             addSurvey: function () { //no need to pass params since we have the values already avaliable in survey.add.controller
                 $state.go('surveys_add');
             },
-            listSections: function (survey) { //take you to the sections list and updates the list; this was index
+            listSections: function (surveyId) { //take you to the sections list and updates the list; this was index
+                var survey = surveysSrvc.getSurveyAt(surveyId);
                 sectionsSrvc.isWaiting(true);
-                
                // var selectedSurvey = surveysSrvc.getSurveyAt(index),
                // surveySections = index.sectionIds;
-                  var surveySections = survey.sectionIds;
+                var surveySections = survey.sectionIds;
                 
                 $state.go('sections_list', {
-                    parentSurvey: survey //selectedSurvey;
+                    parentSurveyId: survey.id //selectedSurvey;
                 });
 
                 sectionsSrvc.updateSections(surveySections).then(function () {
@@ -63,9 +62,9 @@
                     sectionsSrvc.isWaiting(false);
                 });
             },
-            showActionMenu: function ($event, survey) { //this was index
+            showActionMenu: function ($event, surveyID) { //this was index
                 $event.stopPropagation();
-                var selectedSurvey = survey; // surveysSrvc.getSurveyAt(index);
+                var selectedSurvey = surveysSrvc.getSurveyAt(surveyId);
 
                 $ionicActionSheet.show({
                     titleText: 'Modify \'' + selectedSurvey.introductionMessage + '\'',

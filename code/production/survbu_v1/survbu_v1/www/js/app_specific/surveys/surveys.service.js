@@ -8,12 +8,14 @@
 
     surveysSrvc.$inject = [
         '$q', // promises service
-        '$http' // HTTP service
+        '$http', // HTTP service
+        '$filter'
     ];
 
     function surveysSrvc(
         $q,
-        $http
+        $http,
+        $filter
     ) {
         //get all surveys from codegreen restlet; returns deferred promise
         var surveysArray = [],
@@ -56,7 +58,6 @@
             },
             updateSurvey = function (survey) {
                 var deferred = $q.defer();
-                console.log(survey.id);
                 $http({
                     method: 'PUT',
                     url: 'https://codegreen.restlet.net/v1/surveys/' + survey.id,
@@ -129,6 +130,9 @@
                 },
                 getNumSurveys: function () {
                     return surveysArray.length;
+                },
+                getSurveyAt: function (id) {
+                    return angular.copy($filter('filter')(surveysArray, {id: id}, true)[0]);
                 },
                 createSurvey: function (introMessage, completionMessage) {
                     var survey = {

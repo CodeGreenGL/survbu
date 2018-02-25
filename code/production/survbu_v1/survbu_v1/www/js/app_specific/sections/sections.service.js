@@ -8,12 +8,14 @@
 
     sectionsSrvc.$inject = [
         '$q', // promises service
-        '$http' // HTTP service
+        '$http', // HTTP service
+        '$filter'
     ];
 
     function sectionsSrvc(
         $q,
-        $http
+        $http,
+        $filter
     ) {
         //get all sections from codegreen restlet; returns deferred promise
         var sectionsArray = [],
@@ -159,18 +161,14 @@
                 updateSection: function (section) {
                     return promiseToUpdateSection(section);
                 },
-                addQuestionsToSection: function (questionsArray) {
-                //move below logic to 'Addfe'; pass the whole object to updateSection
-                    for (var i = 0; i < questionsArray.length; i++) {
-                        section.questionIds.push(questionsArray[i]);
-                    }
-                    return promiseToUpdateSection(section);
-                },
                 returnSections: function () {
                     return angular.copy(sectionsArray);
                 },
                 getNumSections: function () {
                     return sectionsArray.length;
+                },
+                getSectionAt: function (id) {
+                    return angular.copy($filter('filter')(sectionsArray, {id: id}, true)[0]);
                 },
                 createSection: function(heading, introductionMessage) {
                     var section = {

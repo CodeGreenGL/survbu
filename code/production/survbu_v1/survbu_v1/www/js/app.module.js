@@ -32,7 +32,6 @@
                     controller: 'surveysListCtrl as vm',
                     resolve: {
                         paramPromise: function (surveysSrvc) {
-                            surveysSrvc.isWaiting(true);
                             return surveysSrvc.updateAllSurveys().then(function () {
                                 surveysSrvc.isWaiting(false);
                             });
@@ -74,8 +73,6 @@
                                 return sectionsSrvc.getAllSections().then(function () {
                                     sectionsSrvc.isWaiting(false);
                                 });
-                            } else {
-                                sectionsSrvc.isWaiting(false);
                             }
                         }
                     }
@@ -116,8 +113,6 @@
                                 return questionsSrvc.getAllQuestions().then(function () {
                                     questionsSrvc.isWaiting(false);
                                 });
-                            } else {
-                                questionsSrvc.isWaiting(false);
                             }
                         }
                     }

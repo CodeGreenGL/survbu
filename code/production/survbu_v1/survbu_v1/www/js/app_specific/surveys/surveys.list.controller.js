@@ -23,9 +23,8 @@
     ) {
         var vm = angular.extend(this, {
             surveys: surveysSrvc.getSurveys(),
-            stillWaits: surveysSrvc.isItWaiting(),
             stillWaiting: function () {
-                return vm.stillWaits;
+                return surveysSrvc.isItWaiting();
             },
             noContent: function () {
                 return vm.surveys.length === 0;
@@ -44,19 +43,16 @@
             addSurvey: function () { //no need to pass params since we have the values already avaliable in survey.add.controller
                 $state.go('surveys_add');
             },
-            listSections: function (surveyId) { //take you to the sections list and updates the list; this was index
-                var survey = surveysSrvc.getSurveyAt(surveyId);
+            listSections: function (surveyID) { //take you to the sections list and updates the list; this was index
                 sectionsSrvc.isWaiting(true);
-               // var selectedSurvey = surveysSrvc.getSurveyAt(index),
-               // surveySections = index.sectionIds;
-                var surveySections = survey.sectionIds;
+                var selectedSurvey = surveysSrvc.findID(surveyID);
                 
                 $state.go('sections_list', {
-                    parentSurveyId: survey.id //selectedSurvey;
+                    parentSurvey: selectedSurvey //selectedSurvey;
                 });
 
-                sectionsSrvc.updateSections(surveySections).then(function () {
-                    if (surveySections.length > 0) {
+                sectionsSrvc.updateSections(selectedSurvey.sectionIds).then(function () {
+                    if (selectedSurvey.sectionIds.length > 0) {
                         $state.reload();
                     }
                     sectionsSrvc.isWaiting(false);
@@ -64,7 +60,7 @@
             },
             showActionMenu: function ($event, surveyID) { //this was index
                 $event.stopPropagation();
-                var selectedSurvey = surveysSrvc.getSurveyAt(surveyId);
+                var selectedSurvey = surveysSrvc.getSurveyAt(surveyID);
 
                 $ionicActionSheet.show({
                     titleText: 'Modify \'' + selectedSurvey.introductionMessage + '\'',
@@ -87,6 +83,7 @@
                                     console.log('User pressed cancel');
                                 }
                             });
+                            return true;
                         } else {
                             $ionicPopup.show({
                                 title: 'Delete \'' + selectedSurvey.introductionMessage + '\'',
@@ -124,6 +121,7 @@
                                     console.log('User pressed cancel');
                                 }
                             });
+                            return true;
                         }
                     },
                     buttonClicked: function (buttonIndex) {

@@ -4,30 +4,46 @@
 
     angular
         .module('surveyModule', [])
-        .config(function ($stateProvider) {
+        .run(function ($http) { // Sets default http headers for all requests
+            $http.defaults.headers.common = {
+                Authorization: "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==",
+                Accept: "application/json",
+                'Content-Type': "application/json"
+            };
+        })
+        .config(function ($stateProvider, $urlRouterProvider) {
+            $urlRouterProvider.otherwise("/");
+
             $stateProvider
-			
-				// HOMEPAGE
+
+                // HOMEPAGE
                 .state('homepage', {
                     cache: false,
                     url: '/',
                     templateUrl: 'js/app_specific/homepage.html',
                     controller: 'homepageCtrl as vm'
                 })
-				
-				// SURVEYS
+
+                // SURVEYS
                 .state('surveys_list', {
                     cache: false,
                     url: '/surveys_list',
                     templateUrl: 'js/app_specific/surveys/surveys.list.html',
-                    controller: 'surveysListCtrl as vm'
+                    controller: 'surveysListCtrl as vm',
+                    resolve: {
+                        paramPromise: function (surveysSrvc) {
+                            return surveysSrvc.updateAllSurveys().then(function () {
+                                surveysSrvc.isWaiting(false);
+                            });
+                        }
+                    }
                 })
                 .state('surveys_detail', {
                     cache: false,
                     url: '/surveys_detail',
                     templateUrl: 'js/app_specific/surveys/surveys.detail.html',
                     params: {
-                        'survey': 0
+                        'selected': 0
                     },
                     controller: 'surveysDetailCtrl as vm'
                 })
@@ -35,28 +51,37 @@
                     cache: false,
                     url: '/surveys_add',
                     templateUrl: 'js/app_specific/surveys/surveys.add.html',
-                   /* params: {
+                    params: {
                         'selected': 0
-                    },*/
+                    },
                     controller: 'surveysAddCtrl as vm'
                 })
-				
-				// SECTIONS
-				.state('sections_list', {
+
+                // SECTIONS
+                .state('sections_list', {
                     cache: false,
                     url: '/sections_list',
                     templateUrl: 'js/app_specific/sections/sections.list.html',
                     params: {
-                        'parentSurveyId': 0
+                        'parentSurvey': 0
                     },
-                    controller: 'sectionsListCtrl as vm'
+                    controller: 'sectionsListCtrl as vm',
+                    resolve: {
+                        paramPromise: function (sectionsSrvc, $stateParams) {
+                            if ($stateParams.parentSurvey === 0) {
+                                return sectionsSrvc.getAllSections().then(function () {
+                                    sectionsSrvc.isWaiting(false);
+                                });
+                            }
+                        }
+                    }
                 })
                 .state('sections_detail', {
                     cache: false,
                     url: '/sections_detail',
                     templateUrl: 'js/app_specific/sections/sections.detail.html',
                     params: {
-                        'section': 0
+                        'selected': 0
                     },
                     controller: 'sectionsDetailCtrl as vm'
                 })
@@ -69,9 +94,9 @@
                     },
                     controller: 'sectionsAddCtrl as vm'
                 })
-				
-				// QUESTIONS
-				.state('questions_list', {
+
+                // QUESTIONS
+                .state('questions_list', {
                     cache: false,
                     url: '/questions_list',
                     templateUrl: 'js/app_specific/questions/questions.list.html',
@@ -79,14 +104,23 @@
                         'parentSection': 0,
                         'parentSurvey': 0
                     },
-                    controller: 'questionsListCtrl as vm'
+                    controller: 'questionsListCtrl as vm',
+                    resolve: {
+                        paramPromise: function (questionsSrvc, $stateParams) {
+                            if ($stateParams.parentSection === 0) {
+                                return questionsSrvc.getAllQuestions().then(function () {
+                                    questionsSrvc.isWaiting(false);
+                                });
+                            }
+                        }
+                    }
                 })
                 .state('questions_detail', {
                     cache: false,
                     url: '/questions_detail',
                     templateUrl: 'js/app_specific/questions/questions.detail.html',
                     params: {
-                        'question': 0
+                        'selected': 0
                     },
                     controller: 'questionsDetailCtrl as vm'
                 })
@@ -100,14 +134,10 @@
                     },
                     controller: 'questionsAddCtrl as vm'
                 })
-				.state('questions_addfe', {
+                .state('questions_addfe', {
                     cache: false,
                     url: '/questions_addfe',
                     templateUrl: 'js/app_specific/questions/questions.addfe.html',
-                    params: {
-                        'parentSection': 0,
-                        'parentSurvey': 0
-                    },
                     controller: 'questionsAddfeCtrl as vm'
                 });
         });

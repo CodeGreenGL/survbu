@@ -8,49 +8,44 @@
 
     control.$inject = [
         '$state',
-        '$stateParams',
+        '$ionicHistory',
         'surveysSrvc',
         'sectionsSrvc'
     ];
 
     function control(
         $state,
-        $stateParams,
+        $ionicHistory,
         surveysSrvc,
         sectionsSrvc
     ) {
-        var params = $stateParams,
-            vm = angular.extend(this, {
-                survey: {
-                    introductionMessage: "",
-                    completionMessage: ""
-                }
-            });
-
-        vm.createSurvey = function() {
-            surveysSrvc.createSurvey(vm.survey.introductionMessage,vm.survey.completionMessage).then(function (response) {
-                //Returns the promised object   
-                return listSections(response);
-            });
-            
-        };
-
-        var listSections = function(survey) {
-            sectionsSrvc.isWaiting(true);
-            var createdSurvey = survey;
-
-            $state.go('sections_list', {
-                parentSurvey: createdSurvey
-            });
-            sectionsSrvc.isWaiting(false);
-
-            var surveySections = [];
-                        
-            sectionsSrvc.updateSections(surveySections).then(function () {
-                if (surveySections.length > 0) {
-                    $state.reload();
+        var vm = angular.extend(this, {
+            survey: {
+                introductionMessage: "",
+                completionMessage: ""
+            },
+            createSurvey: function () {
+                var surveyObject = {
+                    introductionMessage: vm.survey.introductionMessage,
+                    completionMessage: vm.survey.completionMessage,
+                    sectionIds: []
                 };
-            });
-        };
+                surveysSrvc.createSurvey(surveyObject).then(function (response) {
+                    var newSurvey = response;
+                    sectionsSrvc.updateSections([]);
+
+                    $state.go('sections_list', { // Returns user to blank section list before updating sections to improve percieved responsiveness
+                        parentSurvey: newSurvey
+                    }).then(function () {
+                        $ionicHistory.removeBackView(); // Remove add page (previous page) from ionic history, so user returns to sections list on back
+                        sectionsSrvc.isWaiting(false);
+                        console.log('he');
+                        $state.reload(); // Refresh the state so back button doesn't display old data
+                    });
+
+                    
+                });
+            }
+        });
     }
 }());

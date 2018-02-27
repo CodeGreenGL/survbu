@@ -1,4 +1,4 @@
-/*global angular */
+/*global angular, console */
 (function () {
     'use strict';
 
@@ -8,7 +8,6 @@
 
     control.$inject = [
         '$state',
-        '$stateParams',
         '$ionicActionSheet',
         '$ionicPopup',
         'surveysSrvc',
@@ -18,20 +17,17 @@
 
     function control(
         $state,
-        $stateParams,
         $ionicActionSheet,
         $ionicPopup,
         surveysSrvc,
         sectionsSrvc,
         questionsSrvc
     ) {
-        var parentSurveyId = $stateParams.parentSurveyId,
-            vm = angular.extend(this, {
-            parentSurvey: surveysSrvc.getSurveyAt(parentSurveyId),
+        var vm = angular.extend(this, {
+            parentSurvey: $state.params.parentSurvey,
             sections: sectionsSrvc.returnSections(),
-            stillWaits: sectionsSrvc.isItWaiting(),
             stillWaiting: function () {
-                return vm.stillWaits;
+                return sectionsSrvc.isItWaiting();
             },
             noContent: function () {
                 return vm.sections.length === 0;
@@ -54,30 +50,35 @@
             },
             listQuestions: function (section) {
                 questionsSrvc.isWaiting(true);
-                
-               /* var selectedSection = sectionsSrvc.getSectionAt(index),
-                    sectionQuestions = selectedSection.questionIds;*/
+
+                /* var selectedSection = sectionsSrvc.getSectionAt(index),
+                     sectionQuestions = selectedSection.questionIds;*/
                 var sectionQuestions = section.questionIds;
-                
+
                 $state.go('questions_list', {
                     parentSection: section,
                     parentSurvey: vm.parentSurvey
                 });
 
-               // sectionsSrvc.setCurrentSection(index); // needs to be removed with implementation of $stateParams
+                // sectionsSrvc.setCurrentSection(index); // needs to be removed with implementation of $stateParams
 
-                questionsSrvc.updateQuestions(sectionQuestions).then(function () {
-                    if(sectionQuestions.length > 0){
+                if (sectionQuestions.length > 0) {
+                    questionsSrvc.updateQuestions(sectionQuestions).then(function () {
                         $state.reload();
-                    }     
+                        questionsSrvc.isWaiting(false);
+                    });
+                } else {
+                    questionsSrvc.disposeQuestions();
                     questionsSrvc.isWaiting(false);
-                });
+                }
             },
             showActionMenu: function ($event, section) {
                 $event.stopPropagation();
-
+                
                 var selectedSection = section,
-                    hasQuestions = (!Array.isArray(selectedSection.questionIds) || !selectedSection.questionIds.length) ? 'This section has no associated questions.' : 'Questions will be kept.'; //TRUE=empty array
+                    referenceCount = section.referenceCount,
+                    hasQuestions = (!Array.isArray(selectedSection.questionIds) || !selectedSection.questionIds.length) ? 'This section has no associated questions.' : 'Questions will be kept.';
+                
                 $ionicActionSheet.show({
                     titleText: 'Modify \'' + selectedSection.heading + '\'',
                     cancelText: 'Cancel',
@@ -86,12 +87,34 @@
                     }],
                     destructiveText: 'Delete',
                     destructiveButtonClicked: function () {
-                        if (surveysSrvc.getNumSurveys() === 0) {
+                        if (vm.parentSurvey === 0 && referenceCount > 0) {
                             $ionicPopup.alert({
-                                title: 'Can\'t delete section from global list!',
-                                template: 'Sections can only be deleted via the relevant survey.'
+                                title: 'Can\'t delete section, referenceCount is ' + referenceCount,
+                                template: 'Sections from the global list can only be deleted if referenceCount is 0.'
                             });
-                        } else {
+                            return true; // Close action menu
+                        } else if (vm.parentSurvey === 0 && (referenceCount === 0 || referenceCount === null)) {
+                            $ionicPopup.confirm({
+                                title: 'Delete Section',
+                                template: 'Are you sure you want to section \'' + selectedSection.heading + '\'?'
+                            }).then(function (response) {
+                                if (response) {
+                                    //vm.sections.splice(vm.sections.indexOf(selectedSection.id), 1); // Splice from the viewmodel?
+                                    sectionsSrvc.deleteSection(selectedSection.id);
+                                    console.log('DELETED section object');
+                                } else {
+                                    console.log('User pressed cancel');
+                                }
+                            });
+                            return true; // Close action menu
+                        } else if (referenceCount > 1) {
+                            $ionicPopup.alert({
+                                title: 'Can\'t delete section, referenceCount is ' + referenceCount,
+                                template: 'This section is used in ' + referenceCount + ' surveys, and cannot be deleted.'
+                            });
+                            return true; // Close action menu
+                        } else if (referenceCount === 0 || referenceCount === 1 || referenceCount === null) { // null part can be removed when questions are cleaned
+                            // referenceCount should only have values of 0 or 1 or above in cleaned questions
                             $ionicPopup.show({
                                 title: 'Delete \'' + selectedSection.heading + '\'',
                                 cssClass: 'extendedDeletePopup',
@@ -113,37 +136,18 @@
                                     }
                                 }]
                             }).then(function (response) {
-                                if (response === 0) {
-                                    vm.parentSurvey.sectionIds.splice(vm.parentSurvey.sectionIds.indexOf(selectedSection.id), 1);
-                                    sectionsSrvc.updateSections(vm.parentSurvey.sectionIds)
-                                    .then(function (response) {
-                                        surveysSrvc.updateSurvey(vm.parentSurvey)
-                                        .then(function (response) {
-                                            surveysSrvc.updateAllSurveys()
-                                            .then(function (response) {
-                                                $state.reload();
-                                            });
-                                        });
-                                    });
-                                } else if (response === 1) {
-                                    vm.parentSurvey.sectionIds.splice(vm.parentSurvey.sectionIds.indexOf(selectedSection.id), 1);
-                                    sectionsSrvc.deleteSection(selectedSection.id)
-                                    .then(function (response) {
-                                        sectionsSrvc.updateSections(vm.parentSurvey.sectionIds)
-                                        .then(function (response) {
-                                            surveysSrvc.updateSurvey(vm.parentSurvey)
-                                            .then(function (response) {
-                                                surveysSrvc.updateAllSurveys()
-                                                .then(function (response) {
-                                                    $state.reload();
-                                                });
-                                            });
-                                        });
-                                    });
+                                var sectionIndex = vm.sections.indexOf(selectedSection.id);
+                                vm.sections.splice(sectionIndex, 1); // Splice from the viewmodel
+                                vm.parentSurvey.sectionIds.splice(sectionIndex, 1); // Remove this section from section list
+                                surveysSrvc.updateSurvey(vm.parentSurvey);
+                                
+                                if (response === 1) { // If response is one, i.e user selected 'Delete Section'
+                                    sectionsSrvc.deleteSection(selectedSection.id);// Delete section from API
                                 } else {
                                     console.log('User pressed cancel');
                                 }
                             });
+                            return true;
                         }
                     },
                     buttonClicked: function (buttonIndex) {

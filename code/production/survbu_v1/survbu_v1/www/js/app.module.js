@@ -27,7 +27,7 @@
                     url: '/surveys_detail',
                     templateUrl: 'js/app_specific/surveys/surveys.detail.html',
                     params: {
-                        'survey': 0
+                        'surveyId': 0
                     },
                     controller: 'surveysDetailCtrl as vm'
                 })
@@ -35,9 +35,6 @@
                     cache: false,
                     url: '/surveys_add',
                     templateUrl: 'js/app_specific/surveys/surveys.add.html',
-                   /* params: {
-                        'selected': 0
-                    },*/
                     controller: 'surveysAddCtrl as vm'
                 })
 				
@@ -56,7 +53,7 @@
                     url: '/sections_detail',
                     templateUrl: 'js/app_specific/sections/sections.detail.html',
                     params: {
-                        'section': 0
+                        'sectionId': 0
                     },
                     controller: 'sectionsDetailCtrl as vm'
                 })
@@ -65,7 +62,7 @@
                     url: '/sections_add',
                     templateUrl: 'js/app_specific/sections/sections.add.html',
                     params: {
-                        'parentSurvey': 0
+                        'parentSurveyId': 0
                     },
                     controller: 'sectionsAddCtrl as vm'
                 })
@@ -76,8 +73,8 @@
                     url: '/questions_list',
                     templateUrl: 'js/app_specific/questions/questions.list.html',
                     params: {
-                        'parentSection': 0,
-                        'parentSurvey': 0
+                        'parentSectionId': 0,
+                        'parentSurveyId': 0
                     },
                     controller: 'questionsListCtrl as vm'
                 })
@@ -86,7 +83,7 @@
                     url: '/questions_detail',
                     templateUrl: 'js/app_specific/questions/questions.detail.html',
                     params: {
-                        'question': 0
+                        'questionId': 0
                     },
                     controller: 'questionsDetailCtrl as vm'
                 })
@@ -95,8 +92,8 @@
                     url: '/questions_add',
                     templateUrl: 'js/app_specific/questions/questions.add.html',
                     params: {
-                        'parentSection': 0,
-                        'parentSurvey': 0
+                        'parentSectionId': 0,
+                        'parentSurveyId': 0
                     },
                     controller: 'questionsAddCtrl as vm'
                 })
@@ -105,8 +102,8 @@
                     url: '/questions_addfe',
                     templateUrl: 'js/app_specific/questions/questions.addfe.html',
                     params: {
-                        'parentSection': 0,
-                        'parentSurvey': 0
+                        'parentSectionId': 0,
+                        'parentSurveyId': 0
                     },
                     controller: 'questionsAddfeCtrl as vm'
                 });

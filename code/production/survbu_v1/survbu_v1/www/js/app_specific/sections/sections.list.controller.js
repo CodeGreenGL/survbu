@@ -52,12 +52,13 @@
                     section: section
                 });
             },
-            listQuestions: function (section) {
+            listQuestions: function (sectionID) {
                 questionsSrvc.isWaiting(true);
-                
+
                /* var selectedSection = sectionsSrvc.getSectionAt(index),
                     sectionQuestions = selectedSection.questionIds;*/
-                var sectionQuestions = section.questionIds;
+                var section = sectionsSrvc.getSectionAt(sectionID),
+                    sectionQuestions = section.questionIds;
                 
                 $state.go('questions_list', {
                     parentSection: section,

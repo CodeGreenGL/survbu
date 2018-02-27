@@ -27,8 +27,8 @@
 
                     surveysSrvc.updateAllSurveys().then(function () {
                         surveysSrvc.isWaiting(false);
-
-                        if (surveysSrvc.getSurveys().length > 0) {
+                        console.log(surveysSrvc.isItWaiting());
+                        if (surveysSrvc.getNumSurveys() > 0) {
                             $state.reload();
                         }
                     });

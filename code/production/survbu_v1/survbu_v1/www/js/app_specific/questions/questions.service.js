@@ -9,12 +9,14 @@
 
     questionsSrvc.$inject = [
         '$q', // promises service
-        '$http' // HTTP service
+        '$http', // HTTP service
+        '$filter'
     ];
 
     function questionsSrvc(
         $q,
-        $http
+        $http,
+        $filter
     ) {
         //get all surveys from codegreen restlet; returns deferred promise
         var questionsArray = [],
@@ -147,8 +149,8 @@
                 disposeQuestions: function () {
                     questionsArray = [];
                 },
-                getQuestionAt: function (index) {
-                    return angular.copy(questionsArray[index]);
+                getQuestionAt: function (id) {
+                    return angular.copy($filter('filter')(questionsArray, {id: id}, true)[0]);
                 },
                 createQuestionService: function (paramType, paramText, paramQuestionChoices) {
                     console.log(paramType);

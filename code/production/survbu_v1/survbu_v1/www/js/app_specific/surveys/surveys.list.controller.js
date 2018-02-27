@@ -36,9 +36,9 @@
             hideNoItems: function () {
                 return (vm.stillWaiting() || !vm.noContent());
             },
-            selectDetail: function (survey) {
+            selectDetail: function (surveyId) {
                 $state.go('surveys_detail', {
-                    survey: survey
+                    surveyId: surveyId
                 });
             },
             addSurvey: function () { //no need to pass params since we have the values already avaliable in survey.add.controller
@@ -62,7 +62,7 @@
                     sectionsSrvc.isWaiting(false);
                 });
             },
-            showActionMenu: function ($event, surveyID) { //this was index
+            showActionMenu: function ($event, surveyId) { //this was index
                 $event.stopPropagation();
                 var selectedSurvey = surveysSrvc.getSurveyAt(surveyId);
 
@@ -81,7 +81,10 @@
                                 template: 'Are you sure you want to permanently delete this survey?<br/><br/>This survey has no associated sections.'
                             }).then(function (response) {
                                 if (response) {
-                                    vm.surveys.splice(vm.surveys.indexOf(selectedSurvey), 1);
+                                    //Alternative Method: var removeIndex = vm.surveys.map(function (survey) { return survey.id; }).indexOf(selectedSurvey.id);
+                                    var removeIndex = vm.surveys.findIndex(survey => survey.id === selectedSurvey.id);
+                                    console.log(removeIndex);
+                                    vm.surveys.splice(removeIndex, 1);
                                     surveysSrvc.deleteSurvey(selectedSurvey.id);
                                 } else {
                                     console.log('User pressed cancel');

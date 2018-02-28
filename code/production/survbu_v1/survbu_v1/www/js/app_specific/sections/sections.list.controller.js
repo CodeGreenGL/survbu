@@ -93,10 +93,10 @@
                                 template: 'Sections from the global list can only be deleted if referenceCount is 0.'
                             });
                             return true; // Close action menu
-                        } else if (vm.parentSurvey === 0 && (referenceCount === 0 || referenceCount === null)) {
+                        } else if (vm.parentSurvey === 0 && (referenceCount === 0 || referenceCount === null)) { // global delete
                             $ionicPopup.confirm({
                                 title: 'Delete Section',
-                                template: 'Are you sure you want to section \'' + selectedSection.heading + '\'?'
+                                template: 'Are you sure you want to delete section \'' + selectedSection.heading + '\'?'
                             }).then(function (response) {
                                 if (response) {
                                     //vm.sections.splice(vm.sections.indexOf(selectedSection.id), 1); // Splice from the viewmodel?
@@ -107,7 +107,7 @@
                                 }
                             });
                             return true; // Close action menu
-                        } else if (referenceCount > 1) {
+                        } else if (referenceCount > 1) { // too many references to delete
                             $ionicPopup.alert({
                                 title: 'Can\'t delete section, referenceCount is ' + referenceCount,
                                 template: 'This section is used in ' + referenceCount + ' surveys, and cannot be deleted.'
@@ -136,13 +136,16 @@
                                     }
                                 }]
                             }).then(function (response) {
-                                var sectionIndex = vm.sections.indexOf(selectedSection.id);
-                                vm.sections.splice(sectionIndex, 1); // Splice from the viewmodel
-                                vm.parentSurvey.sectionIds.splice(sectionIndex, 1); // Remove this section from section list
-                                surveysSrvc.updateSurvey(vm.parentSurvey);
-                                
-                                if (response === 1) { // If response is one, i.e user selected 'Delete Section'
-                                    sectionsSrvc.deleteSection(selectedSection.id);// Delete section from API
+                                if (response === 0 || response === 1) {
+                                    var sectionIndex = vm.sections.indexOf(selectedSection.id);
+
+                                    vm.sections.splice(sectionIndex, 1); // Splice from the viewmodel
+                                    vm.parentSurvey.sectionIds.splice(sectionIndex, 1); // Remove this section from section list
+                                    surveysSrvc.updateSurvey(vm.parentSurvey);
+
+                                    if (response === 1) { // If response is one, i.e user selected 'Delete Section'
+                                        sectionsSrvc.deleteSection(selectedSection.id); // Delete section from API
+                                    }
                                 } else {
                                     console.log('User pressed cancel');
                                 }

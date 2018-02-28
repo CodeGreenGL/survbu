@@ -7,9 +7,7 @@
         .controller('questionsAddCtrl', control);
 
     control.$inject = [
-        '$scope',
         '$state',
-        '$stateParams',
         '$ionicHistory',
         'surveysSrvc',
         'sectionsSrvc',
@@ -17,17 +15,15 @@
     ];
 
     function control(
-        $scope,
         $state,
-        $stateParams,
         $ionicHistory,
         surveysSrvc,
         sectionsSrvc,
         questionsSrvc
     ) {
         var vm = angular.extend(this, {
-            parentSection: $stateParams.parentSection,
-            parentSurvey: $stateParams.parentSurvey,
+            parentSection: $state.params.parentSection,
+            parentSurvey: $state.params.parentSurvey,
             question: {
                 questionText: "",
                 questionType: "",

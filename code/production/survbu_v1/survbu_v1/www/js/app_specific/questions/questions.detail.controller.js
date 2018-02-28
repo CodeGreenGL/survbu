@@ -8,17 +8,15 @@
 
     control.$inject = [
         '$state',
-        '$stateParams',
         'questionsSrvc'
     ];
 
     function control(
         $state,
-        $stateParams,
         questionsSrvc
     ) {
         angular.extend(this, {
-            question: questionsSrvc.getQuestionAt($stateParams.selected),
+            question: questionsSrvc.getQuestionAt($state.params.selected),
             submitButton: function () {
                 $state.go('questions_list');
             }

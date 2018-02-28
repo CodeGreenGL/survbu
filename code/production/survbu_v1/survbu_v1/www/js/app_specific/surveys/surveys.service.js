@@ -8,14 +8,12 @@
 
     surveysSrvc.$inject = [
         '$q', // promises service
-        '$http', // HTTP service
-        '$filter'
+        '$http' // HTTP service
     ];
 
     function surveysSrvc(
         $q,
-        $http,
-        $filter
+        $http
     ) {
         //get all surveys from codegreen restlet; returns deferred promise
         var surveysUrl = "https://codegreen.restlet.net/v2/surveys/",
@@ -86,17 +84,13 @@
                 getNumSurveys: function () {
                     return surveysArray.length;
                 },
-                getSurveyAt: function (paramID) {
-                    // return surveysArray.find(survey => survey.id == paramID);
-                    return angular.copy($filter('filter')(surveysArray, {
-                        id: paramID
-                    }, true)[0]);
+                getSurveyAt: function (surveyID) {
+                    //_.find(surveysArray, ['id', surveyID])); Lodash equivalent
+                    console.log(surveysArray.find(survey => survey.id == surveyID));
+                    return surveysArray.find(survey => survey.id == surveyID);
                 },
                 createSurvey: function (surveyObject) {
                     return createSurvey(surveyObject);
-                },
-                findID: function (surveyID) {
-                    return surveysArray.find(survey => survey.id == surveyID);
                 },
                 isWaiting: function (iWait) {
                     waitingState = iWait;

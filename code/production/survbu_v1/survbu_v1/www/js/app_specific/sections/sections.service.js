@@ -117,14 +117,12 @@
                 getNumSections: function () {
                     return sectionsArray.length;
                 },
-                getSectionAt: function (id) {
-                    return angular.copy($filter('filter')(sectionsArray, {id: id}, true)[0]);
+                getSectionAt: function (sectionID) {
+                    //_.find(sectionsArray, ['id', sectionID])); Lodash equivalent
+                    return sectionsArray.find(section => section.id == sectionID);
                 },
                 createSection: function(sectionObject) {
                     return createSection(sectionObject);
-                },
-                findID: function (sectionID) {
-                    return sectionsArray.find(section => section.id == sectionID);
                 },
                 isWaiting: function (iWait) {
                     waitingState = iWait;

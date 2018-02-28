@@ -45,7 +45,7 @@
             },
             listSections: function (surveyID) { //take you to the sections list and updates the list; this was index
                 sectionsSrvc.isWaiting(true);
-                var selectedSurvey = surveysSrvc.findID(surveyID);
+                var selectedSurvey = surveysSrvc.getSurveyAt(surveyID);
                 
                 $state.go('sections_list', {
                     parentSurvey: selectedSurvey //selectedSurvey;

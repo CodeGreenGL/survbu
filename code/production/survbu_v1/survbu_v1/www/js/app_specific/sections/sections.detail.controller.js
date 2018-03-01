@@ -8,17 +8,15 @@
 
     control.$inject = [
         '$state',
-        '$stateParams',
         'sectionsSrvc'
     ];
 
     function control(
         $state,
-        $stateParams,
         sectionsSrvc
     ) {
         var vm = angular.extend(this, {
-            section: $stateParams.section,
+            section: sectionsSrvc.getSectionAt($state.params.sectionId),
             submitButton: function () {
                 $state.go('sections_list');
             }

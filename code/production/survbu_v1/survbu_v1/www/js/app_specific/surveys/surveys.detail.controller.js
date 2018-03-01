@@ -8,17 +8,15 @@
 
     control.$inject = [
         '$state',
-        '$stateParams',
         'surveysSrvc'
     ];
 
     function control(
         $state,
-        $stateParams,
         surveysSrvc
     ) {
         var vm = angular.extend(this, {
-            survey: $stateParams.survey,
+            survey: surveysSrvc.getSurveyAt($state.params.surveyId),
             submitButton: function () {
                 $state.go('surveys_list');
             }

@@ -8,7 +8,6 @@
 
     control.$inject = [
         '$state',
-        '$stateParams',
         '$ionicHistory',
         'surveysSrvc',
         'sectionsSrvc',
@@ -17,14 +16,13 @@
 
     function control(
         $state,
-        $stateParams,
         $ionicHistory,
         surveysSrvc,
         sectionsSrvc,
         questionsSrvc
     ) {
         var vm = angular.extend(this, {
-            parentSurvey: $stateParams.parentSurvey,
+            parentSurvey: surveysSrvc.getSurveyAt($state.params.parentSurveyId),
             section: {
                 heading: "",
                 introductionMessage: ""
@@ -41,13 +39,13 @@
 
                 sectionsSrvc.createSection(sectionObject).then(function (response) {
                     sectionsSrvc.isWaiting(false);
-                    console.log(response);
+                    
                     var newSection = response;
                     vm.parentSurvey.sectionIds.push(newSection.id);
 
                     $state.go('questions_list', { // Returns user to blank question list before updating questions to improve percieved responsiveness
-                        parentSurvey: vm.parentSurvey,
-                        parentSection: newSection
+                        parentSectionId: newSection.id,
+                        parentSurveyId: vm.parentSurvey.id
                     }).then(function () {
                         $ionicHistory.removeBackView(); // Remove add page (previous page) from ionic history, so user returns to sections list on back
 

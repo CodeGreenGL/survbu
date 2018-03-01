@@ -86,7 +86,6 @@
                 },
                 getSurveyAt: function (surveyID) {
                     //_.find(surveysArray, ['id', surveyID])); Lodash equivalent
-                    console.log(surveysArray.find(survey => survey.id == surveyID));
                     return surveysArray.find(survey => survey.id == surveyID);
                 },
                 createSurvey: function (surveyObject) {

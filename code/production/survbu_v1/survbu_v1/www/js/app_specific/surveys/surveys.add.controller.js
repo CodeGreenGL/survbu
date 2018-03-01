@@ -35,11 +35,10 @@
                     sectionsSrvc.updateSections([]);
 
                     $state.go('sections_list', { // Returns user to blank section list before updating sections to improve percieved responsiveness
-                        parentSurvey: newSurvey
+                        parentSurveyId: newSurvey.id
                     }).then(function () {
                         $ionicHistory.removeBackView(); // Remove add page (previous page) from ionic history, so user returns to sections list on back
                         sectionsSrvc.isWaiting(false);
-                        console.log('he');
                         $state.reload(); // Refresh the state so back button doesn't display old data
                     });
 

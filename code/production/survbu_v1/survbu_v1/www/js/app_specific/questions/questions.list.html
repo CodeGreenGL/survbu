@@ -13,9 +13,9 @@
         <button ng-click="vm.addFromExisting()"  style="color: #ff3344f;">Add from existing</button>
         <div ng-hide="vm.hideList()">
             <ion-list>
-                <ion-item ng-click="vm.selectDetail($index)" ng-repeat="question in vm.questions" class="item-button-right">{{question.questionText}}
+                <ion-item ng-click="vm.selectDetail(question.id)" ng-repeat="question in vm.questions" class="item-button-right">{{question.questionText}}
                     <!-- <button ng-click="vm.showDeleteAlert($event, $index)" class="button button-small button-assertive contextButton">Delete</button> -->
-                    <button ng-click="vm.showDeleteAlert($event, $index)" class="button button-icon icon ion-ios-close actionMenuButton" style="color:#ff3344f;"></button>
+                    <button ng-click="vm.showDeleteAlert($event, question.id)" class="button button-icon icon ion-ios-close actionMenuButton" style="color:#ff3344f;"></button>
                 </ion-item>
             </ion-list>
         </div>

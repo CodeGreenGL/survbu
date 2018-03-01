@@ -24,7 +24,7 @@
         questionsSrvc
     ) {
         var vm = angular.extend(this, {
-            parentSurvey: $state.params.parentSurvey,
+            parentSurvey: surveysSrvc.getSurveyAt($state.params.parentSurveyId),
             sections: sectionsSrvc.returnSections(),
             stillWaiting: function () {
                 return sectionsSrvc.isItWaiting();
@@ -40,27 +40,24 @@
             },
             addSection: function addSection() {
                 $state.go('sections_add', {
-                    parentSurvey: vm.parentSurvey
+                    parentSurveyId: vm.parentSurvey.id
                 });
             },
-            selectDetail: function (section) {
+            selectDetail: function (sectionId) {
                 $state.go('sections_detail', {
-                    section: section
+                    sectionId: sectionId
                 });
             },
-            listQuestions: function (section) {
+            listQuestions: function (sectionId) {
                 questionsSrvc.isWaiting(true);
-
-                /* var selectedSection = sectionsSrvc.getSectionAt(index),
-                     sectionQuestions = selectedSection.questionIds;*/
-                var sectionQuestions = section.questionIds;
-
+                
+                var section = sectionsSrvc.getSectionAt(sectionId),
+                    sectionQuestions = section.questionIds;
+                
                 $state.go('questions_list', {
-                    parentSection: section,
-                    parentSurvey: vm.parentSurvey
+                    parentSectionId: sectionId,
+                    parentSurveyId: vm.parentSurvey.id
                 });
-
-                // sectionsSrvc.setCurrentSection(index); // needs to be removed with implementation of $stateParams
 
                 if (sectionQuestions.length > 0) {
                     questionsSrvc.updateQuestions(sectionQuestions).then(function () {
@@ -72,11 +69,11 @@
                     questionsSrvc.isWaiting(false);
                 }
             },
-            showActionMenu: function ($event, section) {
+            showActionMenu: function ($event, sectionId) {
                 $event.stopPropagation();
                 
-                var selectedSection = section,
-                    referenceCount = section.referenceCount,
+                var selectedSection = sectionsSrvc.getSectionAt(sectionId),
+                    referenceCount = selectedSection.referenceCount,
                     hasQuestions = (!Array.isArray(selectedSection.questionIds) || !selectedSection.questionIds.length) ? 'This section has no associated questions.' : 'Questions will be kept.';
                 
                 $ionicActionSheet.show({
@@ -155,7 +152,7 @@
                     },
                     buttonClicked: function (buttonIndex) {
                         if (buttonIndex === 0) {
-                            vm.selectDetail(selectedSection);
+                            vm.selectDetail(selectedSection.id);
                         }
                         return true; // Close action menu
                     }

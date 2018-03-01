@@ -19,7 +19,6 @@
         //get all surveys from codegreen restlet; returns deferred promise
         var questionsUrl = "https://codegreen.restlet.net/v2/questions/",
             questionsArray = [],
-            allQuestionsArray = [],
             remainingQuestionsArray = [],
             waitingState = false,
             getSectionQuestions = function (sectionQuestions) {
@@ -45,8 +44,8 @@
             getAllQuestions = function () {
                 var deferred = $q.defer();
                 $http.get(questionsUrl).then(function successCallback(response) {
-                    allQuestionsArray = response.data;
-                    deferred.resolve(allQuestionsArray);
+                    questionsArray = response.data;
+                    deferred.resolve(questionsArray);
                 }, function errorCallback(response) {
                     console.error('Error while fetching questions');
                     console.error(response);
@@ -61,7 +60,6 @@
                     addedQuestion = response.data;
                     //Add sections to our sectionArray
                     questionsArray.push(addedQuestion);
-                    allQuestionsArray.push(addedQuestion);
 
                     deferred.resolve(addedQuestion);
                 }, function errorCallback(response) {
@@ -76,6 +74,7 @@
 
                 $http.delete(questionsUrl + questionID).then(function successCallback(response) {
                     // Resolve the promise with response from the server, i.e 204
+                    questionsArray.splice(questionsArray.findIndex(question => question.id == questionID), 1); // Remove the section at the index found
                     deferred.resolve(response);
                 }, function errorCallback(response) {
                     console.error('Error while fetching notes');
@@ -110,26 +109,20 @@
                     return getSectionQuestions(sectionQuestions);
                 },
                 getAllQuestions: function () {
-                    allQuestionsArray = [];
+                    questionsArray = [];
                     return getAllQuestions();
                 },
                 getQuestions: function () {
                     return angular.copy(questionsArray);
                 },
-                returnAllQuestions: function () {
-                    return angular.copy(allQuestionsArray);
-                },
                 getNumQuestions: function () { //this needs reviewing which array length it should return
                     return questionsArray.length;
-                },
-                getNumAllQuestions: function () {
-                    return allQuestionsArray.length;
                 },
                 disposeQuestions: function () {
                     questionsArray = [];
                 },
-                getQuestionAt: function (index) {
-                    return angular.copy(questionsArray[index]);
+                getQuestionAt: function (questionId) {
+                    return questionsArray.find(question => question.id == questionId);
                 },
                 postQuestion: function (questionObject) {
                     return postQuestion(questionObject);

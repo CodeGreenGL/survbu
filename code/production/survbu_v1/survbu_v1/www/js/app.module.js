@@ -43,7 +43,7 @@
                     url: '/surveys_detail',
                     templateUrl: 'js/app_specific/surveys/surveys.detail.html',
                     params: {
-                        'selected': 0
+                        'surveyId': 0
                     },
                     controller: 'surveysDetailCtrl as vm'
                 })
@@ -51,9 +51,6 @@
                     cache: false,
                     url: '/surveys_add',
                     templateUrl: 'js/app_specific/surveys/surveys.add.html',
-                    params: {
-                        'selected': 0
-                    },
                     controller: 'surveysAddCtrl as vm'
                 })
 
@@ -63,12 +60,12 @@
                     url: '/sections_list',
                     templateUrl: 'js/app_specific/sections/sections.list.html',
                     params: {
-                        'parentSurvey': 0
+                        'parentSurveyId': 0
                     },
                     controller: 'sectionsListCtrl as vm',
                     resolve: {
                         paramPromise: function (sectionsSrvc, $stateParams) {
-                            if ($stateParams.parentSurvey === 0) {
+                            if ($stateParams.parentSurveyId === 0) {
                                 return sectionsSrvc.getAllSections().then(function () {
                                     sectionsSrvc.isWaiting(false);
                                 });
@@ -81,7 +78,7 @@
                     url: '/sections_detail',
                     templateUrl: 'js/app_specific/sections/sections.detail.html',
                     params: {
-                        'selected': 0
+                        'sectionId': 0
                     },
                     controller: 'sectionsDetailCtrl as vm'
                 })
@@ -90,7 +87,7 @@
                     url: '/sections_add',
                     templateUrl: 'js/app_specific/sections/sections.add.html',
                     params: {
-                        'parentSurvey': 0
+                        'parentSurveyId': 0
                     },
                     controller: 'sectionsAddCtrl as vm'
                 })
@@ -101,13 +98,13 @@
                     url: '/questions_list',
                     templateUrl: 'js/app_specific/questions/questions.list.html',
                     params: {
-                        'parentSection': 0,
-                        'parentSurvey': 0
+                        'parentSectionId': 0,
+                        'parentSurveyId': 0
                     },
                     controller: 'questionsListCtrl as vm',
                     resolve: {
                         paramPromise: function (questionsSrvc, $stateParams) {
-                            if ($stateParams.parentSection === 0) {
+                            if ($stateParams.parentSectionId === 0) {
                                 return questionsSrvc.getAllQuestions().then(function () {
                                     questionsSrvc.isWaiting(false);
                                 });
@@ -120,7 +117,7 @@
                     url: '/questions_detail',
                     templateUrl: 'js/app_specific/questions/questions.detail.html',
                     params: {
-                        'selected': 0
+                        'questionId': 0
                     },
                     controller: 'questionsDetailCtrl as vm'
                 })
@@ -129,8 +126,8 @@
                     url: '/questions_add',
                     templateUrl: 'js/app_specific/questions/questions.add.html',
                     params: {
-                        'parentSection': 0,
-                        'parentSurvey': 0
+                        'parentSectionId': 0,
+                        'parentSurveyId': 0
                     },
                     controller: 'questionsAddCtrl as vm'
                 })
@@ -138,6 +135,10 @@
                     cache: false,
                     url: '/questions_addfe',
                     templateUrl: 'js/app_specific/questions/questions.addfe.html',
+                    params: {
+                        'parentSectionId': 0,
+                        'parentSurveyId': 0
+                    },
                     controller: 'questionsAddfeCtrl as vm'
                 });
         });

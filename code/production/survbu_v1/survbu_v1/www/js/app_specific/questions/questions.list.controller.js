@@ -9,6 +9,7 @@
     control.$inject = [
         '$state',
         '$ionicPopup',
+        'surveysSrvc',
         'sectionsSrvc',
         'questionsSrvc'
     ];
@@ -16,14 +17,15 @@
     function control(
         $state,
         $ionicPopup,
+        surveysSrvc,
         sectionsSrvc,
         questionsSrvc
     ) {
         var stateParams = $state.params,
             vm = angular.extend(this, {
-                parentSection: stateParams.parentSection,
-                parentSurvey: stateParams.parentSurvey,
-                questions: (stateParams.parentSection) ? questionsSrvc.getQuestions() : questionsSrvc.returnAllQuestions(),
+                parentSection: sectionsSrvc.getSectionAt(stateParams.parentSectionId),
+                parentSurvey: surveysSrvc.getSurveyAt(stateParams.parentSurveyId),
+                questions: questionsSrvc.getQuestions(),
                 stillWaiting: function () {
                     return questionsSrvc.isItWaiting();
                 },
@@ -36,35 +38,33 @@
                 hideNoItems: function () {
                     return (vm.stillWaiting() || !vm.noContent());
                 },
-                selectDetail: function selectDetail(index) {
+                selectDetail: function selectDetail(questionId) {
                     $state.go('questions_detail', {
-                        selected: index
+                        questionId: questionId
                     });
                 },
                 addQuestion: function () {
                     $state.go('questions_add', {
-                        parentSection: vm.parentSection,
-                        parentSurvey: vm.parentSurvey
+                        parentSectionId: vm.parentSection.id,
+                        parentSurveyId: vm.parentSurvey.id
                     });
                 },
                 addFromExisting: function () {
                     questionsSrvc.isWaiting(true);
                     $state.go('questions_addfe', {
-                        parentSection: vm.parentSection,
-                        parentSurvey: vm.parentSurvey
+                        parentSectionId: vm.parentSection.id,
+                        parentSurveyId: vm.parentSurvey.id
                     });
                     questionsSrvc.updateRemainingQuestions().then(function () {
                         $state.reload();
                         questionsSrvc.isWaiting(false);
                     });
                 },
-                showDeleteAlert: function ($event, index) {
+                showDeleteAlert: function ($event, questionId) {
                     $event.stopPropagation();
 
-                    var selectedQuestion = vm.questions[index],
+                    var selectedQuestion = questionsSrvc.getQuestionAt(questionId),
                         referenceCount = selectedQuestion.referenceCount;
-
-                    console.log("question[" + index + "] - referenceCount: " + referenceCount);
 
                     if (vm.parentSection === 0 && referenceCount > 0) {
                         $ionicPopup.alert({
@@ -83,7 +83,7 @@
                             template: 'Are you sure you want to delete \'' + selectedQuestion.questionText + '\'?'
                         }).then(function (response) {
                             if (response) {
-                                vm.questions.splice(index, 1); // Remove the question at the index of the questions list
+                                vm.questions.splice(vm.questions.indexOf(selectedQuestion.id), 1); // Remove the question at the index of the questions list
                                 questionsSrvc.deleteQuestion(selectedQuestion.id); // can put a .then here for error checking the delete response from promise
                                 if (vm.parentSection !== 0) { sectionsSrvc.updateSectionsFromQuestionID(selectedQuestion.id, vm.parentSection.id); } // if not in the global list, update the sections list
                             } else {

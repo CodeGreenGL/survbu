@@ -22,8 +22,8 @@
         questionsSrvc
     ) {
         var vm = angular.extend(this, {
-            parentSection: $state.params.parentSection,
-            parentSurvey: $state.params.parentSurvey,
+            parentSection: sectionsSrvc.getSectionAt($state.params.parentSectionId),
+            parentSurvey: surveysSrvc.getSurveyAt($state.params.parentSurveyId),
             question: {
                 questionText: "",
                 questionType: "",
@@ -54,8 +54,8 @@
                     $ionicHistory.removeBackView();
 
                     $state.go('questions_list', { // Returns user to blank question list before updating questions to improve percieved responsiveness
-                        parentSurvey: vm.parentSurvey,
-                        parentSection: vm.parentSection
+                        parentSurveyId: vm.parentSurvey.id,
+                        parentSectionId: vm.parentSection.id
                     }).then(function () {
                         $ionicHistory.removeBackView(); // Remove add page (previous page) from ionic history, so user returns to sections list on back
 

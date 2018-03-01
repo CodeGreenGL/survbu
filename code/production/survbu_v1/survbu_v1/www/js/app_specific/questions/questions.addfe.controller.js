@@ -8,18 +8,20 @@
 
     control.$inject = [
         '$state',
+        'surveysSrvc',
         'sectionsSrvc',
         'questionsSrvc'
     ];
 
     function control(
         $state,
+        surveysSrvc,
         sectionsSrvc,
         questionsSrvc
     ) {
         var vm = angular.extend(this, {
                 parentSection: sectionsSrvc.getSectionAt($state.params.parentSectionId),
-                parentSurvey: $state.params.parentSurvey,
+                parentSurvey: surveysSrvc.getSurveyAt($state.params.parentSurveyId),
                 questions: questionsSrvc.getRemainingQuestions(),
 
                 stillWaiting: function () {
@@ -44,7 +46,7 @@
                         sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
                             questionsSrvc.updateQuestions(vm.parentSection.questionIds).then(function () {
                                 $state.go('questions_list', {
-                                    parentSection: vm.parentSection
+                                    parentSectionId: vm.parentSection.id
                                 });
                             });
                         });

@@ -55,6 +55,7 @@
             deleteSectionID = function (sectionID) {
                 var deferred = $q.defer();
                 $http.delete(sectionsUrl + sectionID).then(function successCallback(response) {
+                    sectionsArray.splice(sectionsArray.findIndex(section => section.id == sectionID), 1); // Remove the section at the index found
                     deferred.resolve(sectionsArray);
                 }, function errorCallback(response) {
                     console.error('Error while deleting section');

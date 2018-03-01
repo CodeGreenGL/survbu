@@ -51,31 +51,22 @@
                 questionsSrvc.postQuestion(questionObject).then(function (response) {
                     var newQuestionID = response.id;
                     
-                    $ionicHistory.removeBackView();
+                    $ionicHistory.goBack();
 
-                    $state.go('questions_list', { // Returns user to blank question list before updating questions to improve percieved responsiveness
-                        parentSurveyId: vm.parentSurvey.id,
-                        parentSectionId: vm.parentSection.id
-                    }).then(function () {
-                        $ionicHistory.removeBackView(); // Remove add page (previous page) from ionic history, so user returns to sections list on back
+                    if (vm.parentSection === 0) { // stop list from showing updating if no parent section, i.e global list
+                        questionsSrvc.isWaiting(false);
+                    } else if (vm.parentSection !== 0) {
+                        vm.parentSection.questionIds.push(newQuestionID);
+                        questionsSrvc.isWaiting(false); // once new questionID added to array, allow user to view
 
-                        if (vm.parentSection === 0) { // stop list from showing updating if no parent section, i.e global list
-                            questionsSrvc.isWaiting(false);
-                        } else if (vm.parentSection !== 0) {
-                            vm.parentSection.questionIds.push(newQuestionID);
-                            questionsSrvc.isWaiting(false); // once new questionID added to array, allow user to view
-
-                            // PUTs the new parentSection to API
-                            sectionsSrvc.updateSection(vm.parentSection).then(function () {
-                                // Given an array of sectionIds, updates the section array with the retrieves section objects.
-                                sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
-                                    sectionsSrvc.isWaiting(false);
-                                });
+                        // PUTs the new parentSection to API
+                        sectionsSrvc.updateSection(vm.parentSection).then(function () {
+                            // Given an array of sectionIds, updates the section array with the retrieves section objects.
+                            sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
+                                sectionsSrvc.isWaiting(false);
                             });
-                        }
-
-                        $state.reload(); // Refresh the state so back button doesn't display old data
-                    });
+                        });
+                    }
                 });
             }
         });

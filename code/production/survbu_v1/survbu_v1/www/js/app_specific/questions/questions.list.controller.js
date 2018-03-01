@@ -83,7 +83,7 @@
                             template: 'Are you sure you want to delete \'' + selectedQuestion.questionText + '\'?'
                         }).then(function (response) {
                             if (response) {
-                                vm.questions.splice(vm.questions.indexOf(selectedQuestion.id), 1); // Remove the question at the index of the questions list
+                                vm.questions.splice(vm.questions.findIndex(question => question.id == selectedQuestion.id), 1); // Remove the question at the index of the questions list
                                 questionsSrvc.deleteQuestion(selectedQuestion.id); // can put a .then here for error checking the delete response from promise
                                 if (vm.parentSection !== 0) { sectionsSrvc.updateSectionsFromQuestionID(selectedQuestion.id, vm.parentSection.id); } // if not in the global list, update the sections list
                             } else {

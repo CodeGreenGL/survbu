@@ -96,7 +96,7 @@
                                 template: 'Are you sure you want to delete section \'' + selectedSection.heading + '\'?'
                             }).then(function (response) {
                                 if (response) {
-                                    //vm.sections.splice(vm.sections.indexOf(selectedSection.id), 1); // Splice from the viewmodel?
+                                    vm.sections.splice(vm.sections.findIndex(section => section.id == selectedSection.id), 1); // Splice from the viewmodel
                                     sectionsSrvc.deleteSection(selectedSection.id);
                                     console.log('DELETED section object');
                                 } else {
@@ -134,10 +134,8 @@
                                 }]
                             }).then(function (response) {
                                 if (response === 0 || response === 1) {
-                                    var sectionIndex = vm.sections.indexOf(selectedSection.id);
-
-                                    vm.sections.splice(sectionIndex, 1); // Splice from the viewmodel
-                                    vm.parentSurvey.sectionIds.splice(sectionIndex, 1); // Remove this section from section list
+                                    vm.sections.splice(vm.sections.findIndex(section => section.id == selectedSection.id), 1); // Splice from the viewmodel
+                                    vm.parentSurvey.sectionIds.splice(vm.parentSurvey.sectionIds.indexOf(selectedSection.id), 1); // Remove this section from section list
                                     surveysSrvc.updateSurvey(vm.parentSurvey);
 
                                     if (response === 1) { // If response is one, i.e user selected 'Delete Section'

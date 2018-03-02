@@ -9,19 +9,21 @@
     control.$inject = [
         '$state',
         '$stateParams',
-        'sectionsSrvc'
+        'sectionsSrvc',
+        'surveysSrvc'
     ];
 
     function control(
         $state,
         $stateParams,
-        sectionsSrvc
+        sectionsSrvc,
+        surveysSrvc
     ) {
         var sectionId = $stateParams.sectionId,
             parentSurveyId = $stateParams.parentSurveyId,
             vm = angular.extend(this, {
             section: sectionsSrvc.getSectionAt(sectionId),
-            parentSurvey: surveysSrvc.getSurveyAt(surveyId),
+            parentSurvey: surveysSrvc.getSurveyAt(parentSurveyId),
             submitButton: function () {
                 $state.go('sections_list', {
                     parentSurveyId: parentSurvey.id

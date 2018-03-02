@@ -131,7 +131,7 @@
                     },
                     buttonClicked: function (buttonIndex) {
                         if (buttonIndex === 0) {
-                            vm.selectDetail(selectedSurvey);
+                            vm.selectDetail(selectedSurvey.id);
                         }
                         return true; // Close action menu
                     }

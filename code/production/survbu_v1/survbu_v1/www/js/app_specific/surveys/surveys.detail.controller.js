@@ -17,8 +17,9 @@
         $stateParams,
         surveysSrvc
     ) {
-        var vm = angular.extend(this, {
-            survey: $stateParams.survey,
+        var surveyId = $stateParams.surveyId,
+            vm = angular.extend(this, {
+            survey: surveysSrvc.getSurveyAt(surveyId),
             submitButton: function () {
                 $state.go('surveys_list');
             }

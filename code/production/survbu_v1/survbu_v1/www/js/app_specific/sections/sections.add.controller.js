@@ -33,8 +33,11 @@
                         var newSection = response;
                         vm.parentSurvey.sectionIds.push(newSection.id);
                         surveysSrvc.updateSurvey(vm.parentSurvey).then(function (response) {
-                            surveysSrvc.updateAllSurveys();
-                            return listQuestions(newSection);
+                            surveysSrvc.updateAllSurveys().then(function () {
+                                listQuestions(newSection);
+                            });
+
+                            //return listQuestions(newSection);
                         });
                     });
                 }
@@ -43,7 +46,8 @@
                 questionsSrvc.isWaiting(true);
 
                 var sectionQuestions = [];
-
+                console.log("vm.parentSurvey !!!!");
+                console.log(newSection.id);
                 $state.go('questions_list', {
                     parentSectionId: newSection.id,
                     parentSurveyId: vm.parentSurvey.id

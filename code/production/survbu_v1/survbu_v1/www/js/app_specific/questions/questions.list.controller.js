@@ -43,15 +43,15 @@
             hideNoItems: function () {
                 return (vm.stillWaiting() || !vm.noContent());
             },
-            selectDetail: function selectDetail(questionId) { //index
+            selectDetail: function selectDetail(questionId) {
                 $state.go('questions_detail', {
                     questionId: questionId
                 });
             },
             addQuestion: function () {
                 $state.go('questions_add', {
-                    parentSectionId: vm.parentSectionId,
-                    parentSurveyId: vm.parentSurveyId
+                    parentSectionId: vm.parentSection.id,
+                    parentSurveyId: vm.parentSurvey.id
                 });
             },
             addFromExisting: function () {

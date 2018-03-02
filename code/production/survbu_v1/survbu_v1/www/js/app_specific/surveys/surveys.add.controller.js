@@ -40,7 +40,7 @@
             var createdSurvey = survey;
 
             $state.go('sections_list', {
-                parentSurvey: createdSurvey
+                parentSurveyId: createdSurvey.id
             });
             sectionsSrvc.isWaiting(false);
 

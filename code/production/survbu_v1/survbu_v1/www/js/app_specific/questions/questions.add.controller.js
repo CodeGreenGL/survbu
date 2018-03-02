@@ -23,9 +23,11 @@
         sectionsSrvc,
         questionsSrvc
     ) {
-        var vm = angular.extend(this, {
-            parentSectionId: $stateParams.parentSectionId,
-            parentSurveyId: $stateParams.parentSurveyId,
+        var parentSectionId = $stateParams.parentSectionId,
+            parentSurveyId = $stateParams.parentSurveyId,
+            vm = angular.extend(this, {
+            parentSection: sectionsSrvc.getSectionAt(parentSectionId),
+            parentSurvey: surveysSrvc.getSurveyAt(parentSurveyId),
             question: {
                 questionText: "",
                 questionType: "",
@@ -42,19 +44,21 @@
             createQuestion: function () {
                 questionsSrvc.createQuestionService(vm.question.questionType, vm.question.questionText, vm.question.questionChoices).then(function (response) {
 
-                    var section = sectionsSrvc.getSectionAt(vm.parentSectionId); //Pav obtaining the whole section
+                    
                     var newQuestionID = response.id;
-                    section.questionIds.push(newQuestionID);
+                    vm.parentSection.questionIds.push(newQuestionID);
 
-                    sectionsSrvc.updateSection(section).then(function (response) {
-                        
-                        var survey = surveysSrvc.getSurveyAt(vm.parentSurveyId);
-                        sectionsSrvc.updateSections(survey.sectionIds).then(function () {
-                            $state.go('questions_list', {
-                                parentSectionId: vm.parentSectionId,
-                                parentSurveyId: vm.parentSurveyId
+                    sectionsSrvc.updateSection(vm.parentSection).then(function (response) {
+            
+                        sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
+                            
+                            questionsSrvc.updateQuestions(vm.parentSection.questionIds).then(function (response) {
+                                $state.go('questions_list', {
+                                    parentSectionId: vm.parentSection.id,
+                                    parentSurveyId: vm.parentSurvey.id
+                                });
                             });
-                       });
+                        });
                     });
                 });
             }

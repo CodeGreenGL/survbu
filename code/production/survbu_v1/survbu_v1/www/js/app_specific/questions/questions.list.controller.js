@@ -11,7 +11,8 @@
         '$stateParams',
         '$ionicPopup',
         'sectionsSrvc',
-        'questionsSrvc'
+        'questionsSrvc',
+        'surveysSrvc'
     ];
 
     function control(
@@ -19,12 +20,15 @@
         $stateParams,
         $ionicPopup,
         sectionsSrvc,
-        questionsSrvc
+        questionsSrvc,
+        surveysSrvc
 
     ) {
-        var vm = angular.extend(this, {
-            parentSectionId: $stateParams.parentSectionId,
-            parentSurveyId: $stateParams.parentSurveyId,
+        var parentSectionId = $stateParams.parentSectionId,
+            parentSurveyId = $stateParams.parentSurveyId,
+            vm = angular.extend(this, {
+            parentSection: sectionsSrvc.getSectionAt(parentSectionId),
+            parentSurvey: surveysSrvc.getSurveyAt(parentSurveyId),
             questions: ($stateParams.parentSectionId) ? questionsSrvc.getQuestions() : questionsSrvc.returnAllQuestions(), //I have changed to parentSectionId , may need to obtain the section and then compare
             stillWaits: questionsSrvc.isItWaiting(),
             stillWaiting: function () {
@@ -79,9 +83,8 @@
 
                             var removeIndex = vm.questions.findIndex(quest => quest.id === questionId);
                             vm.questions.splice(removeIndex, 1);
-                            var section = sectionsSrvc.getSectionAt(vm.parentSectionId);
-                            section.questionIds.splice(removeIndex, 1);
-                            sectionsSrvc.updateSection(section).then(function(){
+                            vm.parentSection.questionIds.splice(removeIndex, 1);
+                            sectionsSrvc.updateSection(vm.parentSection).then(function(){
                                 
                             });
                         } else {

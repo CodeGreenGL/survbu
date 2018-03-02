@@ -76,16 +76,12 @@
                         template: 'Are you sure you want to delete \'' + question.questionText + '\'?'
                     }).then(function (response) {
                         if (response) {
-                            console.log("Question id");
-                            console.log(questionId);
-                            console.log(vm.questions.indexOf(questionId));
-                            var question = questionsSrvc.getQuestionAt(questionId);
-                            console.log(question);
 
-                            vm.questions.splice(vm.questions.indexOf(question), 1);
-                            var survey = surveySrvc.getSurveyAt(vm.parentSurveyId)
-                            //survey.questionIds.splice();
-                            sectionsSrvc.updateSection(vm.parentSection);
+                            var removeIndex = vm.questions.findIndex(quest => quest.id === questionId);
+                            vm.questions.splice(removeIndex, 1);
+                            var section = sectionsSrvc.getSectionAt(vm.parentSectionId);
+                            section.questionIds.splice(removeIndex, 1);
+                            sectionsSrvc.updateSection(section);
                         } else {
                             console.log('User pressed cancel');
                         }

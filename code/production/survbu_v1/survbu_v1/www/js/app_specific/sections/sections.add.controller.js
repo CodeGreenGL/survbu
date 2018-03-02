@@ -21,8 +21,9 @@
         sectionsSrvc,
         questionsSrvc
     ) {
-        var vm = angular.extend(this, {
-                parentSurvey: $stateParams.parentSurvey,
+        var parentSurveyId = $stateParams.parentSurveyId,
+            vm = angular.extend(this, {
+                parentSurvey: surveysSrvc.getSurveyAt(parentSurveyId),
                 section: {
                     heading: "",
                     introductionMessage: ""
@@ -44,8 +45,8 @@
                 var sectionQuestions = [];
 
                 $state.go('questions_list', {
-                    parentSection: newSection,
-                    parentSurvey: vm.parentSurvey
+                    parentSectionId: newSection.id,
+                    parentSurveyId: vm.parentSurvey.id
                 });
 
                 questionsSrvc.updateQuestions(sectionQuestions).then(function () {

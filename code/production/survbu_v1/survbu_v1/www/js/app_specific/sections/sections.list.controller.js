@@ -44,12 +44,12 @@
             },
             addSection: function addSection() {
                 $state.go('sections_add', {
-                    parentSurvey: vm.parentSurvey
+                    parentSurveyId: vm.parentSurvey.id
                 });
             },
-            selectDetail: function (section) {
+            selectDetail: function (sectionId) {
                 $state.go('sections_detail', {
-                    section: section
+                    sectionId: section.id
                 });
             },
             listQuestions: function (sectionId) {
@@ -62,7 +62,7 @@
                 
 
                 $state.go('questions_list', {
-                    parentSectionId: sectionId,
+                    parentSectionId: section.id,
                     parentSurveyId: vm.parentSurvey.id
                 });
 
@@ -75,10 +75,10 @@
                     questionsSrvc.isWaiting(false);
                 });
             },
-            showActionMenu: function ($event, section) {
+            showActionMenu: function ($event, sectionId) {
                 $event.stopPropagation();
 
-                var selectedSection = section,
+                var selectedSection = sectionsSrvc.getSectionAt(sectionId),
                     hasQuestions = (!Array.isArray(selectedSection.questionIds) || !selectedSection.questionIds.length) ? 'This section has no associated questions.' : 'Questions will be kept.'; //TRUE=empty array
                 $ionicActionSheet.show({
                     titleText: 'Modify \'' + selectedSection.heading + '\'',
@@ -150,7 +150,7 @@
                     },
                     buttonClicked: function (buttonIndex) {
                         if (buttonIndex === 0) {
-                            vm.selectDetail(selectedSection);
+                            vm.selectDetail(selectedSection.id);
                         }
                         return true; // Close action menu
                     }

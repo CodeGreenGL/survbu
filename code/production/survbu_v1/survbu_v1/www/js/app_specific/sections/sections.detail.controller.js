@@ -17,10 +17,15 @@
         $stateParams,
         sectionsSrvc
     ) {
-        var vm = angular.extend(this, {
-            section: $stateParams.section,
+        var sectionId = $stateParams.sectionId,
+            parentSurveyId = $stateParams.parentSurveyId,
+            vm = angular.extend(this, {
+            section: sectionsSrvc.getSectionAt(sectionId),
+            parentSurvey: surveysSrvc.getSurveyAt(surveyId),
             submitButton: function () {
-                $state.go('sections_list');
+                $state.go('sections_list', {
+                    parentSurveyId: parentSurvey.id
+                });
             }
         });
     }

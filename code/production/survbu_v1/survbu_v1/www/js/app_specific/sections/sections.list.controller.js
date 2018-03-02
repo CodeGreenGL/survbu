@@ -49,6 +49,7 @@
             },
             selectDetail: function (sectionId) {
                 $state.go('sections_detail', {
+                    parentSurveyId: vm.parentSurvey.id,
                     sectionId: section.id
                 });
             },

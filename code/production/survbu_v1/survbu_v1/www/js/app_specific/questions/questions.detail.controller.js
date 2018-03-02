@@ -18,7 +18,7 @@
         questionsSrvc
     ) {
         angular.extend(this, {
-            question: questionsSrvc.getQuestionAt($stateParams.selected),
+            question: questionsSrvc.getQuestionAt($stateParams.questionId),
             submitButton: function () {
                 $state.go('questions_list');
             }

@@ -38,9 +38,11 @@
             hideNoItems: function () {
                 return (vm.stillWaiting() || !vm.noContent());
             },
-            selectDetail: function selectDetail(index) {
+            selectDetail: function selectDetail(questionId) { //index
+                var question = questionsSrvc.getQuestionAt(questionId);
+                console.log("QUESTION in selectDetail" + question);
                 $state.go('questions_detail', {
-                    selected: index
+                    questionId: question.id
                 });
             },
             addQuestion: function () {

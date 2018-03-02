@@ -70,14 +70,14 @@
                 });
                 return deferred.promise;
             },
-            createQuestion = function (questionObject) {
+            createQuestion = function (question) {
                 var addedQuestion,
                     deferred = $q.defer();
 
                 $http({
                     method: "POST",
                     url: 'https://codegreen.restlet.net:443/v1/questions/',
-                    data: questionObject,
+                    data: question,
                     headers: {
                         "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
                         "content-type": "application/json",
@@ -104,8 +104,8 @@
             promiseToGetAllQuestions = function () {
                 return getAllQuestions();
             },
-            promiseToCreateQuestion = function (questionObject) {
-                return createQuestion(questionObject);
+            promiseToCreateQuestion = function (question) {
+                return createQuestion(question);
             },
             removeAlreadyAdded = function () {
                 var deferred = $q.defer(),
@@ -152,15 +152,14 @@
                 getQuestionAt: function (id) {
                     return angular.copy($filter('filter')(questionsArray, {id: id}, true)[0]);
                 },
-                createQuestionService: function (paramType, paramText, paramQuestionChoices) {
-                    console.log(paramType);
-                    var questionObject = {
+                createQuestionService: function (questionType, questionText, questionChoices){
+                    var question = {
                         id: "",
-                        questionType: paramType,
-                        questionText: paramText,
-                        questionChoices: paramQuestionChoices
+                        questionType: questionType,
+                        questionText: questionText,
+                        questionChoices: questionChoices
                     };
-                    return promiseToCreateQuestion(questionObject);
+                    return promiseToCreateQuestion(question);
                 },
                 isWaiting: function (iWait) {
                     waitingState = iWait;

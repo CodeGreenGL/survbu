@@ -43,6 +43,7 @@
                 questionsSrvc.createQuestionService(vm.question.questionType, vm.question.questionText, vm.question.questionChoices).then(function (response) {
 
                     var newQuestionID = response.id;
+                    console.log("Parent sections in createQuestion" + vm.parentSection);
                     vm.parentSection.questionIds.push(newQuestionID);
 
                     sectionsSrvc.updateSection(vm.parentSection).then(function (response) {

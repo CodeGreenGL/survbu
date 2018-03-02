@@ -52,17 +52,18 @@
                     section: section
                 });
             },
-            listQuestions: function (sectionID) {
+            listQuestions: function (sectionId) {
                 questionsSrvc.isWaiting(true);
 
                /* var selectedSection = sectionsSrvc.getSectionAt(index),
                     sectionQuestions = selectedSection.questionIds;*/
-                var section = sectionsSrvc.getSectionAt(sectionID),
+                var section = sectionsSrvc.getSectionAt(sectionId), //could be possible deleted
                     sectionQuestions = section.questionIds;
                 
+
                 $state.go('questions_list', {
-                    parentSection: section,
-                    parentSurvey: vm.parentSurvey
+                    parentSectionId: sectionId,
+                    parentSurveyId: vm.parentSurvey.id
                 });
 
                // sectionsSrvc.setCurrentSection(index); // needs to be removed with implementation of $stateParams

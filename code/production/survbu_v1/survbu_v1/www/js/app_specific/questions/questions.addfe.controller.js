@@ -23,8 +23,8 @@
     ) {
         var parentSectionId = $stateParams.parentSectionId,
             vm = angular.extend(this, {
-                parentSection: sectionsSrvc.getSectionAt(parentSectionId),
-                parentSurvey: $stateParams.parentSurvey,
+                parentSectionId: sectionsSrvc.getSectionAt(parentSectionId),
+                parentSurveyId: $stateParams.parentSurvey,
                 questions: questionsSrvc.getRemainingQuestions(),
 
                 stillWaits: questionsSrvc.isItWaiting(),

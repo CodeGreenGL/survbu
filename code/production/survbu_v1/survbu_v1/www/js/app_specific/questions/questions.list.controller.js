@@ -22,9 +22,9 @@
         questionsSrvc
     ) {
         var vm = angular.extend(this, {
-            parentSection: $stateParams.parentSection,
-            parentSurvey: $stateParams.parentSurvey,
-            questions: ($stateParams.parentSection) ? questionsSrvc.getQuestions() : questionsSrvc.returnAllQuestions(),
+            parentSectionId: $stateParams.parentSectionId,
+            parentSurveyId: $stateParams.parentSurveyId,
+            questions: ($stateParams.parentSectionId) ? questionsSrvc.getQuestions() : questionsSrvc.returnAllQuestions(), //I have changed to parentSectionId , may need to obtain the section and then compare
             stillWaits: questionsSrvc.isItWaiting(),
             stillWaiting: function () {
                 return vm.stillWaits;
@@ -39,16 +39,16 @@
                 return (vm.stillWaiting() || !vm.noContent());
             },
             selectDetail: function selectDetail(questionId) { //index
-                var question = questionsSrvc.getQuestionAt(questionId);
-                console.log("QUESTION in selectDetail" + question);
                 $state.go('questions_detail', {
-                    questionId: question.id
+                    questionId: questionId
                 });
             },
             addQuestion: function () {
+              console.log(vm.parentSection);
+                console.log(vm.parentSurvey);     
                 $state.go('questions_add', {
-                    parentSection: vm.parentSection,
-                    parentSurvey: vm.parentSurvey
+                    parentSectionId: vm.parentSectionId,
+                    parentSurveyId: vm.parentSurveyId
                 });
             },
             addFromExisting: function () {
@@ -62,7 +62,7 @@
                     questionsSrvc.isWaiting(false);
                 });
             },
-            showDeleteAlert: function ($event, questionID) {
+            showDeleteAlert: function ($event, questionId) {
                 $event.stopPropagation();
 
                 if (sectionsSrvc.getNumSections() === 0) {
@@ -71,14 +71,15 @@
                         template: 'Questions can only be deleted via the relevant section.'
                     });
                 } else if (sectionsSrvc.getNumSections() > 0) {
-                    var selectedQuestion = questionsSrvc.getQuestionAt(questionID);
+                    var question = questionsSrvc.getQuestionAt(questionId);
                     $ionicPopup.confirm({
                         title: 'Delete Question',
-                        template: 'Are you sure you want to delete \'' + selectedQuestion.questionText + '\'?'
+                        template: 'Are you sure you want to delete \'' + question.questionText + '\'?'
                     }).then(function (response) {
                         if (response) {
-                            vm.questions.splice(vm.questions.indexOf(questionID), 1);
-                            vm.parentSection.questionIds.splice
+                            vm.questions.splice(vm.questions.indexOf(questionId), 1);
+                            var section = sectionsSrvc.getSectionAt(vm.parentSectionId)
+                            vm.parentSectionId.questionIds.splice
                             sectionsSrvc.updateSection(vm.parentSection);
                         } else {
                             console.log('User pressed cancel');

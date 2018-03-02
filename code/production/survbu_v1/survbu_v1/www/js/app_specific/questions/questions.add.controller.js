@@ -24,8 +24,8 @@
         questionsSrvc
     ) {
         var vm = angular.extend(this, {
-            parentSection: $stateParams.parentSection,
-            parentSurvey: $stateParams.parentSurvey,
+            parentSectionId: $stateParams.parentSectionId,
+            parentSurveyId: $stateParams.parentSurveyId,
             question: {
                 questionText: "",
                 questionType: "",
@@ -42,17 +42,17 @@
             createQuestion: function () {
                 questionsSrvc.createQuestionService(vm.question.questionType, vm.question.questionText, vm.question.questionChoices).then(function (response) {
 
+                    var section = sectionsSrvc.getSectionAt(vm.parentSectionId); //Pav obtaining the whole section
                     var newQuestionID = response.id;
-                    console.log("Parent sections in createQuestion" + vm.parentSection);
-                    vm.parentSection.questionIds.push(newQuestionID);
+                    section.questionIds.push(newQuestionID);
 
-                    sectionsSrvc.updateSection(vm.parentSection).then(function (response) {
-                        var parentSurveySections = vm.parentSurvey.sectionIds;
-                        sectionsSrvc.updateSections(parentSurveySections).then(function () {
-                            //surveysSrvc.isWaiting(false);
-                            //$state.reload();
+                    sectionsSrvc.updateSection(section).then(function (response) {
+                        
+                        var survey = surveysSrvc.getSurveyAt(vm.parentSurveyId);
+                        sectionsSrvc.updateSections(survey.sectionIds).then(function () {
                             $state.go('questions_list', {
-                                parentSection: vm.parentSection
+                                parentSectionId: vm.parentSectionId,
+                                parentSurveyId: vm.parentSurveyId
                             });
                        });
                     });

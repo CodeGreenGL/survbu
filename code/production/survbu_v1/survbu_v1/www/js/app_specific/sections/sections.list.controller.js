@@ -84,13 +84,13 @@
                     }],
                     destructiveText: 'Delete',
                     destructiveButtonClicked: function () {
-                        if (vm.parentSurvey === 0 && referenceCount > 0) {
+                        if ((!vm.parentSurvey || vm.parentSurvey === 0) && referenceCount > 0) {
                             $ionicPopup.alert({
                                 title: 'Can\'t delete section, referenceCount is ' + referenceCount,
                                 template: 'Sections from the global list can only be deleted if referenceCount is 0.'
                             });
                             return true; // Close action menu
-                        } else if (vm.parentSurvey === 0 && (referenceCount === 0 || referenceCount === null)) { // global delete
+                        } else if ((!vm.parentSurvey || vm.parentSurvey === 0) && (referenceCount === 0 || referenceCount === null)) { // global delete
                             $ionicPopup.confirm({
                                 title: 'Delete Section',
                                 template: 'Are you sure you want to delete section \'' + selectedSection.heading + '\'?'
@@ -139,6 +139,9 @@
                                     surveysSrvc.updateSurvey(vm.parentSurvey);
 
                                     if (response === 1) { // If response is one, i.e user selected 'Delete Section'
+                                        if (hasQuestions) {
+                                            questionsSrvc.dereferenceQuestions(selectedSection.questionIds); // Decrement the reference count of each question in the section
+                                        }
                                         sectionsSrvc.deleteSection(selectedSection.id); // Delete section from API
                                     }
                                 } else {

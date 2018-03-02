@@ -83,6 +83,17 @@
 
                 return deferred.promise;
             },
+            updateQuestion = function (questionObject) {
+                var deferred = $q.defer();
+                $http.put(questionsUrl + questionObject.id, questionObject).then(function successCallback(response) {
+                    // Resolve the promise with response from the server, i.e 204
+                    deferred.resolve(response);
+                }, function errorCallback(response) {
+                    console.error('Error while fetching notes');
+                    console.error(response);
+                });
+                return deferred.promise;
+            },
             removeAlreadyAdded = function () {
                 var deferred = $q.defer(),
                     i;
@@ -129,6 +140,15 @@
                 },
                 deleteQuestion: function (questionID) {
                     return deleteQuestion(questionID);
+                },
+                dereferenceQuestions: function (questionsIds) {
+                    service.updateQuestions(questionsIds).then(function () {
+                        for (var i = 0, len = questionsIds.length; i < len; i++) {
+                            var currentIndex = questionsArray.findIndex(question => question.id == questionsIds[i]);
+                            questionsArray[currentIndex].referenceCount--;
+                            updateQuestion(questionsArray[currentIndex]);
+                        }
+                    });
                 },
                 isWaiting: function (iWait) {
                     waitingState = iWait;

@@ -66,7 +66,7 @@
                     var selectedQuestion = questionsSrvc.getQuestionAt(questionId),
                         referenceCount = selectedQuestion.referenceCount;
 
-                    if (vm.parentSection === 0 && referenceCount > 0) {
+                    if ((!vm.parentSection || vm.parentSection === 0) && referenceCount > 0) {
                         $ionicPopup.alert({
                             title: 'Can\'t delete question, referenceCount is ' + referenceCount,
                             template: 'Questions from the global list can only be deleted if referenceCount is 0.'
@@ -85,7 +85,7 @@
                             if (response) {
                                 vm.questions.splice(vm.questions.findIndex(question => question.id == selectedQuestion.id), 1); // Remove the question at the index of the questions list
                                 questionsSrvc.deleteQuestion(selectedQuestion.id); // can put a .then here for error checking the delete response from promise
-                                if (vm.parentSection !== 0) { sectionsSrvc.updateSectionsFromQuestionID(selectedQuestion.id, vm.parentSection.id); } // if not in the global list, update the sections list
+                                if (vm.parentSection !== 0 && vm.parentSection) { sectionsSrvc.updateSectionsFromQuestionID(selectedQuestion.id, vm.parentSection.id); } // if not in the global list, update the sections list
                             } else {
                                 console.log('User pressed cancel');
                             }

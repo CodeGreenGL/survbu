@@ -81,7 +81,9 @@
                             vm.questions.splice(removeIndex, 1);
                             var section = sectionsSrvc.getSectionAt(vm.parentSectionId);
                             section.questionIds.splice(removeIndex, 1);
-                            sectionsSrvc.updateSection(section);
+                            sectionsSrvc.updateSection(section).then(function(){
+                                
+                            });
                         } else {
                             console.log('User pressed cancel');
                         }

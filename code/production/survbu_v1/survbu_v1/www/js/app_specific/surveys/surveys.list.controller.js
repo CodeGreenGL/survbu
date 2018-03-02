@@ -109,6 +109,7 @@
                                 if (response === 0) {
                                     vm.surveys.splice(vm.surveys.indexOf(selectedSurvey), 1);
                                     surveysSrvc.deleteSurvey(selectedSurvey.id);
+                                    sectionsSrvc.dereferenceSections(selectedSurvey.sectionIds); // Dereference the sections if they are being kept
                                     console.log('Deleted Survey, KEPT associated sections');
                                 } else if (response === 1) {
                                     for (var i = 0; i < selectedSurvey.sectionIds.length; i++) {

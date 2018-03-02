@@ -125,6 +125,15 @@
                 createSection: function(sectionObject) {
                     return createSection(sectionObject);
                 },
+                dereferenceSections: function (sectionIds) {
+                    service.updateSections(sectionIds).then(function () {
+                        for (var i = 0, len = sectionIds.length; i < len; i++) {
+                            var currentIndex = sectionsArray.findIndex(section => section.id == sectionIds[i]);
+                            sectionsArray[currentIndex].referenceCount--;
+                            updateSection(sectionsArray[currentIndex]);
+                        }
+                    });
+                },
                 isWaiting: function (iWait) {
                     waitingState = iWait;
                 },

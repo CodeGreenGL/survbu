@@ -20,6 +20,7 @@
         $ionicPopup,
         sectionsSrvc,
         questionsSrvc
+
     ) {
         var vm = angular.extend(this, {
             parentSectionId: $stateParams.parentSectionId,
@@ -44,8 +45,6 @@
                 });
             },
             addQuestion: function () {
-              console.log(vm.parentSection);
-                console.log(vm.parentSurvey);     
                 $state.go('questions_add', {
                     parentSectionId: vm.parentSectionId,
                     parentSurveyId: vm.parentSurveyId
@@ -77,9 +76,15 @@
                         template: 'Are you sure you want to delete \'' + question.questionText + '\'?'
                     }).then(function (response) {
                         if (response) {
-                            vm.questions.splice(vm.questions.indexOf(questionId), 1);
-                            var section = sectionsSrvc.getSectionAt(vm.parentSectionId)
-                            vm.parentSectionId.questionIds.splice
+                            console.log("Question id");
+                            console.log(questionId);
+                            console.log(vm.questions.indexOf(questionId));
+                            var question = questionsSrvc.getQuestionAt(questionId);
+                            console.log(question);
+
+                            vm.questions.splice(vm.questions.indexOf(question), 1);
+                            var survey = surveySrvc.getSurveyAt(vm.parentSurveyId)
+                            //survey.questionIds.splice();
                             sectionsSrvc.updateSection(vm.parentSection);
                         } else {
                             console.log('User pressed cancel');

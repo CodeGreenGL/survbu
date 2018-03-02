@@ -14,7 +14,7 @@
         <div ng-hide="vm.hideList()">
             <ion-list>
                 <ion-item ng-click="vm.selectDetail(question.id)" ng-repeat="question in vm.questions" class="item-button-right">
-                    {{question.questionText}}
+                    {{question.questionText}} - {{question.id}}
                     <button ng-click="vm.showDeleteAlert($event, question.id)" class="button button-icon icon ion-ios-close actionMenuButton" style="color:#ff3344f;"></button>
                 </ion-item>
             </ion-list>

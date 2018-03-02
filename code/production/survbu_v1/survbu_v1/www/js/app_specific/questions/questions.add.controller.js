@@ -37,14 +37,16 @@
             addChoice: function (addChoice) {
                 vm.question.questionChoices.push(addChoice);
             },
+            removeChoice: function (removeChoice) {
+                vm.question.questionChoices.splice(vm.question.questionChoices.indexOf(removeChoice), 1);
+            },
             createQuestion: function () {
                 var questionObject = {
                     questionType: vm.question.questionType,
                     questionText: vm.question.questionText,
-                    questionChoices: vm.questionChoices,
-                    referenceCount: ((vm.parentSection === 0) ? 0 : 1) // Set referenceCount to 0 if there is no parentSection, i.e from global list
+                    questionChoices: vm.question.questionChoices,
+                    referenceCount: ((!vm.parentSection || vm.parentSection === 0) ? 0 : 1) // Set referenceCount to 0 if there is no parentSection, i.e from global list
                 };
-                
                 questionsSrvc.isWaiting(true);
                 sectionsSrvc.isWaiting(true);
                 
@@ -53,7 +55,7 @@
                     
                     $ionicHistory.goBack();
 
-                    if (vm.parentSection === 0) { // stop list from showing updating if no parent section, i.e global list
+                    if (!vm.parentSection || vm.parentSection === 0) { // stop list from showing updating if no parent section, i.e global list
                         questionsSrvc.isWaiting(false);
                     } else if (vm.parentSection !== 0) {
                         vm.parentSection.questionIds.push(newQuestionID);

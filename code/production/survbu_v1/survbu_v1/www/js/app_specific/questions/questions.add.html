@@ -3,35 +3,45 @@
     <ion-nav-bar class="bar-dark" align-title="center">
         <ion-nav-back-button/>
     </ion-nav-bar>
-    
+
     <ion-content class="has-header">
-          <form ng-submit="vm.createQuestion()">
-              <input type="text" placeholder="Question Text" ng-model="vm.question.questionText"/>
-              <select ng-model="vm.question.questionType" name="questionType">
-                <option value="FREE_TEXT">Free Text</option>
-                <option value="BOOLEAN">Boolean</option>
-                <option value="RATING_1_TO_5">Rating from 1 to 5</option>
-                <option value="MULTIPLE_SELECT">Multiple Select</option>
-                <option value="TIME">Time</option>
-                <option value="DURATION_S">Duration in Second</option>
-                <option value="SINGLE_SELECT">Single Select</option>
-                <option value="NUMBER">Number</option>
-              </select>
-              <input value="CREATE QUESTION" type="submit"/>
-          </form>
+        <form name="addQuestion" ng-submit="vm.createQuestion()" class="list list-inset">
 
-          <div ng-show="vm.displayAddQuestionChoices()">
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Question Text</span>
+                <input type="text" placeholder="What is your favourite food?" ng-model="vm.question.questionText" ng-required="true"/>
+            </label>
 
-            <input ng-model="choice" type="text" placeholder="Add Choice"/>
-            <button ng-click="vm.addChoice(choice)">ADD</button>
-              <ion-list>
-                <ion-item ng-repeat="choice in vm.question.questionChoices">
-                  {{choice}}
-                </ion-item>
-            </ion-list>
-          </div>
-           
-         
+            <label class="item item-input">
+                <span class="input-label">Question Type</span>
+                <select ng-model="vm.question.questionType" ng-required="true">
+                    <option value="FREE_TEXT">Free Text</option>
+                    <option value="BOOLEAN">Boolean</option>
+                    <option value="RATING_1_TO_5">Rating from 1 to 5</option>
+                    <option value="MULTIPLE_SELECT">Multiple Select</option>
+                    <option value="TIME">Time</option>
+                    <option value="DURATION_S">Duration in Second</option>
+                    <option value="SINGLE_SELECT">Single Select</option>
+                    <option value="NUMBER">Number</option>
+                </select>
+            </label>
+
+            <div ng-show="vm.displayAddQuestionChoices()" class="item item-input item-stacked-label">
+                <span class="input-label">Question Choices</span>
+                <input type="text" placeholder="Choice one" ng-model="choice" ng-required="vm.displayAddQuestionChoices()" />
+                <button class="button button-small button-positive" type="button" ng-click="vm.addChoice(choice)">Add</button>
+                <ion-list class="list list-inset">
+                    <ion-item ng-repeat="choice in vm.question.questionChoices" class="item-button-right padding">{{choice}}
+                        <button ng-click="vm.removeChoice(choice)" type="button" class="button-icon button icon ion-ios-close" style="top: -5px;"></button>
+                    </ion-item>
+                </ion-list>
+            </div>
+
+            <label class="row">
+                <button class="button button-positive col-50 col-offset-25" type="submit" ng-disabled="addQuestion.$invalid">Create Question</button>
+            </label>
+
+        </form>
     </ion-content>
 
     <ion-footer-bar class="bar bar-dark bar-footer row">

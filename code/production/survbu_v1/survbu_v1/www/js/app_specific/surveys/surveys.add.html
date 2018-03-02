@@ -5,13 +5,23 @@
     </ion-nav-bar>
     
     <ion-content class="has-header">
-          <form ng-submit="vm.createSurvey()">
-              <input type="text" placeholder="Introduction message" ng-model="vm.survey.introductionMessage"/>
-              <input type="text" placeholder="Completion message" ng-model="vm.survey.completionMessage"/>
-              <input value="CREATE SURVEY" type="submit"/>
-          </form>
-    </ion-content>
+        <form name="addSurvey" ng-submit="vm.createSurvey()" class="list list-inset">
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Introduction Message</span>
+                <input type="text" placeholder="Student questionnaire introduction" ng-model="vm.survey.introductionMessage" ng-required="true"/>
+            </label>
 
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Completion Message</span>
+                <input type="text" placeholder="Thank you for completing the survey!" ng-model="vm.survey.completionMessage" ng-required="true"/>
+            </label>
+
+            <label class="row">
+                <button class="button button-positive col-50 col-offset-25" type="submit" ng-disabled="addSurvey.$invalid">Create Survey</button>
+            </label>
+        </form>
+    </ion-content>
+    
     <ion-footer-bar class="bar bar-dark bar-footer row">
         <i class="col-20"></i>
     </ion-footer-bar>

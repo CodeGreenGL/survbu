@@ -10,6 +10,7 @@
         '$scope',
         '$state',
         '$stateParams',
+        'surveysSrvc',
         'sectionsSrvc',
         'questionsSrvc'
     ];
@@ -18,13 +19,15 @@
         $scope,
         $state,
         $stateParams,
+        surveysSrvc,
         sectionsSrvc,
         questionsSrvc
     ) {
         var parentSectionId = $stateParams.parentSectionId,
+            parentSurveyId = $stateParams.parentSurveyId,
             vm = angular.extend(this, {
-                parentSectionId: sectionsSrvc.getSectionAt(parentSectionId),
-                parentSurveyId: $stateParams.parentSurvey,
+                parentSection: sectionsSrvc.getSectionAt(parentSectionId),
+                parentSurvey: surveysSrvc.getSurveyAt(parentSurveyId),
                 questions: questionsSrvc.getRemainingQuestions(),
 
                 stillWaits: questionsSrvc.isItWaiting(),
@@ -43,6 +46,7 @@
                 addQuestions: function () {
                     for (var i = 0; i < vm.questions.length; i++) {
                         if (vm.questions[i].adding === true) {
+                            console.log(vm.parentSection);
                             vm.parentSection.questionIds.push(vm.questions[i].id);
                         }
                     };
@@ -52,7 +56,7 @@
                             var sectionQuestions = vm.parentSection.questionIds;
                             questionsSrvc.updateQuestions(sectionQuestions).then(function (response) {
                                 $state.go('questions_list', {
-                                    parentSection: vm.parentSection
+                                    parentSectionId: vm.parentSection.id
                                 });
                             });
                         });

@@ -108,17 +108,16 @@
                 return createQuestion(question);
             },
             removeAlreadyAdded = function () {
-                var deferred = $q.defer(),
-                    i;
+                var deferred = $q.defer();
                 service.getAllQuestions().then(function () {
                     remainingQuestionsArray = angular.copy(allQuestionsArray);
                     if (questionsArray.length > 0) {
-                        for (i = 0; i < questionsArray.length; i = i + 1) {
+                        for (var i = 0; i < questionsArray.length; i = i + 1) {
                             var removeIndex = remainingQuestionsArray.map(function (question) { return question.id; }).indexOf(questionsArray[i].id);
                             remainingQuestionsArray.splice(removeIndex, 1);
                         }
                     }
-                    for (i = 0; i < remainingQuestionsArray.length; i = i + 1) {
+                    for (var i = 0; i < remainingQuestionsArray.length; i = i + 1) {
                         remainingQuestionsArray[i].adding = false;
                     }
                     deferred.resolve(remainingQuestionsArray);

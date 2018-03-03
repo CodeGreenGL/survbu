@@ -56,7 +56,8 @@
                             var sectionQuestions = vm.parentSection.questionIds;
                             questionsSrvc.updateQuestions(sectionQuestions).then(function (response) {
                                 $state.go('questions_list', {
-                                    parentSectionId: vm.parentSection.id
+                                    parentSectionId: vm.parentSection.id,
+					parentSurveyId: vm.parentSurvey.id			
                                 });
                             });
                         });

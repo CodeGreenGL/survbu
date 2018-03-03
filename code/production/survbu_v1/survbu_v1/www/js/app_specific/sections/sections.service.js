@@ -19,6 +19,8 @@
     ) {
         //get all sections from codegreen restlet; returns deferred promise
         var sectionsArray = [],
+		    allSectionsArray = [],
+		    remainingSectionsArray = [],
             waitingState = false,
             getSurveySections = function (surveySections) {
                 var deferred = $q.defer();
@@ -56,8 +58,8 @@
                         "accept": "application/json"
                     }
                 }).then(function successCallback(response) {
-                    sectionsArray = response.data;
-                    deferred.resolve(sectionsArray);
+                    allSectionsArray = response.data;
+                    deferred.resolve(allSectionsArray);
                 }, function errorCallback(response) {
                     console.error('Error while fetching questions');
                     console.error(response);
@@ -146,13 +148,30 @@
                 // returns a promise
                 return createSection(sectionObject);
             },
+		    removeAlreadyAdded = function () {
+			    var deferred = $q.defer();
+			    service.getAllSections().then(function () {
+				    remainingSectionsArray = angular.copy(allSectionsArray);
+				    if (sectionsArray.length > 0) {
+					    for (var i = 0; i < sectionsArray.length; i++) {
+						    var removeIndex = remainingSectionsArray.map(function (section) { return section.id; }).indexOf(sectionsArray[i].id);
+					    remainingSectionsArray.splice(removeIndex, 1);
+					    }
+				    }
+				    for (var i = 0; i < remainingSectionsArray.length; i++) {
+					    remainingSectionsArray[i].adding = false;
+				    }
+				    deferred.resolve(remainingSectionsArray);
+			    });
+			    return deferred.promise;
+		    },
             service = {
                 updateSections: function (surveySections) {
                     sectionsArray = [];
                     return promiseToGetSurveySections(surveySections);
                 },
                 getAllSections: function () {
-                    sectionsArray = [];
+                    allSectionsArray = [];
                     return promiseToGetAllSections();
                 },
                 deleteSection: function (sectionID) {
@@ -167,6 +186,9 @@
                 getNumSections: function () {
                     return sectionsArray.length;
                 },
+		        getNumAllSections: function () {
+			        return allSectionsArray.length;
+		        },
                 getSectionAt: function (id) {
                     return angular.copy($filter('filter')(sectionsArray, {id: id}, true)[0]);
                 },
@@ -184,7 +206,13 @@
                 },
                 isItWaiting: function () {
                     return waitingState;
-                }
+                },
+		        updateRemainingSections: function () {
+			        return removeAlreadyAdded();
+		        },
+		        getRemainingSections: function () {
+			        return angular.copy(remainingSectionsArray);
+		        }
             };
         return service;
     }

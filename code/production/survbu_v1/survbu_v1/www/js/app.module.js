@@ -66,7 +66,16 @@
                     },
                     controller: 'sectionsAddCtrl as vm'
                 })
-				
+		.state('sections_addfe', {
+			cache: false,
+			url: '/sections_addfe',
+			templateUrl: 'js/app_specific/sections/sections.addfe.html',
+			params: {
+				'parentSurveyId': 0
+			},
+			controller: 'sectionsAddfeCtrl as vm'
+		})
+		
 				// QUESTIONS
 				.state('questions_list', {
                     cache: false,

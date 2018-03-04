@@ -57,8 +57,8 @@
             addFromExisting: function () {
                 questionsSrvc.isWaiting(true);
                 $state.go('questions_addfe', {
-                    parentSectionId: vm.parentSectionId,
-                    parentSurveyId: vm.parentSurveyId
+                    parentSectionId: vm.parentSection.id,
+                    parentSurveyId: vm.parentSurvey.id
                 });
                 questionsSrvc.updateRemainingQuestions().then(function () {
                     $state.reload();

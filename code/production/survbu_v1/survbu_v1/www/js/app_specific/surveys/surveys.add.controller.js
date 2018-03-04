@@ -21,36 +21,33 @@
     ) {
         var params = $stateParams,
             vm = angular.extend(this, {
-                survey: {
-                    introductionMessage: "",
-                    completionMessage: ""
-                }
-            });
+            survey: {
+                introductionMessage: "",
+                completionMessage: ""
+            },
+            createSurvey: function() {
+                surveysSrvc.createSurvey(vm.survey.introductionMessage,vm.survey.completionMessage).then(function (response) {
+                    //Returns the promised object   
+                    return vm.listSections(response);
+                });      
+            },
+            listSections: function(survey) {
+                sectionsSrvc.isWaiting(true);
+                var createdSurvey = survey;
 
-        vm.createSurvey = function() {
-            surveysSrvc.createSurvey(vm.survey.introductionMessage,vm.survey.completionMessage).then(function (response) {
-                //Returns the promised object   
-                return listSections(response);
-            });
-            
-        };
+                $state.go('sections_list', {
+                    parentSurveyId: createdSurvey.id
+                });
+                sectionsSrvc.isWaiting(false);
 
-        var listSections = function(survey) {
-            sectionsSrvc.isWaiting(true);
-            var createdSurvey = survey;
-
-            $state.go('sections_list', {
-                parentSurveyId: createdSurvey.id
-            });
-            sectionsSrvc.isWaiting(false);
-
-            var surveySections = [];
-                        
-            sectionsSrvc.updateSections(surveySections).then(function () {
-                if (surveySections.length > 0) {
-                    $state.reload();
-                };
-            });
-        };
+                var surveySections = [];
+                            
+                sectionsSrvc.updateSections(surveySections).then(function () {
+                    if (surveySections.length > 0) {
+                        $state.reload();
+                    };
+                });
+            }
+        });
     }
 }());

@@ -57,7 +57,8 @@
                 return deferred.promise;
             },
             updateSurvey = function (survey) {
-                var deferred = $q.defer();
+                var updatedSurvey,
+                    deferred = $q.defer();
                 $http({
                     method: 'PUT',
                     url: 'https://codegreen.restlet.net/v1/surveys/' + survey.id,
@@ -68,7 +69,8 @@
                     },
                     data: survey
                 }).then(function successCallback(response) {
-                    deferred.resolve();
+                    updatedSurvey = response.data;
+                    deferred.resolve(updatedSurvey);
                 }, function errorCallback(response) {
                     console.error('Error while deleting section from survey');
                     console.error(response);
@@ -122,7 +124,13 @@
                 deleteSurvey: function (surveyID) {
                     return promiseToDeleteSurveyID(surveyID);
                 },
-                updateSurvey: function (survey) {
+                updateSurvey: function (id,introMessage, completionMessage, sectiondIds) {
+                    var survey = {
+                        id: id,
+                        introductionMessage: introMessage,
+                        completionMessage: completionMessage,
+                        sectionIds: sectiondIds
+                    };
                     return promiseToUpdateSurvey(survey);
                 },
                 getSurveys: function () {

@@ -39,15 +39,16 @@
                 hideNoItems: function () {
                     return (vm.stillWaiting() || !vm.noContent());
                 },
-                addSecstions: function () {
+                addSections: function () {
+                console.log(vm.parentSurvey);
                     for (var i = 0; i < vm.sections.length; i++) {
                         if (vm.sections[i].adding === true) {
-                            vm.parentSurvey.sectionsIds.push(vm.sections[i].id);
+                            vm.parentSurvey.sectionIds.push(vm.sections[i].id);
                         }
                     };
-                    surveySrvc.updateSurvey(vm.parentSurvey).then(function (response) {
+                    surveysSrvc.updateSurvey(vm.parentSurvey).then(function (response) {
                         surveysSrvc.updateAllSurveys().then(function () {
-                            sectionsSrvc.updateSections(sectionQuestions).then(function (response) {
+                            sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function (response) {
                                 $state.go('sections_list', {
                                     parentSurveyId: vm.parentSurvey.id
                                 });

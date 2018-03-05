@@ -23,9 +23,9 @@
             getAllSurveys = function () {
                 var deferred = $q.defer();
                 $http({
-                    url: 'https://codegreen.restlet.net/v1/surveys/', //'https://codegreen.restlet.net/v2/surveys/',
+                    url: 'https://codegreen.restlet.net/v2/surveys/', //'https://codegreen.restlet.net/v2/surveys/',
                     headers: {
-                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==", // SHOULD BE THE version 2 token => OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmExYmZjYTExLWI0ZDEtNGEzZS05YmMxLTk5YzI5ZDFmZTEzMw==",
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==", // SHOULD BE THE version 2 token => OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmExYmZjYTExLWI0ZDEtNGEzZS05YmMxLTk5YzI5ZDFmZTEzMw==",
                         "content-type": "application/json",
                         "accept": "application/json"
                     }

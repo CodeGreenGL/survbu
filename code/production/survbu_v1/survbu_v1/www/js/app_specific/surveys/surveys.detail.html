@@ -6,25 +6,23 @@
     
     <ion-content class="has-header">
 
-        <!--<div class="list detailText">
-            <h3 class="light">Title:</h3>
-            <label class="item item-input">
-                <input type="text" placeholder="Intro Message" ng-model="vm.survey.introductionMessage"/>
-            </label>
-
-            <h3 class="light">Description:</h3>
-            <label class="item item-input">
-                <input type="text" placeholder="Completion Message" ng-model="vm.survey.completionMessage"/>
-            </label>
-        </div> -->
-
-        <form ng-submit="vm.updateSurvey()">
+      <div class="list detailText">
+          <form ng-submit="vm.updateSurvey()">
               <h3 class="light">Title:</h3>
-              <input type="text" placeholder="Introduction message" ng-model="vm.survey.introductionMessage"/>
+              <label class="item item-input">
+                  <input type="text" placeholder="Intro Message" ng-model="vm.survey.introductionMessage"/>
+              </label>
+
               <h3 class="light">Description:</h3>
-              <input type="text" placeholder="Completion message" ng-model="vm.survey.completionMessage"/>
+              <label class="item item-input">
+                  <input type="text" placeholder="Completion Message" ng-model="vm.survey.completionMessage"/>
+              </label>
               <input value="UPDATE SURVEY" type="submit"/>
-        </form>
+          </form>
+      </div> 
+
+        
+        
 
     </ion-content>
 

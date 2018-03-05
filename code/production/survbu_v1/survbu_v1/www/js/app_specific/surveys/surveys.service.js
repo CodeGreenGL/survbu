@@ -23,14 +23,15 @@
             getAllSurveys = function () {
                 var deferred = $q.defer();
                 $http({
-                    url: 'https://codegreen.restlet.net/v1/surveys/',
+                    url: 'https://codegreen.restlet.net/v1/surveys/', //'https://codegreen.restlet.net/v2/surveys/',
                     headers: {
-                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==", // SHOULD BE THE version 2 token => OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmExYmZjYTExLWI0ZDEtNGEzZS05YmMxLTk5YzI5ZDFmZTEzMw==",
                         "content-type": "application/json",
                         "accept": "application/json"
                     }
                 }).then(function successCallback(response) {
                     surveysArray = response.data;
+                    console.log(surveysArray);
                     deferred.resolve(surveysArray);
                 }, function errorCallback(response) {
                     console.error('Error while fetching all surveys');
@@ -57,6 +58,8 @@
                 return deferred.promise;
             },
             updateSurvey = function (survey) {
+                console.log("survey in updateSUrvey servces");
+                console.log(survey);
                 var updatedSurvey,
                     deferred = $q.defer();
                 $http({
@@ -72,7 +75,7 @@
                     updatedSurvey = response.data;
                     deferred.resolve(updatedSurvey);
                 }, function errorCallback(response) {
-                    console.error('Error while deleting section from survey');
+                    console.error('Error while updating section from survey');
                     console.error(response);
                 });
                 return deferred.promise;
@@ -124,12 +127,12 @@
                 deleteSurvey: function (surveyID) {
                     return promiseToDeleteSurveyID(surveyID);
                 },
-                updateSurvey: function (id,introMessage, completionMessage, sectiondIds) {
+                updateSurvey: function (survey) {
                     var survey = {
-                        id: id,
-                        introductionMessage: introMessage,
-                        completionMessage: completionMessage,
-                        sectionIds: sectiondIds
+                        id: survey.id,
+                        introductionMessage: survey.introductionMessage,
+                        completionMessage: survey.completionMessage,
+                        sectionIds: survey.sectionIds
                     };
                     return promiseToUpdateSurvey(survey);
                 },

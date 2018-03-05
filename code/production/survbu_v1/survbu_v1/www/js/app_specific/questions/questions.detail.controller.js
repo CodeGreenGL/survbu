@@ -17,11 +17,17 @@
         $stateParams,
         questionsSrvc
     ) {
-        angular.extend(this, {
-            question: questionsSrvc.getQuestionAt($stateParams.questionId),
-            submitButton: function () {
-                $state.go('questions_list');
-            }
-        });
+        var vm = angular.extend(this, {
+                 question: questionsSrvc.getQuestionAt($stateParams.questionId),
+                 submitButton: function () {
+                    $state.go('questions_list');
+                 },
+                 containsChoices: function() {
+                    if(vm.question.questionType === "MULTIPLE_SELECT" || vm.question.questionType === "SINGLE_SELECT"){
+                       return true; 
+                    }
+                return false;
+                }
+            });
     }
 }());

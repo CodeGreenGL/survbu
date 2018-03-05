@@ -140,9 +140,9 @@
                 // returns a promise
                 return deleteSectionID(sectionID);
             },
-            promiseToUpdateSection = function (localSection) {
+            promiseToUpdateSection = function (Section) {
                 // returns a promise
-                return updateSection(localSection);
+                return updateSection(Section);
             },
             promiseToCreateSection = function (sectionObject) {
                 // returns a promise
@@ -178,6 +178,12 @@
                     return promiseToDeleteSectionID(sectionID);
                 },
                 updateSection: function (section) {
+                    var section = {
+                        id: section.id,
+                        introductionMessage: section.introductionMessage,
+                        questionIds: section.questionIds,
+                        heading: section.heading
+                    }
                     return promiseToUpdateSection(section);
                 },
                 returnSections: function () {

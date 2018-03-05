@@ -53,7 +53,8 @@
                     url: '/sections_detail',
                     templateUrl: 'js/app_specific/sections/sections.detail.html',
                     params: {
-                        'sectionId': 0
+                        'sectionId': 0,
+                        'parentSurveyId': 0
                     },
                     controller: 'sectionsDetailCtrl as vm'
                 })

@@ -7,15 +7,18 @@
     <ion-content class="has-header">
 
         <div class="list detailText">
-            <h3 class="light">Heading:</h3>
-            <label class="item item-input">
-                <input type="text" placeholder="Section heading" ng-model="vm.section.heading"/>
-            </label>
+            <form ng-submit="vm.updateSection()">
+                <h3 class="light">Heading:</h3>
+                <label class="item item-input">
+                    <input type="text" placeholder="Section heading" ng-model="vm.section.heading"/>
+                </label>
 
-            <h3 class="light">Introduction Message:</h3>
-            <label class="item item-input">
-                <input type="text" placeholder="Section Description" ng-model="vm.section.introductionMessage"/>
-            </label>
+                <h3 class="light">Introduction Message:</h3>
+                <label class="item item-input">
+                    <input type="text" placeholder="Section Description" ng-model="vm.section.introductionMessage"/>
+                </label>
+                <input type="submit" value="Update Section">
+            </form>
         </div>
 
     </ion-content>

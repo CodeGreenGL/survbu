@@ -24,8 +24,8 @@
                 $state.go('surveys_list');
             },
             updateSurvey: function () {
-                surveysSrvc.updateSurvey(vm.survey.id,vm.survey.introductionMessage,vm.survey.completionMessage,vm.survey.sectionIds).then(function (response) {
-                    //Returns the promised object   
+                surveysSrvc.updateSurvey(vm.survey).then(function (response) {
+
                     return vm.listSurveys(response);
                 });   
             },

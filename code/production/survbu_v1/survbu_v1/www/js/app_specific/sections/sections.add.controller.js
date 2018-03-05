@@ -36,8 +36,6 @@
                             surveysSrvc.updateAllSurveys().then(function () {
                                 listQuestions(newSection);
                             });
-
-                            //return listQuestions(newSection);
                         });
                     });
                 }
@@ -46,8 +44,6 @@
                 questionsSrvc.isWaiting(true);
 
                 var sectionQuestions = [];
-                console.log("vm.parentSurvey !!!!");
-                console.log(newSection.id);
                 $state.go('questions_list', {
                     parentSectionId: newSection.id,
                     parentSurveyId: vm.parentSurvey.id

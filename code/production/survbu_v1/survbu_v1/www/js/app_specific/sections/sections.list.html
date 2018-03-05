@@ -10,11 +10,11 @@
             
              <div class="SearchBar">
             <div ng-hide = "!show_me"><label>Search: <input ng-model="searchText"></label></div>
-            <button ng-click = "show_me = !show_me">Toggle search box</button>
+            <button><img ng-src="/www/img/search.png"/ ng-click = "show_me = !show_me"></button>
             </div>
             
             <table id="searchTextResults">
-              <tr ng-repeat="section in vm.sections | filter:searchText">
+              <tr ng-repeat="section in vm.sections | filter:searchText | orderBy:'heading'">
             <ion-list>
                <td><ion-item ng-click="vm.listQuestions($index)" class="item-button-right">{{section.heading}}
                 <!--<button ng-click="vm.selectDetail($event, $index)" class="button button-small button-energized contextButton">Edit</button>

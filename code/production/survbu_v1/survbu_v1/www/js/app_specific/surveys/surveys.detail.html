@@ -17,7 +17,8 @@
               <label class="item item-input">
                   <input type="text" placeholder="Completion Message" ng-model="vm.survey.completionMessage"/>
               </label>
-              <input value="UPDATE SURVEY" type="submit"/>
+              <input value="Confirm" type="submit"/>
+              <input value="Cancel" type="button" ng-click="vm.cancelEditing()">
           </form>
       </div> 
 
@@ -27,9 +28,7 @@
     </ion-content>
 
     <ion-footer-bar class="bar bar-dark bar-footer row">
-        <i class="col-20"></i>
-        <button class="doneButton button button-positive col" ng-click="vm.submitButton()">Done</button>
-        <i class="col-20"></i>
+    
     </ion-footer-bar>
 
 </ion-view>

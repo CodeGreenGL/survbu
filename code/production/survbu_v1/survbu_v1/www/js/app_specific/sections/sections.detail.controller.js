@@ -24,7 +24,7 @@
             vm = angular.extend(this, {
             section: sectionsSrvc.getSectionAt(sectionId),
             parentSurvey: surveysSrvc.getSurveyAt(parentSurveyId),
-            submitButton: function () {
+            cancelEditing: function () {
                 $state.go('sections_list', {
                     parentSurveyId: vm.parentSurvey.id
                 });

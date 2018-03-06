@@ -20,7 +20,7 @@
         var surveyId = $stateParams.surveyId,
             vm = angular.extend(this, {
             survey: surveysSrvc.getSurveyAt(surveyId),
-            submitButton: function () {
+            cancelEditing: function () {
                 $state.go('surveys_list');
             },
             updateSurvey: function () {

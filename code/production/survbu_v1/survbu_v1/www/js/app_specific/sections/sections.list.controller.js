@@ -23,6 +23,19 @@
         sectionsSrvc,
         questionsSrvc
     ) {
+        if ($state.params.parentSurveyId === 0) { // Update sections if global list, i.e no parent survey id
+            sectionsSrvc.isWaiting(true);
+            sectionsSrvc.getAllSections().then(responseSectionsArray => {
+                vm.sections = responseSectionsArray;
+                sectionsSrvc.isWaiting(false);
+            });
+        } else if ($state.params.parentSurveyId !== 0) {
+            sectionsSrvc.isWaiting(true);
+            sectionsSrvc.updateSections(surveysSrvc.getSurveyAt($state.params.parentSurveyId).sectionIds).then(() => {
+                vm.sections = sectionsSrvc.returnSections();
+                sectionsSrvc.isWaiting(false);
+            });
+        }
         var vm = angular.extend(this, {
             parentSurvey: surveysSrvc.getSurveyAt($state.params.parentSurveyId),
             sections: sectionsSrvc.returnSections(),
@@ -58,16 +71,6 @@
                     parentSectionId: sectionId,
                     parentSurveyId: vm.parentSurvey.id
                 });
-
-                if (sectionQuestions.length > 0) {
-                    questionsSrvc.updateQuestions(sectionQuestions).then(function () {
-                        $state.reload();
-                        questionsSrvc.isWaiting(false);
-                    });
-                } else {
-                    questionsSrvc.disposeQuestions();
-                    questionsSrvc.isWaiting(false);
-                }
             },
             showActionMenu: function ($event, sectionId) {
                 $event.stopPropagation();

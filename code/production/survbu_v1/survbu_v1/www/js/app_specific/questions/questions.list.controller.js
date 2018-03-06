@@ -21,6 +21,20 @@
         sectionsSrvc,
         questionsSrvc
     ) {
+
+        if ($state.params.parentSectionId === 0) { // Update questions if global list, i.e no parent section id
+            questionsSrvc.isWaiting(true);
+            questionsSrvc.getAllQuestions().then(responseQuestions => {
+                vm.questions = responseQuestions;
+                questionsSrvc.isWaiting(false);
+            });
+        } else if ($state.params.parentSectionId !== 0) {
+            questionsSrvc.isWaiting(true);
+            questionsSrvc.updateQuestions(sectionsSrvc.getSectionAt($state.params.parentSectionId).questionIds).then(function () {
+                vm.questions = questionsSrvc.getQuestions();
+                questionsSrvc.isWaiting(false);
+            });
+        }
         var stateParams = $state.params,
             vm = angular.extend(this, {
                 parentSection: sectionsSrvc.getSectionAt(stateParams.parentSectionId),
@@ -85,7 +99,9 @@
                             if (response) {
                                 vm.questions.splice(vm.questions.findIndex(question => question.id == selectedQuestion.id), 1); // Remove the question at the index of the questions list
                                 questionsSrvc.deleteQuestion(selectedQuestion.id); // can put a .then here for error checking the delete response from promise
-                                if (vm.parentSection !== 0 && vm.parentSection) { sectionsSrvc.updateSectionsFromQuestionID(selectedQuestion.id, vm.parentSection.id); } // if not in the global list, update the sections list
+                                if (vm.parentSection !== 0 && vm.parentSection) {
+                                    sectionsSrvc.updateSectionsFromQuestionID(selectedQuestion.id, vm.parentSection.id);
+                                } // if not in the global list, update the sections list
                             } else {
                                 console.log('User pressed cancel');
                             }

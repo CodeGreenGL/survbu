@@ -21,6 +21,11 @@
         surveysSrvc,
         sectionsSrvc
     ) {
+        surveysSrvc.isWaiting(true);
+        surveysSrvc.updateAllSurveys().then(responseSurveysArray => {
+            vm.surveys = responseSurveysArray;
+            surveysSrvc.isWaiting(false);
+        });
         var vm = angular.extend(this, {
             surveys: surveysSrvc.getSurveys(),
             stillWaiting: function () {
@@ -49,13 +54,6 @@
                 
                 $state.go('sections_list', {
                     parentSurveyId: surveyId //selectedSurvey;
-                });
-
-                sectionsSrvc.updateSections(selectedSurvey.sectionIds).then(function () {
-                    if (selectedSurvey.sectionIds.length > 0) {
-                        $state.reload();
-                    }
-                    sectionsSrvc.isWaiting(false);
                 });
             },
             showActionMenu: function ($event, surveyId) { //this was index

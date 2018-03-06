@@ -29,14 +29,7 @@
                     cache: false,
                     url: '/surveys_list',
                     templateUrl: 'js/app_specific/surveys/surveys.list.html',
-                    controller: 'surveysListCtrl as vm',
-                    resolve: {
-                        paramPromise: function (surveysSrvc) {
-                            return surveysSrvc.updateAllSurveys().then(function () {
-                                surveysSrvc.isWaiting(false);
-                            });
-                        }
-                    }
+                    controller: 'surveysListCtrl as vm'
                 })
                 .state('surveys_detail', {
                     cache: false,
@@ -62,16 +55,7 @@
                     params: {
                         'parentSurveyId': 0
                     },
-                    controller: 'sectionsListCtrl as vm',
-                    resolve: {
-                        paramPromise: function (sectionsSrvc, $stateParams) {
-                            if ($stateParams.parentSurveyId === 0) {
-                                return sectionsSrvc.getAllSections().then(function () {
-                                    sectionsSrvc.isWaiting(false);
-                                });
-                            }
-                        }
-                    }
+                    controller: 'sectionsListCtrl as vm'
                 })
                 .state('sections_detail', {
                     cache: false,
@@ -101,16 +85,7 @@
                         'parentSectionId': 0,
                         'parentSurveyId': 0
                     },
-                    controller: 'questionsListCtrl as vm',
-                    resolve: {
-                        paramPromise: function (questionsSrvc, $stateParams) {
-                            if ($stateParams.parentSectionId === 0) {
-                                return questionsSrvc.getAllQuestions().then(function () {
-                                    questionsSrvc.isWaiting(false);
-                                });
-                            }
-                        }
-                    }
+                    controller: 'questionsListCtrl as vm'
                 })
                 .state('questions_detail', {
                     cache: false,

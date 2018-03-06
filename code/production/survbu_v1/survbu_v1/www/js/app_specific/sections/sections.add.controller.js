@@ -26,10 +26,11 @@
                 parentSurvey: surveysSrvc.getSurveyAt(parentSurveyId),
                 section: {
                     heading: "",
-                    introductionMessage: ""
+                    introductionMessage: "",
+                    referenceCount: 1
                 },
-                createSection: function () {
-                    sectionsSrvc.createSection(vm.section.heading, vm.section.introductionMessage).then(function (response) {
+                createSection: function () {    //If you are coming from the global list of sections parentSurvey does not exist ????
+                    sectionsSrvc.createSection(vm.section).then(function (response) {
                         var newSection = response;
                         vm.parentSurvey.sectionIds.push(newSection.id);
                         surveysSrvc.updateSurvey(vm.parentSurvey).then(function (response) {

@@ -50,7 +50,7 @@
                             vm.parentSection.questionIds.push(vm.questions[i].id);
                         }
                     };
-                    sectionsSrvc.updateSection(vm.parentSection).then(function (response) {
+                    sectionsSrvc.updateSection(vm.parentSection).then(function (response) { // should not change the reference count
                         var parentSurveySections = vm.parentSurvey.sectionIds;
                         sectionsSrvc.updateSections(parentSurveySections).then(function () {
                             var sectionQuestions = vm.parentSection.questionIds;

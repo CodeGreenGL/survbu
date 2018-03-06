@@ -29,9 +29,15 @@
                     parentSurveyId: vm.parentSurvey.id
                 });
             },
+            referenceCount: function(){
+                if(vm.section.referenceCount > 1){
+                    return true;}
+                else{
+                    return false;}
+               
+            },
             updateSection: function () {
-                console.log(vm.section);
-                sectionsSrvc.updateSection(vm.section).then(function (response) {
+                sectionsSrvc.updateSection(vm.section).then(function (response) { //Needs further attention not to update the reference count
 
                     return vm.listSections();
                 });   

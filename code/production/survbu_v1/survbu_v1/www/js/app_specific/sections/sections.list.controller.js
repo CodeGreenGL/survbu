@@ -29,8 +29,8 @@
             vm = angular.extend(this, {
                 parentSurvey: surveysSrvc.getSurveyAt(parentSurveyId),
                 sections: sectionsSrvc.returnSections(),
-                
                 stillWaits: sectionsSrvc.isItWaiting(),
+
                 stillWaiting: function () {
                     return vm.stillWaits;
                 },
@@ -49,6 +49,8 @@
                     });
                 },
                 selectDetail: function (sectionId) {
+                    console.log(vm.parentSurvey);
+                    console.log(vm.sections);
                     $state.go('sections_detail', {
                         parentSurveyId: vm.parentSurvey.id,
                         sectionId: sectionId

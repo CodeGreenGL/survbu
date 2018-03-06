@@ -40,14 +40,15 @@
                     return (vm.stillWaiting() || !vm.noContent());
                 },
                 addSections: function () {
-                console.log(vm.parentSurvey);
                     for (var i = 0; i < vm.sections.length; i++) {
-                        if (vm.sections[i].adding === true) {
+                        if (vm.sections[i].adding === true) { // Needs to update the reference count for all the sections added.
                             vm.parentSurvey.sectionIds.push(vm.sections[i].id);
+                            vm.sections[i].referenceCount = vm.sections[i].referenceCount + 1; //increase the reference count
+                            sectionsSrvc.updateSection(vm.sections[i]).then(function(){}); //Update the section's reference count
                         }
                     };
                     surveysSrvc.updateSurvey(vm.parentSurvey).then(function (response) {
-                        surveysSrvc.updateAllSurveys().then(function () {
+                        surveysSrvc.updateAllSurveys().then(function () {           
                             sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function (response) {
                                 $state.go('sections_list', {
                                     parentSurveyId: vm.parentSurvey.id

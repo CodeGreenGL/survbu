@@ -48,7 +48,7 @@
                     var newQuestionID = response.id;
                     vm.parentSection.questionIds.push(newQuestionID);
 
-                    sectionsSrvc.updateSection(vm.parentSection).then(function (response) {
+                    sectionsSrvc.updateSection(vm.parentSection).then(function (response) { // Should not update the reference count
             
                         sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
                             

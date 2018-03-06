@@ -17,7 +17,12 @@
                 <label class="item item-input">
                     <input type="text" placeholder="Section Description" ng-model="vm.section.introductionMessage"/>
                 </label>
-                <input type="submit" value="Update Section">
+                <div ng-show="!vm.referenceCount()">
+                    <input type="submit" value="Update Section">
+                </div>
+                <div ng-show="vm.referenceCount()">
+                    <h4 class="light">This section belongs to {{vm.section.referenceCount}} survey therefore you cannot edit it.</h4>
+                </div>
             </form>
         </div>
 

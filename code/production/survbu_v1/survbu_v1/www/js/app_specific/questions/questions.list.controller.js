@@ -84,7 +84,7 @@
                             var removeIndex = vm.questions.findIndex(quest => quest.id === questionId);
                             vm.questions.splice(removeIndex, 1);
                             vm.parentSection.questionIds.splice(removeIndex, 1);
-                            sectionsSrvc.updateSection(vm.parentSection).then(function(){
+                            sectionsSrvc.updateSection(vm.parentSection).then(function(){ //this should decrease the reference count by --1
                                 
                             });
                         } else {

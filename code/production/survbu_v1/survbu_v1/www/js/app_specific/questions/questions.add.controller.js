@@ -31,7 +31,8 @@
             question: {
                 questionText: "",
                 questionType: "",
-                questionChoices: []
+                questionChoices: [],
+                referenceCount: 1
             },
             displayAddQuestionChoices: function () {
                 if (vm.question.questionType === 'MULTIPLE_SELECT' || vm.question.questionType === 'SINGLE_SELECT') {
@@ -42,7 +43,7 @@
                 vm.question.questionChoices.push(addChoice);
             },
             createQuestion: function () {
-                questionsSrvc.createQuestionService(vm.question.questionType, vm.question.questionText, vm.question.questionChoices).then(function (response) {
+                questionsSrvc.createQuestionService(vm.question).then(function (response) {
 
                     
                     var newQuestionID = response.id;

@@ -30,9 +30,9 @@
                 if (sectionQuestions.length > 0) {
                     for (len = sectionQuestions.length; i < len; i = i + 1) {
                         $http({
-                            url: 'https://codegreen.restlet.net/v1/questions/' + sectionQuestions[i],
+                            url: 'https://codegreen.restlet.net/v2/questions/' + sectionQuestions[i],
                             headers: {
-                                "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                                "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==",
                                 "content-type": "application/json",
                                 "accept": "application/json"
                             }
@@ -55,9 +55,9 @@
             getAllQuestions = function () {
                 var deferred = $q.defer();
                 $http({
-                    url: 'https://codegreen.restlet.net/v1/questions/',
+                    url: 'https://codegreen.restlet.net/v2/questions/',
                     headers: {
-                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==",
                         "content-type": "application/json",
                         "accept": "application/json"
                     }
@@ -76,10 +76,10 @@
 
                 $http({
                     method: "POST",
-                    url: 'https://codegreen.restlet.net:443/v1/questions/',
+                    url: 'https://codegreen.restlet.net:443/v2/questions/',
                     data: question,
                     headers: {
-                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==",
                         "content-type": "application/json",
                         "accept": "application/json"
                     }
@@ -97,9 +97,30 @@
 
                 return deferred.promise;
             },
+            updateQuestion = function(question){
+                var deferred = $q.defer();
+                $http({
+                    method: 'PUT',
+                    url: 'https://codegreen.restlet.net/v2/questions/' + question.id,
+                    headers: {
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==",
+                        "content-type": "application/json",
+                        "accept": "application/json"
+                    },
+                    data: question
+                }).then(function successCallback(response) {
+                    deferred.resolve();
+                }, function errorCallback(response) {
+                    console.error('Error while updating question');
+                    console.error(response);
+                });
+                return deferred.promise;
+            },
             promiseToUpdateQuestions = function (sectionQuestions) {
-                // returns a promise
                 return getSectionQuestions(sectionQuestions);
+            },
+            promiseToUpdateQuestion = function(question){
+                return updateQuestion(question);
             },
             promiseToGetAllQuestions = function () {
                 return getAllQuestions();
@@ -129,6 +150,16 @@
                     questionsArray = [];
                     return promiseToUpdateQuestions(sectionQuestions);
                 },
+                updateQuestion: function(question){
+                    var question = {
+                        id: question.id,
+                        questionType: question.questionType,
+                        questionText: question.questionText,
+                        questionChoices: question.questionChoices,
+                        referenceCount: question.referenceCount
+                    };
+                    return promiseToUpdateQuestion(question);
+                },
                 getAllQuestions: function () {
                     allQuestionsArray = [];
                     return promiseToGetAllQuestions();
@@ -151,12 +182,13 @@
                 getQuestionAt: function (id) {
                     return angular.copy($filter('filter')(questionsArray, {id: id}, true)[0]);
                 },
-                createQuestionService: function (questionType, questionText, questionChoices){
+                createQuestionService: function (question){
                     var question = {
                         id: "",
-                        questionType: questionType,
-                        questionText: questionText,
-                        questionChoices: questionChoices
+                        questionType: question.questionType,
+                        questionText: question.questionText,
+                        questionChoices: question.questionChoices,
+                        referenceCount: question.referenceCount
                     };
                     return promiseToCreateQuestion(question);
                 },

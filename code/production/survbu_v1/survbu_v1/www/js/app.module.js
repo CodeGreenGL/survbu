@@ -93,7 +93,9 @@
                     url: '/questions_detail',
                     templateUrl: 'js/app_specific/questions/questions.detail.html',
                     params: {
-                        'questionId': 0
+                        'questionId': 0,
+                        'sectionId': 0,
+                        'parentSurveyId': 0
                     },
                     controller: 'questionsDetailCtrl as vm'
                 })

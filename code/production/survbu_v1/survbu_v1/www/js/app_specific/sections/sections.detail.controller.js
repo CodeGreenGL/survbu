@@ -30,11 +30,8 @@
                 });
             },
             referenceCount: function(){
-                if(vm.section.referenceCount > 1){
-                    return true;}
-                else{
-                    return false;}
-               
+                if(vm.section.referenceCount > 1){return true;}
+                else{return false;} 
             },
             updateSection: function () {
                 sectionsSrvc.updateSection(vm.section).then(function (response) {

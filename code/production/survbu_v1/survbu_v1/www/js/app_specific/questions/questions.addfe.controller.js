@@ -45,9 +45,10 @@
                 },
                 addQuestions: function () {
                     for (var i = 0; i < vm.questions.length; i++) {
-                        if (vm.questions[i].adding === true) {
-                            console.log(vm.parentSection);
+                        if (vm.questions[i].adding === true) {                         
                             vm.parentSection.questionIds.push(vm.questions[i].id);
+                            vm.questions[i].referenceCount = vm.questions[i].referenceCount + 1; // add one more to the refrrence count for each
+                            questionsSrvc.updateQuestion(vm.questions[i]).then(function(){}); //update the reference count ==> PAV 06/03/2018
                         }
                     };
                     sectionsSrvc.updateSection(vm.parentSection).then(function (response) { // should not change the reference count

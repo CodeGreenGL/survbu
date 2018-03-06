@@ -45,7 +45,9 @@
             },
             selectDetail: function selectDetail(questionId) {
                 $state.go('questions_detail', {
-                    questionId: questionId
+                    questionId: questionId,
+                    parentSectionId: vm.parentSection.id,
+                    parentSurveyId: vm.parentSurvey.id
                 });
             },
             addQuestion: function () {

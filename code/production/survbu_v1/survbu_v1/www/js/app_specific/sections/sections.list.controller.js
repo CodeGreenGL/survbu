@@ -61,17 +61,6 @@
                     sectionId: sectionId
                 });
             },
-            listQuestions: function (sectionId) {
-                questionsSrvc.isWaiting(true);
-                
-                var section = sectionsSrvc.getSectionAt(sectionId),
-                    sectionQuestions = section.questionIds;
-                
-                $state.go('questions_list', {
-                    parentSectionId: sectionId,
-                    parentSurveyId: vm.parentSurvey.id
-                });
-            },
             showActionMenu: function ($event, sectionId) {
                 $event.stopPropagation();
                 

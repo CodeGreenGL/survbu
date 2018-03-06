@@ -48,14 +48,6 @@
             addSurvey: function () { //no need to pass params since we have the values already avaliable in survey.add.controller
                 $state.go('surveys_add');
             },
-            listSections: function (surveyId) { //take you to the sections list and updates the list; this was index
-                sectionsSrvc.isWaiting(true);
-                var selectedSurvey = surveysSrvc.getSurveyAt(surveyId);
-                
-                $state.go('sections_list', {
-                    parentSurveyId: surveyId //selectedSurvey;
-                });
-            },
             showActionMenu: function ($event, surveyId) { //this was index
                 $event.stopPropagation();
                 var selectedSurvey = surveysSrvc.getSurveyAt(surveyId);

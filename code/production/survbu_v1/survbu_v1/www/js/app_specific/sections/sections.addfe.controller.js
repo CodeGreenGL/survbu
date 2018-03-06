@@ -41,7 +41,7 @@
                 },
                 addSections: function () {
                     for (var i = 0; i < vm.sections.length; i++) {
-                        if (vm.sections[i].adding === true) { // Needs to update the reference count for all the sections added.
+                        if (vm.sections[i].adding === true) { // Needs to update the reference count for all the sections added. ==> PAV - 6th-March
                             vm.parentSurvey.sectionIds.push(vm.sections[i].id);
                             vm.sections[i].referenceCount = vm.sections[i].referenceCount + 1; //increase the reference count
                             sectionsSrvc.updateSection(vm.sections[i]).then(function(){}); //Update the section's reference count

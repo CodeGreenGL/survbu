@@ -37,7 +37,7 @@
                
             },
             updateSection: function () {
-                sectionsSrvc.updateSection(vm.section).then(function (response) { //Needs further attention not to update the reference count
+                sectionsSrvc.updateSection(vm.section).then(function (response) {
 
                     return vm.listSections();
                 });   

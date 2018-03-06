@@ -18,7 +18,9 @@
             </label>
             <div ng-show="vm.containsChoices()">
                 <h3 class="light">Choices:</h3>
-                <input ng-model="choice" ng-repeat="choice in vm.question.questionChoices">
+                <label class="item item-input">
+                     <input ng-model="choice" ng-repeat="choice in vm.question.questionChoices">
+                </label>
             </div>
         </div>
 

@@ -23,6 +23,7 @@
         var sectionsArray = [],
 		    allSectionsArray = [],
 		    remainingSectionsArray = [],
+            updatedSection,
             waitingState = false,
             getSurveySections = function (surveySections) {
                 var deferred = $q.defer();
@@ -98,7 +99,8 @@
                     },
                     data: section
                 }).then(function successCallback(response) {
-                    deferred.resolve();
+                    updatedSection = response.data;
+                    deferred.resolve(updatedSection);
                 }, function errorCallback(response) {
                     console.error('Error while fetching questions');
                     console.error(response);

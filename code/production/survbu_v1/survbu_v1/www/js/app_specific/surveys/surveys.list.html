@@ -10,8 +10,8 @@
         
         <div ng-hide="vm.hideList()">
             <div class="SearchBar">
-            <div ng-hide = "!show_me"><label>Search: <input ng-model="searchText"></label></div>
-            <button><img ng-src="/www/img/search.png"/ ng-click = "show_me = !show_me"></button>
+            <div ng-hide = "!show_me"><input placeholder="Search" ng-model="searchText"></div>
+            <span><img ng-src="../../../img/search.png"/ ng-click = "show_me = !show_me"></span>
             </div>
     
             <table id="searchTextResults">

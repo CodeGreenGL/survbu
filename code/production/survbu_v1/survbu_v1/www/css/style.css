@@ -85,15 +85,21 @@ ion-content[class*="homeContent"].scroll-content {
 
 .SearchBar {
      position: center;
-     top: 355px;
+     /*top: 355px;
      left: 575px;
      padding: 0 6px 0 1850px;
-     margin: 0px 8px 6px 8px;
+     margin: 0px 8px 6px 8px;*/
     
+}
+
+#searchButton{
+    background: none;
+    border: 0;
+    -webkit-appearance: none;
 }
 .SearchBar input {
      height: 30px;
-     width: 1750px;
-     padding: 10 6px 0 6px;
-     margin: 6px 8px 6px -1850px;
+     width: 100%;
+     transition: 2s;
+     /*margin: 6px 8px 6px -1850px;*/
 }

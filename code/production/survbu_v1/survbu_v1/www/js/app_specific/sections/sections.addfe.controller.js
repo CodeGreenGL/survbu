@@ -46,16 +46,16 @@
                 addSections: function () {
                     
                     for (var i = 0; i < vm.sections.length; i++) {
-                        var questions = [];
+                        //var questions = []; // no need for this
                         var promises = [];
                         if (vm.sections[i].adding === true) {
                             vm.parentSurvey.sectionIds.push(vm.sections[i].id);
                             vm.sections[i].referenceCount = vm.sections[i].referenceCount + 1;
-                            questions = questionsSrvc.updateQuestions(vm.sections[i].questionIds);
+                            //questions = questionsSrvc.updateQuestions(vm.sections[i].questionIds);  // no need for this
                            
                             //NEEDS TO HANDLE THE PROMSIES IN APPROPRIATE WAY => PAV
                             sectionsSrvc.updateSection(vm.sections[i]).then(function(section){
-                                questionsSrvc.updateQuestions(section.questionIds).then(function (response) {
+                                questionsSrvc.updateQuestions(section.questionIds).then(function (questions) {
                                     for(var j = 0; j < questions.length; j++){
                                         questions[j].referenceCount = questions[j].referenceCount + 1;
                                         promises.push(questionsSrvc.updateQuestion(questions[j]));

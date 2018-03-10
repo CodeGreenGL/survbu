@@ -31,7 +31,6 @@
                     }
                 }).then(function successCallback(response) {
                     surveysArray = response.data;
-                    console.log(surveysArray);
                     deferred.resolve(surveysArray);
                 }, function errorCallback(response) {
                     console.error('Error while fetching all surveys');
@@ -58,8 +57,6 @@
                 return deferred.promise;
             },
             updateSurvey = function (survey) {
-                console.log("survey in updateSUrvey servces");
-                console.log(survey);
                 var updatedSurvey,
                     deferred = $q.defer();
                 $http({

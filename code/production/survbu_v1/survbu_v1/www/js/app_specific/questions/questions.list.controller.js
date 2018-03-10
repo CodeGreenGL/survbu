@@ -11,7 +11,8 @@
         '$stateParams',
         '$ionicPopup',
         'sectionsSrvc',
-        'questionsSrvc'
+        'questionsSrvc',
+        'surveysSrvc'
     ];
 
     function control(
@@ -19,12 +20,16 @@
         $stateParams,
         $ionicPopup,
         sectionsSrvc,
-        questionsSrvc
+        questionsSrvc,
+        surveysSrvc
+
     ) {
-        var vm = angular.extend(this, {
-            parentSection: $stateParams.parentSection,
-            parentSectionSurvey: $stateParams.parentSectionSurvey,
-            questions: ($stateParams.parentSection) ? questionsSrvc.getQuestions() : questionsSrvc.returnAllQuestions(),
+        var parentSectionId = $stateParams.parentSectionId,
+            parentSurveyId = $stateParams.parentSurveyId,
+            vm = angular.extend(this, {
+            parentSection: sectionsSrvc.getSectionAt(parentSectionId),
+            parentSurvey: surveysSrvc.getSurveyAt(parentSurveyId),
+            questions: ($stateParams.parentSectionId) ? questionsSrvc.getQuestions() : questionsSrvc.returnAllQuestions(), //I have changed to parentSectionId , may need to obtain the section and then compare
             stillWaits: questionsSrvc.isItWaiting(),
             stillWaiting: function () {
                 return vm.stillWaits;
@@ -38,27 +43,31 @@
             hideNoItems: function () {
                 return (vm.stillWaiting() || !vm.noContent());
             },
-            selectDetail: function selectDetail(index) {
+            selectDetail: function selectDetail(questionId) {
                 $state.go('questions_detail', {
-                    selected: index
+                    questionId: questionId,
+                    parentSectionId: vm.parentSection.id,
+                    parentSurveyId: vm.parentSurvey.id
                 });
             },
             addQuestion: function () {
                 $state.go('questions_add', {
-                    parentSection: vm.parentSection,
-                    parentSectionSurvey: vm.parentSectionSurvey
+                    parentSectionId: vm.parentSection.id,
+                    parentSurveyId: vm.parentSurvey.id
                 });
             },
             addFromExisting: function () {
                 questionsSrvc.isWaiting(true);
-                $state.go('questions_addfe');
-
+                $state.go('questions_addfe', {
+                    parentSectionId: vm.parentSection.id,
+                    parentSurveyId: vm.parentSurvey.id
+                });
                 questionsSrvc.updateRemainingQuestions().then(function () {
                     $state.reload();
                     questionsSrvc.isWaiting(false);
                 });
             },
-            showDeleteAlert: function ($event, index) {
+            showDeleteAlert: function ($event, questionId) {
                 $event.stopPropagation();
 
                 if (sectionsSrvc.getNumSections() === 0) {
@@ -67,14 +76,19 @@
                         template: 'Questions can only be deleted via the relevant section.'
                     });
                 } else if (sectionsSrvc.getNumSections() > 0) {
-                    var selectedQuestion = questionsSrvc.getQuestionAt(index);
+                    var question = questionsSrvc.getQuestionAt(questionId);
                     $ionicPopup.confirm({
                         title: 'Delete Question',
-                        template: 'Are you sure you want to delete \'' + selectedQuestion.questionText + '\'?'
+                        template: 'Are you sure you want to delete \'' + question.questionText + '\'?'
                     }).then(function (response) {
                         if (response) {
-                            vm.questions.splice(index, 1);
-                            sectionsSrvc.updateSection(selectedQuestion.id);
+
+                            var removeIndex = vm.questions.findIndex(quest => quest.id === questionId);
+                            vm.questions.splice(removeIndex, 1);
+                            vm.parentSection.questionIds.splice(removeIndex, 1);
+                            sectionsSrvc.updateSection(vm.parentSection).then(function(){ //this should decrease the reference count by --1
+                                
+                            });
                         } else {
                             console.log('User pressed cancel');
                         }
@@ -83,7 +97,5 @@
             }
            
         });
-            console.log("ParentSection survey");
-            console.log(vm.parentSectionSurvey);
     }
 }());

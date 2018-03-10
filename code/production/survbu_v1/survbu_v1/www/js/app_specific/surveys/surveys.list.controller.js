@@ -36,43 +36,36 @@
             hideNoItems: function () {
                 return (vm.stillWaiting() || !vm.noContent());
             },
-            selectDetail: function (index) {
+            selectDetail: function (surveyId) {
                 $state.go('surveys_detail', {
-                    selected: index
+                    surveyId: surveyId
                 });
             },
-            addSurvey: function () {
-                $state.go('surveys_add', {
-                    // PARAMS HERE
-                });
+            addSurvey: function () { //no need to pass params since we have the values already avaliable in survey.add.controller
+                $state.go('surveys_add');
             },
-            listSections: function (index) { //take you to the sections list and updates the list
+            listSections: function (surveyId) { //take you to the sections list and updates the list; this was index
+                var survey = surveysSrvc.getSurveyAt(surveyId);
                 sectionsSrvc.isWaiting(true);
-                
-                var selectedSurvey = surveysSrvc.getSurveyAt(index),
-                    surveySections = selectedSurvey.sectionIds;
+               // var selectedSurvey = surveysSrvc.getSurveyAt(index),
+               // surveySections = index.sectionIds;
+                var surveySections = survey.sectionIds;
                 
                 $state.go('sections_list', {
-                    parentSurvey: selectedSurvey
+                    parentSurveyId: survey.id //selectedSurvey;
                 });
 
-                surveysSrvc.setCurrentSurvey(index); // needs to be removed with implementation of $stateParams
-
-                if (surveySections.length > 0) {
-                    sectionsSrvc.updateSections(surveySections).then(function () {
+                sectionsSrvc.updateSections(surveySections).then(function () {
+                    if (surveySections.length > 0) {
                         $state.reload();
-                        sectionsSrvc.isWaiting(false);
-                    });
-                } else {
-                    sectionsSrvc.disposeSections();
+                    }
                     sectionsSrvc.isWaiting(false);
-                }
+                });
             },
-            showActionMenu: function ($event, index) {
+            showActionMenu: function ($event, surveyId) { //this was index
                 $event.stopPropagation();
-                var selectedSurvey = surveysSrvc.getSurveyAt(index),
-                    len,
-                    i = 0;
+                var selectedSurvey = surveysSrvc.getSurveyAt(surveyId);
+
                 $ionicActionSheet.show({
                     titleText: 'Modify \'' + selectedSurvey.introductionMessage + '\'',
                     cancelText: 'Cancel',
@@ -88,7 +81,10 @@
                                 template: 'Are you sure you want to permanently delete this survey?<br/><br/>This survey has no associated sections.'
                             }).then(function (response) {
                                 if (response) {
-                                    vm.surveys.splice(index, 1);
+                                    //Alternative Method: var removeIndex = vm.surveys.map(function (survey) { return survey.id; }).indexOf(selectedSurvey.id);
+                                    var removeIndex = vm.surveys.findIndex(survey => survey.id === selectedSurvey.id);
+                                    console.log(removeIndex);
+                                    vm.surveys.splice(removeIndex, 1);
                                     surveysSrvc.deleteSurvey(selectedSurvey.id);
                                 } else {
                                     console.log('User pressed cancel');
@@ -117,14 +113,14 @@
                                 }]
                             }).then(function (response) {
                                 if (response === 0) {
-                                    vm.surveys.splice(index, 1);
+                                    vm.surveys.splice(vm.surveys.indexOf(selectedSurvey), 1);
                                     surveysSrvc.deleteSurvey(selectedSurvey.id);
                                     console.log('Deleted Survey, KEPT associated sections');
                                 } else if (response === 1) {
-                                    for (len = selectedSurvey.sectionIds.length; i < len; i = i + 1) {
+                                    for (var i = 0; i < selectedSurvey.sectionIds.length; i++) {
                                         sectionsSrvc.deleteSection(selectedSurvey.sectionIds[i]);
                                     }
-                                    vm.surveys.splice(index, 1);
+                                    vm.surveys.splice(vm.surveys.indexOf(selectedSurvey), 1);
                                     surveysSrvc.deleteSurvey(selectedSurvey.id);
                                     console.log('Deleted Survey, DELETED associated sections');
                                 } else {
@@ -135,7 +131,7 @@
                     },
                     buttonClicked: function (buttonIndex) {
                         if (buttonIndex === 0) {
-                            vm.selectDetail(index);
+                            vm.selectDetail(selectedSurvey.id);
                         }
                         return true; // Close action menu
                     }

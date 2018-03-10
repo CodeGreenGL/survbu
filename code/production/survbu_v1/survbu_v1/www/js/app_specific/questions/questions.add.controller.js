@@ -23,33 +23,42 @@
         sectionsSrvc,
         questionsSrvc
     ) {
-        var vm = angular.extend(this, {
-            questionChoices: [],
-            parentSection: $stateParams.parentSection,
-            parentSectionSurvey: $stateParams.parentSectionSurvey,
+        var parentSectionId = $stateParams.parentSectionId,
+            parentSurveyId = $stateParams.parentSurveyId,
+            vm = angular.extend(this, {
+            parentSection: sectionsSrvc.getSectionAt(parentSectionId),
+            parentSurvey: surveysSrvc.getSurveyAt(parentSurveyId),
             question: {
                 questionText: "",
-                questionType: ""
+                questionType: "",
+                questionChoices: [],
+                referenceCount: 1
             },
-            displayAddQuestionChoices: function (questionType) {
-                if (questionType === 'MULTIPLE_SELECT' || questionType === 'SINGLE_SELECT') {
+            displayAddQuestionChoices: function () {
+                if (vm.question.questionType === 'MULTIPLE_SELECT' || vm.question.questionType === 'SINGLE_SELECT') {
                     return true;
                 }
             },
             addChoice: function (addChoice) {
-                vm.questionChoices.push(addChoice);
+                vm.question.questionChoices.push(addChoice);
             },
             createQuestion: function () {
-                questionsSrvc.createQuestionService(vm.question.questionType, vm.question.questionText, vm.questionChoices).then(function (response) {
+                questionsSrvc.createQuestionService(vm.question).then(function (response) {
 
+                    
                     var newQuestionID = response.id;
                     vm.parentSection.questionIds.push(newQuestionID);
 
-                    sectionsSrvc.updateCreateSection(vm.parentSection).then(function (response) {
-                        var parentSectionSurveySections = vm.parentSectionSurvey['sectionIds'];
-                        sectionsSrvc.updateSections(parentSectionSurveySections).then(function () {
-                            //surveysSrvc.isWaiting(false);
-                            //$state.reload();
+                    sectionsSrvc.updateSection(vm.parentSection).then(function (response) { // Should not update the reference count
+            
+                        sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
+                            
+                            questionsSrvc.updateQuestions(vm.parentSection.questionIds).then(function (response) {
+                                $state.go('questions_list', {
+                                    parentSectionId: vm.parentSection.id,
+                                    parentSurveyId: vm.parentSurvey.id
+                                });
+                            });
                         });
                     });
                 });

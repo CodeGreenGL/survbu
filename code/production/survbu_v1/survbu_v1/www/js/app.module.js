@@ -27,7 +27,7 @@
                     url: '/surveys_detail',
                     templateUrl: 'js/app_specific/surveys/surveys.detail.html',
                     params: {
-                        'selected': 0
+                        'surveyId': 0
                     },
                     controller: 'surveysDetailCtrl as vm'
                 })
@@ -35,9 +35,6 @@
                     cache: false,
                     url: '/surveys_add',
                     templateUrl: 'js/app_specific/surveys/surveys.add.html',
-                    params: {
-                        'selected': 0
-                    },
                     controller: 'surveysAddCtrl as vm'
                 })
 				
@@ -47,7 +44,7 @@
                     url: '/sections_list',
                     templateUrl: 'js/app_specific/sections/sections.list.html',
                     params: {
-                        'parentSurvey': 0
+                        'parentSurveyId': 0
                     },
                     controller: 'sectionsListCtrl as vm'
                 })
@@ -56,7 +53,8 @@
                     url: '/sections_detail',
                     templateUrl: 'js/app_specific/sections/sections.detail.html',
                     params: {
-                        'selected': 0
+                        'sectionId': 0,
+                        'parentSurveyId': 0
                     },
                     controller: 'sectionsDetailCtrl as vm'
                 })
@@ -65,19 +63,28 @@
                     url: '/sections_add',
                     templateUrl: 'js/app_specific/sections/sections.add.html',
                     params: {
-                        'parentSurvey': 0
+                        'parentSurveyId': 0
                     },
                     controller: 'sectionsAddCtrl as vm'
                 })
-				
+		.state('sections_addfe', {
+			cache: false,
+			url: '/sections_addfe',
+			templateUrl: 'js/app_specific/sections/sections.addfe.html',
+			params: {
+				'parentSurveyId': 0
+			},
+			controller: 'sectionsAddfeCtrl as vm'
+		})
+		
 				// QUESTIONS
 				.state('questions_list', {
                     cache: false,
                     url: '/questions_list',
                     templateUrl: 'js/app_specific/questions/questions.list.html',
                     params: {
-                        'parentSection': 0,
-                        'parentSectionSurvey': 0
+                        'parentSectionId': 0,
+                        'parentSurveyId': 0
                     },
                     controller: 'questionsListCtrl as vm'
                 })
@@ -86,7 +93,9 @@
                     url: '/questions_detail',
                     templateUrl: 'js/app_specific/questions/questions.detail.html',
                     params: {
-                        'selected': 0
+                        'questionId': 0,
+                        'sectionId': 0,
+                        'parentSurveyId': 0
                     },
                     controller: 'questionsDetailCtrl as vm'
                 })
@@ -95,8 +104,8 @@
                     url: '/questions_add',
                     templateUrl: 'js/app_specific/questions/questions.add.html',
                     params: {
-                        'parentSection': 0,
-                        'parentSectionSurvey': 0
+                        'parentSectionId': 0,
+                        'parentSurveyId': 0
                     },
                     controller: 'questionsAddCtrl as vm'
                 })
@@ -104,6 +113,10 @@
                     cache: false,
                     url: '/questions_addfe',
                     templateUrl: 'js/app_specific/questions/questions.addfe.html',
+                    params: {
+                        'parentSectionId': 0,
+                        'parentSurveyId': 0
+                    },
                     controller: 'questionsAddfeCtrl as vm'
                 });
         });

@@ -21,21 +21,22 @@
         sectionsSrvc,
         questionsSrvc
     ) {
-        var vm = angular.extend(this, {
-                parentSurvey: $stateParams.parentSurvey,
+        var parentSurveyId = $stateParams.parentSurveyId,
+            vm = angular.extend(this, {
+                parentSurvey: surveysSrvc.getSurveyAt(parentSurveyId),
                 section: {
-                    sectionHeading: "no text",
-                    sectionIntroductionMessage: "no type"
+                    heading: "",
+                    introductionMessage: "",
+                    referenceCount: 1
                 },
-                createSection: function () {
-                    sectionsSrvc.createSectionService(vm.section.sectionHeading, vm.section.sectionIntroductionMessage).then(function (response) {
-
+                createSection: function () {    //If you are coming from the global list of sections parentSurvey does not exist ????
+                    sectionsSrvc.createSection(vm.section).then(function (response) {
                         var newSection = response;
                         vm.parentSurvey.sectionIds.push(newSection.id);
-                        surveysSrvc.updateCreateSurvey(vm.parentSurvey).then(function (response) {
-                            console.log(response);
-                            surveysSrvc.updateAllSurveys();
-                            return listQuestions(newSection);
+                        surveysSrvc.updateSurvey(vm.parentSurvey).then(function (response) {
+                            surveysSrvc.updateAllSurveys().then(function () {
+                                listQuestions(newSection);
+                            });
                         });
                     });
                 }
@@ -44,10 +45,9 @@
                 questionsSrvc.isWaiting(true);
 
                 var sectionQuestions = [];
-
                 $state.go('questions_list', {
-                    parentSection: newSection,
-                    parentSectionSurvey: vm.parentSurvey
+                    parentSectionId: newSection.id,
+                    parentSurveyId: vm.parentSurvey.id
                 });
 
                 questionsSrvc.updateQuestions(sectionQuestions).then(function () {

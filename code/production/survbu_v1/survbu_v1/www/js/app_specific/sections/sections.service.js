@@ -8,25 +8,31 @@
 
     sectionsSrvc.$inject = [
         '$q', // promises service
-        '$http' // HTTP service
+        '$http', // HTTP service
+        '$filter'
     ];
 
     function sectionsSrvc(
         $q,
-        $http
+        $http,
+        $filter
     ) {
         //get all sections from codegreen restlet; returns deferred promise
+        //token for v1 = Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==
+        //token for v2 = Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==
         var sectionsArray = [],
-            currentSection,
-            waitingState = false, // Set waitingstate to false so surveys load
+		    allSectionsArray = [],
+		    remainingSectionsArray = [],
+            updatedSection,
+            waitingState = false,
             getSurveySections = function (surveySections) {
                 var deferred = $q.defer();
                 if (surveySections.length > 0) {
-                    for (var i = 0, len = surveySections.length; i < len; i++) {
+                    for (var i = 0; i < surveySections.length; i++) {
                         $http({
-                            url: 'https://codegreen.restlet.net/v1/surveySections/' + surveySections[i],
+                            url: 'https://codegreen.restlet.net/v2/surveySections/' + surveySections[i],
                             headers: {
-                                "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                                "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==",
                                 "content-type": "application/json",
                                 "accept": "application/json"
                             }
@@ -48,15 +54,15 @@
             getAllSections = function () {
                 var deferred = $q.defer();
                 $http({
-                    url: 'https://codegreen.restlet.net/v1/surveySections/',
+                    url: 'https://codegreen.restlet.net/v2/surveySections/',
                     headers: {
-                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==",
                         "content-type": "application/json",
                         "accept": "application/json"
                     }
                 }).then(function successCallback(response) {
-                    sectionsArray = response.data;
-                    deferred.resolve(sectionsArray);
+                    allSectionsArray = response.data;
+                    deferred.resolve(allSectionsArray);
                 }, function errorCallback(response) {
                     console.error('Error while fetching questions');
                     console.error(response);
@@ -67,33 +73,34 @@
                 var deferred = $q.defer();
                 $http({
                     method: 'DELETE',
-                    url: 'https://codegreen.restlet.net/v1/surveySections/' + sectionID,
+                    url: 'https://codegreen.restlet.net/v2/surveySections/' + sectionID,
                     headers: {
-                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==",
                         "content-type": "application/json",
                         "accept": "application/json"
                     },
                 }).then(function successCallback(response) {
-                    deferred.resolve(sectionsArray);
+                    deferred.resolve();
                 }, function errorCallback(response) {
                     console.error('Error while deleting section');
                     console.error(response);
                 });
                 return deferred.promise;
             },
-            updateSection = function (localSection) {
+            updateSection = function (section) {
                 var deferred = $q.defer();
                 $http({
                     method: 'PUT',
-                    url: 'https://codegreen.restlet.net/v1/surveySections/' + localSection.id,
+                    url: 'https://codegreen.restlet.net/v2/surveySections/' + section.id,
                     headers: {
-                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==",
                         "content-type": "application/json",
                         "accept": "application/json"
                     },
-                    data: localSection
+                    data: section
                 }).then(function successCallback(response) {
-                    deferred.resolve(sectionsArray);
+                    updatedSection = response.data;
+                    deferred.resolve(updatedSection);
                 }, function errorCallback(response) {
                     console.error('Error while fetching questions');
                     console.error(response);
@@ -106,10 +113,10 @@
 
                 $http({
                     method: "POST",
-                    url: 'https://codegreen.restlet.net:443/v1/surveySections/',
+                    url: 'https://codegreen.restlet.net:443/v2/surveySections/',
                     data: sectionObject,
                     headers: {
-                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==",
                         "content-type": "application/json",
                         "accept": "application/json"
                     }
@@ -137,49 +144,52 @@
                 // returns a promise
                 return deleteSectionID(sectionID);
             },
-            promiseToUpdateSection = function (localSection) {
+            promiseToUpdateSection = function (Section) {
                 // returns a promise
-                return updateSection(localSection);
+                return updateSection(Section);
             },
             promiseToCreateSection = function (sectionObject) {
                 // returns a promise
                 return createSection(sectionObject);
             },
+		    removeAlreadyAdded = function () {
+			    var deferred = $q.defer();
+			    service.getAllSections().then(function () {
+				    remainingSectionsArray = angular.copy(allSectionsArray);
+				    if (sectionsArray.length > 0) {
+					    for (var i = 0; i < sectionsArray.length; i++) {
+						    var removeIndex = remainingSectionsArray.map(function (section) { return section.id; }).indexOf(sectionsArray[i].id);
+					    remainingSectionsArray.splice(removeIndex, 1);
+					    }
+				    }
+				    for (var i = 0; i < remainingSectionsArray.length; i++) {
+					    remainingSectionsArray[i].adding = false;
+				    }
+				    deferred.resolve(remainingSectionsArray);
+			    });
+			    return deferred.promise;
+		    },
             service = {
                 updateSections: function (surveySections) {
                     sectionsArray = [];
                     return promiseToGetSurveySections(surveySections);
                 },
                 getAllSections: function () {
-                    sectionsArray = [];
+                    allSectionsArray = [];
                     return promiseToGetAllSections();
                 },
                 deleteSection: function (sectionID) {
                     return promiseToDeleteSectionID(sectionID);
                 },
-                updateSection: function (questionID) {
-                    var localSection = sectionsArray[currentSection];
-                    localSection.questionIds.splice(localSection.questionIds.indexOf(questionID), 1);
-                    sectionsArray[currentSection] = localSection;
-                    
-                    return promiseToUpdateSection(localSection);
-                },
-                updateCreateSection: function (localSection) {
-                    return promiseToUpdateSection(localSection);
-                },
-                addQuestionsToSection: function (questionsArray) {
-                    var localSection = sectionsArray[currentSection];
-
-                    for (var i = 0; i < questionsArray.length; i++) {
-                        localSection.questionIds.push(questionsArray[i]);
+                updateSection: function (section) {
+                    var section = {
+                        id: section.id,
+                        introductionMessage: section.introductionMessage,
+                        questionIds: section.questionIds,
+                        heading: section.heading,
+                        referenceCount: section.referenceCount
                     }
-                    
-                    sectionsArray[currentSection] = localSection;
-                    
-                    return promiseToUpdateSection(localSection);
-                },
-                setCurrentSection: function (index) {
-                    currentSection = parseInt(index, 10);
+                    return promiseToUpdateSection(section);
                 },
                 returnSections: function () {
                     return angular.copy(sectionsArray);
@@ -187,20 +197,21 @@
                 getNumSections: function () {
                     return sectionsArray.length;
                 },
-                disposeSections: function () {
-                    sectionsArray = [];
+		        getNumAllSections: function () {
+			        return allSectionsArray.length;
+		        },
+                getSectionAt: function (id) {
+                    return angular.copy($filter('filter')(sectionsArray, {id: id}, true)[0]);
                 },
-                getSectionAt: function (index) {
-                    return angular.copy(sectionsArray[index]);
-                },
-                createSectionService: function(sectionHeading, sectionIntroductionMessage) {
-                    var sectionObject = {
+                createSection: function(section) {
+                    var section = {
                         id: "",
-                        introductionMessage: sectionIntroductionMessage,
+                        introductionMessage: section.introductionMessage,
                         questionIds: [],
-                        heading: sectionHeading
+                        heading: section.heading,
+                        referenceCount: section.referenceCount
                     }
-                    return promiseToCreateSection(sectionObject);
+                    return promiseToCreateSection(section);
                 },
                 isWaiting: function (iWait) {
                     waitingState = iWait;
@@ -208,9 +219,12 @@
                 isItWaiting: function () {
                     return waitingState;
                 },
-                getCurrentSection: function () {
-                    return currentSection;
-                }
+		        updateRemainingSections: function () {
+			        return removeAlreadyAdded();
+		        },
+		        getRemainingSections: function () {
+			        return angular.copy(remainingSectionsArray);
+		        }
             };
         return service;
     }

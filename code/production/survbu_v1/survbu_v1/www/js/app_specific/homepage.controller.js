@@ -27,19 +27,20 @@
 
                     surveysSrvc.updateAllSurveys().then(function () {
                         surveysSrvc.isWaiting(false);
-
-                        if (surveysSrvc.getSurveys().length > 0) {
+                        console.log(surveysSrvc.isItWaiting());
+                        if (surveysSrvc.getNumSurveys() > 0) {
                             $state.reload();
                         }
                     });
                 }, //end listAllSurveys function
                 listAllSections: function () {
-                    surveysSrvc.disposeSurveys();
                     
                     sectionsSrvc.isWaiting(true);
-                    $state.go('sections_list');
+                    $state.go('sections_list',{
+                        parentSurvey : 0
+                    });
                     
-                    sectionsSrvc.getAllSections("pete").then(function () {
+                    sectionsSrvc.getAllSections().then(function () {
                         sectionsSrvc.isWaiting(false);
                         
                         if (sectionsSrvc.getNumSections() > 0) {
@@ -49,10 +50,12 @@
                     
                 }, //end listAllSections function
                 listAllQuestions: function () {
-                    sectionsSrvc.disposeSections();
-                    
+                
                     questionsSrvc.isWaiting(true);
-                    $state.go('questions_list'); //this needs sorting; it's going to be separate (global) list; this will have additional functionality
+                    $state.go('questions_list',{
+                        parentSection : 0,
+                        parentSectionSurvey : 0
+                    }); //this needs sorting; it's going to be separate (global) list; this will have additional functionality
 
                     questionsSrvc.getAllQuestions().then(function () {
                         console.log(questionsSrvc.returnAllQuestions());

@@ -21,46 +21,33 @@
     ) {
         var params = $stateParams,
             vm = angular.extend(this, {
-                surveys: [],
-                survey: {
-                    introductionMessage: "",
-                    completionMessage: ""
-                }
-            });
+            survey: {
+                introductionMessage: "",
+                completionMessage: ""
+            },
+            createSurvey: function() {
+                surveysSrvc.createSurvey(vm.survey.introductionMessage,vm.survey.completionMessage).then(function (response) {
+                    //Returns the promised object   
+                    return vm.listSections(response);
+                });      
+            },
+            listSections: function(survey) {
+                sectionsSrvc.isWaiting(true);
+                var createdSurvey = survey;
 
-        vm.createSurvey = function() {
-            /*surveysSrvc.createSurveyService(surveyTitle,surveyDescription).then(function (response) {
-                //Returns the promised object
-                return listSections(response);
-            }); */
-            surveysSrvc.createSurveyService(vm.survey.introductionMessage,vm.survey.completionMessage).then(function (response) {
-                //Returns the promised object
-                
-                return listSections(response);
-            });
-            
-        };
-
-        //possible needs to be renamed to more appropriate name.
-        var listSections = function(surveyObject) {
-            sectionsSrvc.isWaiting(true);
-            var selectedSurvey = surveyObject;
-
-            $state.go('sections_list', {
-                parentSurvey: selectedSurvey
-            });
-
-            var surveySections = [];
-                        
-            sectionsSrvc.updateSections(surveySections).then(function () {
+                $state.go('sections_list', {
+                    parentSurveyId: createdSurvey.id
+                });
                 sectionsSrvc.isWaiting(false);
-                if (surveySections.length > 0) {
-                    $state.reload();
-                };
-            });
-        };
 
-        //vm.survey = surveysSrvc.getSectionAt(params.selected);
-
+                var surveySections = [];
+                            
+                sectionsSrvc.updateSections(surveySections).then(function () {
+                    if (surveySections.length > 0) {
+                        $state.reload();
+                    };
+                });
+            }
+        });
     }
 }());

@@ -20,11 +20,12 @@
     </div>
     
     <ion-content class="has-header">
-        
+
+	<button ng-click="vm.addFromExisting()" style="color: #ff3344f;">Add from existing</button>        
         <div ng-hide="vm.hideList()">
             <ion-list>
-                <ion-item ng-click="vm.listQuestions($index)" ng-repeat="section in vm.sections" class="item-button-right">{{section.heading}}
-                    <button ng-click="vm.showActionMenu($event, $index)" class="button button-icon icon ion-navicon actionMenuButton"></button>
+                <ion-item ng-click="vm.listQuestions(section.id)" ng-repeat="section in vm.sections" class="item-button-right">{{section.heading}}
+                    <button ng-click="vm.showActionMenu($event, section.id)" class="button button-icon icon ion-navicon actionMenuButton"></button>
                 </ion-item>
             </ion-list>
         </div>

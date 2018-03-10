@@ -7,52 +7,63 @@
         .controller('questionsAddfeCtrl', control);
 
     control.$inject = [
+        '$scope',
         '$state',
+        '$stateParams',
+        'surveysSrvc',
         'sectionsSrvc',
         'questionsSrvc'
     ];
 
     function control(
+        $scope,
         $state,
+        $stateParams,
+        surveysSrvc,
         sectionsSrvc,
         questionsSrvc
     ) {
-        var vm = angular.extend(this, {
-            questions: questionsSrvc.getRemainingQuestions(),
+        var parentSectionId = $stateParams.parentSectionId,
+            parentSurveyId = $stateParams.parentSurveyId,
+            vm = angular.extend(this, {
+                parentSection: sectionsSrvc.getSectionAt(parentSectionId),
+                parentSurvey: surveysSrvc.getSurveyAt(parentSurveyId),
+                questions: questionsSrvc.getRemainingQuestions(),
 
-            stillWaits: questionsSrvc.isItWaiting(),
-            stillWaiting: function () {
-                return vm.stillWaits;
-            },
-            noContent: function () {
-                return vm.questions.length === 0;
-            },
-            hideList: function () {
-                return (vm.stillWaiting() || vm.noContent());
-            },
-            hideNoItems: function () {
-                return (vm.stillWaiting() || !vm.noContent());
-            },
-            addQuestions: function () {
-                var questionsToAdd = [];
-                for (var i = 0; i < vm.questions.length; i++) {
-                    if (vm.questions[i].adding === true) {
-                        questionsToAdd.push(vm.questions[i].id);
-                    }
-                };
-                // HERE we need questionsSrvc that adds the above array (questionsToAdd) to an array of questions of current Section and then updates that Section's questionsIds (PUT)
-                questionsSrvc.isWaiting(true);
-                $state.go('questions_list');
-                
-                sectionsSrvc.addQuestionsToSection (questionsToAdd).then(function () {
-                // ##### the below could work with 'parentSection' passed as state param
-//                    var currentSection = sectionsSrvc.getCurrentSection();
-//                    questionsSrvc.updateQuestions(currentSection).then(function () { 
-                        $state.reload();
-                        questionsSrvc.isWaiting(false);
-//                    });
-                });
-            }
+                stillWaits: questionsSrvc.isItWaiting(),
+                stillWaiting: function () {
+                    return vm.stillWaits;
+                },
+                noContent: function () {
+                    return vm.questions.length === 0;
+                },
+                hideList: function () {
+                    return (vm.stillWaiting() || vm.noContent());
+                },
+                hideNoItems: function () {
+                    return (vm.stillWaiting() || !vm.noContent());
+                },
+                addQuestions: function () {
+                    for (var i = 0; i < vm.questions.length; i++) {
+                        if (vm.questions[i].adding === true) {                         
+                            vm.parentSection.questionIds.push(vm.questions[i].id);
+                            vm.questions[i].referenceCount = vm.questions[i].referenceCount + 1; // add one more to the refrrence count for each
+                            questionsSrvc.updateQuestion(vm.questions[i]).then(function(){}); //update the reference count ==> PAV 06/03/2018 //this should just add to pool of promises and not wait for its execution [K]
+                        }
+                    };
+                    sectionsSrvc.updateSection(vm.parentSection).then(function (response) { // should not change the reference count //this should only start once all the above questions get updated [K]
+                        var parentSurveySections = vm.parentSurvey.sectionIds;
+                        sectionsSrvc.updateSections(parentSurveySections).then(function () {
+                            var sectionQuestions = vm.parentSection.questionIds;
+                            questionsSrvc.updateQuestions(sectionQuestions).then(function (response) {
+                                $state.go('questions_list', {
+                                    parentSectionId: vm.parentSection.id,
+					                parentSurveyId: vm.parentSurvey.id			
+                                });
+                            });
+                        });
+                    });
+                }
         });
     }
 }());

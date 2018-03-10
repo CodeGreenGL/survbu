@@ -24,11 +24,9 @@
             remainingQuestionsArray = [],
             waitingState = false,
             getSectionQuestions = function (sectionQuestions) {
-                var deferred = $q.defer(),
-                    i = 0,
-                    len;
+                var deferred = $q.defer();
                 if (sectionQuestions.length > 0) {
-                    for (len = sectionQuestions.length; i < len; i = i + 1) {
+                    for (var i = 0; i < sectionQuestions.length; i++) {
                         $http({
                             url: 'https://codegreen.restlet.net/v2/questions/' + sectionQuestions[i],
                             headers: {
@@ -65,7 +63,7 @@
                     allQuestionsArray = response.data;
                     deferred.resolve(allQuestionsArray);
                 }, function errorCallback(response) {
-                    console.error('Error while fetching questions');
+                    console.error('Error while fetching all questions');
                     console.error(response);
                 });
                 return deferred.promise;
@@ -88,10 +86,9 @@
                     //Add sections to our sectionArray
                     questionsArray.push(addedQuestion);
                     deferred.resolve(addedQuestion);
-
                     
                 }, function errorCallback(response) {
-                    console.error('Error while fetching notes');
+                    console.error('Error creating question');
                     console.error(response);
                 });
 
@@ -116,6 +113,24 @@
                 });
                 return deferred.promise;
             },
+            deleteQuestion = function(question){
+                var deferred = $q.defer();
+                $http({
+                    method: 'DELETE',
+                    url: 'https://codegreen.restlet.net/v2/questions/' + question.id,
+                    headers: {
+                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==",
+                        "content-type": "application/json",
+                        "accept": "application/json"
+                    }
+                }).then(function successCallback(response) {
+                    deferred.resolve();
+                }, function errorCallback(response) {
+                    console.error('Error while deleting question');
+                    console.error(response);
+                });
+                return deferred.promise;
+            },
             promiseToUpdateQuestions = function (sectionQuestions) {
                 return getSectionQuestions(sectionQuestions);
             },
@@ -127,6 +142,9 @@
             },
             promiseToCreateQuestion = function (question) {
                 return createQuestion(question);
+            },
+            promiseToDeleteQuestion = function (question) {
+                return deleteQuestion(question);
             },
             removeAlreadyAdded = function () {
                 var deferred = $q.defer();
@@ -150,7 +168,7 @@
                     questionsArray = [];
                     return promiseToUpdateQuestions(sectionQuestions);
                 },
-                updateQuestion: function(question){
+                updateQuestion: function(question) {
                     var question = {
                         id: question.id,
                         questionType: question.questionType,
@@ -159,6 +177,9 @@
                         referenceCount: question.referenceCount
                     };
                     return promiseToUpdateQuestion(question);
+                },
+                deleteQuestion: function(question) {
+                    return promiseToDeleteQuestion(question);
                 },
                 getAllQuestions: function () {
                     allQuestionsArray = [];
@@ -170,17 +191,20 @@
                 returnAllQuestions: function () {
                     return angular.copy(allQuestionsArray);
                 },
-                getNumQuestions: function () { //this needs reviewing which array length it should return
+                getNumQuestions: function () {
                     return questionsArray.length;
                 },
                 getNumAllQuestions: function () {
                     return allQuestionsArray.length;
                 },
-                disposeQuestions: function () {
-                    questionsArray = [];
-                },
+//                disposeQuestions: function () {
+  //                  questionsArray = [];
+    //            },
                 getQuestionAt: function (id) {
                     return angular.copy($filter('filter')(questionsArray, {id: id}, true)[0]);
+                },
+                getQuestionAtGlobal: function (id) {
+                    return angular.copy($filter('filter')(allQuestionsArray, {id: id}, true)[0]);
                 },
                 createQuestionService: function (question){
                     var question = {

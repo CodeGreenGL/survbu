@@ -81,25 +81,46 @@
             showDeleteAlert: function ($event, questionId) {
                 $event.stopPropagation();
 
-                if (sectionsSrvc.getNumSections() === 0) {
+                var question = questionsSrvc.getQuestionAt(questionId);
+                $ionicPopup.confirm({
+                    title: 'Delete Question',
+                    template: 'Are you sure you want to delete \'' + question.questionText + '\'?'
+                }).then(function (response) {
+                    if (response) {
+                        var removeIndex = vm.questions.findIndex(quest => quest.id === questionId);
+                        vm.questions.splice(removeIndex, 1);
+                        vm.parentSection.questionIds.splice(removeIndex, 1);
+                        question.referenceCount = question.referenceCount - 1;
+                        questionsSrvc.updateQuestion(question).then(function () {
+                            sectionsSrvc.updateSection(vm.parentSection).then(function () {
+                                sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
+                                    questionsSrvc.updateQuestions(vm.parentSection.questionIds);
+                                });
+                            });
+                        });
+                    } else {
+                        console.log('User pressed cancel');
+                    }
+                });
+            },
+            showDeleteAlertGlobal: function ($event, questionId) {
+                $event.stopPropagation();
+
+                var question = questionsSrvc.getQuestionAtGlobal(questionId);
+                if (question.referenceCount > 0) {
                     $ionicPopup.alert({
                         title: 'Can\'t delete question from global list!',
                         template: 'Questions can only be deleted via the relevant section.'
                     });
-                } else if (sectionsSrvc.getNumSections() > 0) {
-                    var question = questionsSrvc.getQuestionAt(questionId);
+                } else if (question.referenceCount === 0) {
                     $ionicPopup.confirm({
                         title: 'Delete Question',
                         template: 'Are you sure you want to delete \'' + question.questionText + '\'?'
                     }).then(function (response) {
                         if (response) {
-
                             var removeIndex = vm.questions.findIndex(quest => quest.id === questionId);
                             vm.questions.splice(removeIndex, 1);
-                            vm.parentSection.questionIds.splice(removeIndex, 1);
-                            sectionsSrvc.updateSection(vm.parentSection).then(function(){ //this should decrease the reference count by --1
-                                
-                            });
+                            questionsSrvc.deleteQuestion(question);
                         } else {
                             console.log('User pressed cancel');
                         }

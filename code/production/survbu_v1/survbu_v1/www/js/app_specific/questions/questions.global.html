@@ -15,7 +15,7 @@
                 <ion-item ng-click="vm.selectDetail(question.id)" ng-repeat="question in vm.allQuestions" class="item-button-right">
                     <span class="refCountLabel">{{question.referenceCount}}</span>
                     {{question.questionText}}
-                    <button ng-click="vm.showDeleteAlert($event, question.id)" class="button button-icon icon ion-ios-close actionMenuButton" style="color:#ff3344f;"></button>
+                    <button ng-click="vm.showDeleteAlertGlobal($event, question.id)" class="button button-icon icon ion-ios-close actionMenuButton" style="color:#ff3344f;"></button>
                 </ion-item>
             </ion-list>
         </div>

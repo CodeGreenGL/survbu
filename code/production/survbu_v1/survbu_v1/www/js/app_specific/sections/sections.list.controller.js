@@ -56,18 +56,29 @@
                     parentSurveyId: vm.parentSurvey.id
                 });
             },
+            addFromExisting: function () {
+                sectionsSrvc.isWaiting(true);
+                $state.go('sections_addfe', {
+                    parentSurveyId: vm.parentSurvey.id
+                });
+                sectionsSrvc.updateRemainingSections().then(function () {
+                    $state.reload();
+                    sectionsSrvc.isWaiting(false);
+                });
+            },
             selectDetail: function (sectionId) {
                 $state.go('sections_detail', {
+                    parentSurveyId: vm.parentSurvey.id,
                     sectionId: sectionId
                 });
             },
             showActionMenu: function ($event, sectionId) {
                 $event.stopPropagation();
-                
+
                 var selectedSection = sectionsSrvc.getSectionAt(sectionId),
                     referenceCount = selectedSection.referenceCount,
                     hasQuestions = (!Array.isArray(selectedSection.questionIds) || !selectedSection.questionIds.length) ? 'This section has no associated questions.' : 'Questions will be kept.';
-                
+
                 $ionicActionSheet.show({
                     titleText: 'Modify \'' + selectedSection.heading + '\'',
                     cancelText: 'Cancel',

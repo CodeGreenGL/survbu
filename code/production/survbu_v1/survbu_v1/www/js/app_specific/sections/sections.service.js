@@ -19,6 +19,8 @@
     ) {
         //get all sections from codegreen restlet; returns deferred promise
         var sectionsUrl = "https://codegreen.restlet.net/v2/surveySections/",
+            allSectionsArray = [],
+            remainingSectionsArray = [],
             sectionsArray = [],
             waitingState = false,
             getSurveySections = function (surveySections) {
@@ -45,6 +47,7 @@
                 var deferred = $q.defer();
                 $http.get(sectionsUrl).then(function successCallback(response) {
                     sectionsArray = response.data;
+                    allSectionsArray = response.data;
                     deferred.resolve(sectionsArray);
                 }, function errorCallback(response) {
                     console.error('Error while fetching questions');
@@ -88,6 +91,23 @@
                 });
                 return deferred.promise;
             },
+            removeAlreadyAdded = function () {
+			    var deferred = $q.defer();
+			    service.getAllSections().then(function () {
+				    remainingSectionsArray = angular.copy(allSectionsArray);
+				    if (sectionsArray.length > 0) {
+					    for (var i = 0; i < sectionsArray.length; i++) {
+						    var removeIndex = remainingSectionsArray.map(function (section) { return section.id; }).indexOf(sectionsArray[i].id);
+					    remainingSectionsArray.splice(removeIndex, 1);
+					    }
+				    }
+				    for (var i = 0; i < remainingSectionsArray.length; i++) {
+					    remainingSectionsArray[i].adding = false;
+				    }
+				    deferred.resolve(remainingSectionsArray);
+			    });
+			    return deferred.promise;
+		    },
             service = {
                 updateSections: function (surveySections) {
                     sectionsArray = [];
@@ -96,10 +116,10 @@
                 updateSectionsFromQuestionID: function (questionID, sectionID) {
                     var arrayIndex = sectionsArray.findIndex(section => section.id == sectionID),
                         localSection = sectionsArray[arrayIndex];
-                    
+
                     localSection.questionIds.splice(localSection.questionIds.indexOf(questionID), 1);
                     sectionsArray[arrayIndex] = localSection;
-                    
+
                     return updateSection(localSection);
                 },
                 getAllSections: function () {
@@ -122,7 +142,7 @@
                     //_.find(sectionsArray, ['id', sectionID])); Lodash equivalent
                     return sectionsArray.find(section => section.id == sectionID);
                 },
-                createSection: function(sectionObject) {
+                createSection: function (sectionObject) {
                     return createSection(sectionObject);
                 },
                 dereferenceSections: function (sectionIds) {
@@ -139,6 +159,14 @@
                 },
                 isItWaiting: function () {
                     return waitingState;
+                },
+                updateRemainingSections: function () {
+                    return removeAlreadyAdded();
+                },
+                getRemainingSections: function () {
+                    console.log(remainingSectionsArray);
+                    console.log(allSectionsArray);
+                    return angular.copy(remainingSectionsArray);
                 }
             };
         return service;

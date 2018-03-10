@@ -37,8 +37,8 @@
         }
         var stateParams = $state.params,
             vm = angular.extend(this, {
-                parentSection: sectionsSrvc.getSectionAt(stateParams.parentSectionId),
-                parentSurvey: surveysSrvc.getSurveyAt(stateParams.parentSurveyId),
+                parentSection: sectionsSrvc.getSectionAt(stateParams.parentSectionId) || 0,
+                parentSurvey: surveysSrvc.getSurveyAt(stateParams.parentSurveyId) || 0,
                 questions: questionsSrvc.getQuestions(),
                 stillWaiting: function () {
                     return questionsSrvc.isItWaiting();
@@ -54,7 +54,9 @@
                 },
                 selectDetail: function selectDetail(questionId) {
                     $state.go('questions_detail', {
-                        questionId: questionId
+                        questionId: questionId,
+                        parentSectionId: vm.parentSection.id,
+                        parentSurveyId: vm.parentSurvey.id
                     });
                 },
                 addQuestion: function () {
@@ -76,11 +78,12 @@
                 },
                 showDeleteAlert: function ($event, questionId) {
                     $event.stopPropagation();
-
-                    var selectedQuestion = questionsSrvc.getQuestionAt(questionId),
+                    
+                    // Select either from questionsArray or All depending on whether from global list (i.e parentSection undefined)
+                    var selectedQuestion = (vm.parentSection) ? questionsSrvc.getQuestionAt(questionId) : questionsSrvc.getAllQuestionAt(questionId),
                         referenceCount = selectedQuestion.referenceCount;
 
-                    if ((!vm.parentSection || vm.parentSection === 0) && referenceCount > 0) {
+                    if ((!vm.parentSection) && referenceCount > 0) {
                         $ionicPopup.alert({
                             title: 'Can\'t delete question, referenceCount is ' + referenceCount,
                             template: 'Questions from the global list can only be deleted if referenceCount is 0.'

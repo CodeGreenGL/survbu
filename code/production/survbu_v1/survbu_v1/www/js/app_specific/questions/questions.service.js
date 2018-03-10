@@ -18,6 +18,7 @@
     ) {
         //get all surveys from codegreen restlet; returns deferred promise
         var questionsUrl = "https://codegreen.restlet.net/v2/questions/",
+            allQuestionsArray = [],
             questionsArray = [],
             remainingQuestionsArray = [],
             waitingState = false,
@@ -44,8 +45,8 @@
             getAllQuestions = function () {
                 var deferred = $q.defer();
                 $http.get(questionsUrl).then(function successCallback(response) {
-                    questionsArray = response.data;
-                    deferred.resolve(questionsArray);
+                    allQuestionsArray = response.data;
+                    deferred.resolve(allQuestionsArray);
                 }, function errorCallback(response) {
                     console.error('Error while fetching questions');
                     console.error(response);
@@ -59,6 +60,7 @@
                 $http.post(questionsUrl, questionObject).then(function successCallback(response) {
                     addedQuestion = response.data;
                     //Add sections to our sectionArray
+                    allQuestionsArray.push(addedQuestion);
                     questionsArray.push(addedQuestion);
 
                     deferred.resolve(addedQuestion);
@@ -101,9 +103,7 @@
                     remainingQuestionsArray = angular.copy(allQuestionsArray);
                     if (questionsArray.length > 0) {
                         for (i = 0; i < questionsArray.length; i = i + 1) {
-                            var removeIndex = remainingQuestionsArray.map(function (question) {
-                                return question.id;
-                            }).indexOf(questionsArray[i].id);
+                            var removeIndex = remainingQuestionsArray.findIndex(question => question.id == questionsArray[i].id);
                             remainingQuestionsArray.splice(removeIndex, 1);
                         }
                     }
@@ -119,8 +119,18 @@
                     questionsArray = [];
                     return getSectionQuestions(sectionQuestions);
                 },
+                updateQuestion: function (question) {
+                    var question = {
+                        id: question.id,
+                        questionType: question.questionType,
+                        questionText: question.questionText,
+                        questionChoices: question.questionChoices,
+                        referenceCount: question.referenceCount
+                    };
+                    return updateQuestion(question);
+                },
                 getAllQuestions: function () {
-                    questionsArray = [];
+                    allQuestionsArray = [];
                     return getAllQuestions();
                 },
                 getQuestions: function () {
@@ -134,6 +144,9 @@
                 },
                 getQuestionAt: function (questionId) {
                     return questionsArray.find(question => question.id == questionId);
+                },
+                getAllQuestionAt: function (questionId) {
+                    return allQuestionsArray.find(question => question.id == questionId);
                 },
                 postQuestion: function (questionObject) {
                     return postQuestion(questionObject);

@@ -206,6 +206,9 @@
                 getSectionAt: function (id) {
                     return angular.copy($filter('filter')(sectionsArray, {id: id}, true)[0]);
                 },
+                getSectionAtGlobal: function (id) {
+                    return angular.copy($filter('filter')(allSectionsArray, {id: id}, true)[0]);
+                },
                 createSection: function(section) {
                     var section = {
                         id: "",

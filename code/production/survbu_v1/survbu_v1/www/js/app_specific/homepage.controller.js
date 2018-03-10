@@ -28,9 +28,7 @@
                     surveysSrvc.updateAllSurveys().then(function () {
                         surveysSrvc.isWaiting(false);
                         console.log(surveysSrvc.isItWaiting());
-                        if (surveysSrvc.getNumSurveys() > 0) {
-                            $state.reload();
-                        }
+                        $state.reload();
                     });
                 }, //end listAllSurveys function
                 listAllSections: function () {
@@ -40,10 +38,7 @@
                     
                     sectionsSrvc.getAllSections().then(function () {
                         sectionsSrvc.isWaiting(false);
-                        
-                        if (sectionsSrvc.getNumAllSections() > 0) {
-                            $state.reload();
-                        }
+                        $state.reload();
                     });
                     
                 }, //end listAllSections function
@@ -54,10 +49,7 @@
 
                     questionsSrvc.getAllQuestions().then(function () {
                         questionsSrvc.isWaiting(false);
-
-                        if (questionsSrvc.getNumAllQuestions() > 0) {
-                            $state.reload();
-                        }
+                        $state.reload();
                     });
                 } //end listAllQuestions function
             }); //end angular.extend

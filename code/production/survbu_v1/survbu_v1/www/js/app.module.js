@@ -121,6 +121,12 @@
                     },
                     controller: 'questionsAddCtrl as vm'
                 })
+                .state('questions_addglobal', {
+                    cache: false,
+                    url: '/questions_addglobal',
+                    templateUrl: 'js/app_specific/questions/questions.addglobal.html',
+                    controller: 'questionsAddCtrl as vm'
+                })
 				.state('questions_addfe', {
                     cache: false,
                     url: '/questions_addfe',

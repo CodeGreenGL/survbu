@@ -197,9 +197,6 @@
                 getNumAllQuestions: function () {
                     return allQuestionsArray.length;
                 },
-//                disposeQuestions: function () {
-  //                  questionsArray = [];
-    //            },
                 getQuestionAt: function (id) {
                     return angular.copy($filter('filter')(questionsArray, {id: id}, true)[0]);
                 },

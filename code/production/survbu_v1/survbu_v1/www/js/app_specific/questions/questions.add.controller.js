@@ -45,14 +45,11 @@
             createQuestion: function () {
                 questionsSrvc.createQuestionService(vm.question).then(function (response) {
 
-                    
                     var newQuestionID = response.id;
                     vm.parentSection.questionIds.push(newQuestionID);
 
-                    sectionsSrvc.updateSection(vm.parentSection).then(function (response) { // Should not update the reference count
-            
+                    sectionsSrvc.updateSection(vm.parentSection).then(function (response) {
                         sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
-                            
                             questionsSrvc.updateQuestions(vm.parentSection.questionIds).then(function (response) {
                                 $state.go('questions_list', {
                                     parentSectionId: vm.parentSection.id,
@@ -62,6 +59,14 @@
                         });
                     });
                 });
+            },
+            createQuestionGlobal: function () {
+                vm.question.referenceCount = 0;
+                questionsSrvc.createQuestionService(vm.question).then(function (response) {
+                    questionsSrvc.getAllQuestions().then(function (response) {
+                        $state.go('questions_global'); //THIS DOES NOT WORK CORRECTLY;  when allQuestions are fetched, new question is not part of the response [K]
+                    });
+                }); 
             }
         });
     }

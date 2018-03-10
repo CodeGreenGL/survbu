@@ -62,7 +62,7 @@
                     });
                 },
                 selectDetailGlobal: function (questionId) {
-                    $state.go('questions_detail', {
+                    $state.go('questions_detailglobal', {
                         questionId: questionId
                     });
                 },

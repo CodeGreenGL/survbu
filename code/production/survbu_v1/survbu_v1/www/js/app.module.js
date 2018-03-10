@@ -111,6 +111,15 @@
                     },
                     controller: 'questionsDetailCtrl as vm'
                 })
+                .state('questions_detailglobal', {
+                    cache: false,
+                    url: '/questions_detail',
+                    templateUrl: 'js/app_specific/questions/questions.detail.html',
+                    params: {
+                        'questionId': 0
+                    },
+                    controller: 'questionsDetailGlobalCtrl as vm'
+                })
                 .state('questions_add', {
                     cache: false,
                     url: '/questions_add',

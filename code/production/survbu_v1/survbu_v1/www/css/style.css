@@ -271,4 +271,11 @@ ion-content[class*="homeContent"].scroll-content {
     border: 0 !important;
 }
 
+.refCountLabel {
+    background: #1ba32b;
+    padding: 10px 12px;
+    color: white;
+    border-radius: 5px;
+}
+
 /* Fancy Button Menu END */

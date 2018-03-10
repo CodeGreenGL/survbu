@@ -194,6 +194,9 @@
                 returnSections: function () {
                     return angular.copy(sectionsArray);
                 },
+                returnAllSections: function () {
+                    return angular.copy(allSectionsArray);
+                },
                 getNumSections: function () {
                     return sectionsArray.length;
                 },

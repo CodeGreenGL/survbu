@@ -36,14 +36,12 @@
                 listAllSections: function () {
                     
                     sectionsSrvc.isWaiting(true);
-                    $state.go('sections_list',{
-                        parentSurvey : 0
-                    });
+                    $state.go('sections_global');
                     
                     sectionsSrvc.getAllSections().then(function () {
                         sectionsSrvc.isWaiting(false);
                         
-                        if (sectionsSrvc.getNumSections() > 0) {
+                        if (sectionsSrvc.getNumAllSections() > 0) {
                             $state.reload();
                         }
                     });
@@ -52,13 +50,9 @@
                 listAllQuestions: function () {
                 
                     questionsSrvc.isWaiting(true);
-                    $state.go('questions_list',{
-                        parentSection : 0,
-                        parentSectionSurvey : 0
-                    }); //this needs sorting; it's going to be separate (global) list; this will have additional functionality
+                    $state.go('questions_global');
 
                     questionsSrvc.getAllQuestions().then(function () {
-                        console.log(questionsSrvc.returnAllQuestions());
                         questionsSrvc.isWaiting(false);
 
                         if (questionsSrvc.getNumAllQuestions() > 0) {

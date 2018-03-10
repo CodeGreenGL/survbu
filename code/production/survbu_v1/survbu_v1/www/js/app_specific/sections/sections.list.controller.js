@@ -29,6 +29,7 @@
             vm = angular.extend(this, {
                 parentSurvey: surveysSrvc.getSurveyAt(parentSurveyId),
                 sections: sectionsSrvc.returnSections(),
+                allSections: sectionsSrvc.returnAllSections(),
                 stillWaits: sectionsSrvc.isItWaiting(),
 
                 stillWaiting: function () {
@@ -42,6 +43,15 @@
                 },
                 hideNoItems: function () {
                     return (vm.stillWaiting() || !vm.noContent());
+                },
+                noContentAll: function () {
+                    return vm.allSections.length === 0;
+                },
+                hideListAll: function () {
+                    return (vm.stillWaiting() || vm.noContentAll());
+                },
+                hideNoItemsAll: function () {
+                    return (vm.stillWaiting() || !vm.noContentAll());
                 },
                 addSection: function addSection() {
                     $state.go('sections_add', {
@@ -69,18 +79,13 @@
                 listQuestions: function (sectionId) {
                     questionsSrvc.isWaiting(true);
 
-                   /* var selectedSection = sectionsSrvc.getSectionAt(index),
-                        sectionQuestions = selectedSection.questionIds;*/
-                    var section = sectionsSrvc.getSectionAt(sectionId), //could be possible deleted
+                    var section = sectionsSrvc.getSectionAt(sectionId),
                         sectionQuestions = section.questionIds;
                     
-
                     $state.go('questions_list', {
                         parentSectionId: section.id,
                         parentSurveyId: vm.parentSurvey.id
                     });
-
-                   // sectionsSrvc.setCurrentSection(index); // needs to be removed with implementation of $stateParams
 
                     questionsSrvc.updateQuestions(sectionQuestions).then(function () {
                         if(sectionQuestions.length > 0){

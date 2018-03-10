@@ -48,6 +48,12 @@
                     },
                     controller: 'sectionsListCtrl as vm'
                 })
+				.state('sections_global', {
+                    cache: false,
+                    url: '/sections_global',
+                    templateUrl: 'js/app_specific/sections/sections.global.html',
+                    controller: 'sectionsListCtrl as vm'
+                })
                 .state('sections_detail', {
                     cache: false,
                     url: '/sections_detail',
@@ -67,15 +73,15 @@
                     },
                     controller: 'sectionsAddCtrl as vm'
                 })
-		.state('sections_addfe', {
-			cache: false,
-			url: '/sections_addfe',
-			templateUrl: 'js/app_specific/sections/sections.addfe.html',
-			params: {
-				'parentSurveyId': 0
-			},
-			controller: 'sectionsAddfeCtrl as vm'
-		})
+                .state('sections_addfe', {
+                    cache: false,
+                    url: '/sections_addfe',
+                    templateUrl: 'js/app_specific/sections/sections.addfe.html',
+                    params: {
+                        'parentSurveyId': 0
+                    },
+                    controller: 'sectionsAddfeCtrl as vm'
+                })
 		
 				// QUESTIONS
 				.state('questions_list', {
@@ -86,6 +92,12 @@
                         'parentSectionId': 0,
                         'parentSurveyId': 0
                     },
+                    controller: 'questionsListCtrl as vm'
+                })
+				.state('questions_global', {
+                    cache: false,
+                    url: '/questions_global',
+                    templateUrl: 'js/app_specific/questions/questions.global.html',
                     controller: 'questionsListCtrl as vm'
                 })
                 .state('questions_detail', {

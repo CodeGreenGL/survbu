@@ -29,8 +29,10 @@
             vm = angular.extend(this, {
             parentSection: sectionsSrvc.getSectionAt(parentSectionId),
             parentSurvey: surveysSrvc.getSurveyAt(parentSurveyId),
-            questions: ($stateParams.parentSectionId) ? questionsSrvc.getQuestions() : questionsSrvc.returnAllQuestions(), //I have changed to parentSectionId , may need to obtain the section and then compare
+            questions: questionsSrvc.getQuestions(),
+            allQuestions: questionsSrvc.returnAllQuestions(), 
             stillWaits: questionsSrvc.isItWaiting(),
+
             stillWaiting: function () {
                 return vm.stillWaits;
             },
@@ -42,6 +44,15 @@
             },
             hideNoItems: function () {
                 return (vm.stillWaiting() || !vm.noContent());
+            },
+            noContentAll: function () {
+                return vm.allQuestions.length === 0;
+            },
+            hideListAll: function () {
+                return (vm.stillWaiting() || vm.noContentAll());
+            },
+            hideNoItemsAll: function () {
+                return (vm.stillWaiting() || !vm.noContentAll());
             },
             selectDetail: function selectDetail(questionId) {
                 $state.go('questions_detail', {

@@ -73,6 +73,12 @@
                     },
                     controller: 'sectionsAddCtrl as vm'
                 })
+                .state('sections_addglobal', {
+                    cache: false,
+                    url: '/sections_addglobal',
+                    templateUrl: 'js/app_specific/sections/sections.addglobal.html',
+                    controller: 'sectionsAddCtrl as vm'
+                })
                 .state('sections_addfe', {
                     cache: false,
                     url: '/sections_addfe',

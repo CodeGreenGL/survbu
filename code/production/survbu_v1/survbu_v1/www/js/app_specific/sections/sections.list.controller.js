@@ -58,6 +58,9 @@
                         parentSurveyId: vm.parentSurvey.id
                     });
                 },
+                addSectionGlobal: function addSection() {
+                    $state.go('sections_addglobal');
+                },
                 selectDetail: function (sectionId) {
                     console.log(vm.parentSurvey);
                     console.log(vm.sections);
@@ -85,6 +88,23 @@
                     $state.go('questions_list', {
                         parentSectionId: section.id,
                         parentSurveyId: vm.parentSurvey.id
+                    });
+
+                    questionsSrvc.updateQuestions(sectionQuestions).then(function () {
+                        if(sectionQuestions.length > 0){
+                            $state.reload();
+                        }     
+                        questionsSrvc.isWaiting(false);
+                    });
+                },
+                listQuestionsGlobal: function (sectionId) {
+                    questionsSrvc.isWaiting(true);
+
+                    var section = sectionsSrvc.getSectionAtGlobal(sectionId),
+                        sectionQuestions = section.questionIds;
+                    
+                    $state.go('questions_list', {
+                        parentSectionId: section.id,
                     });
 
                     questionsSrvc.updateQuestions(sectionQuestions).then(function () {

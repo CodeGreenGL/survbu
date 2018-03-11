@@ -29,33 +29,55 @@
                     introductionMessage: "",
                     referenceCount: 1
                 },
-                createSection: function () {    //If you are coming from the global list of sections parentSurvey does not exist ????
+                createSection: function () {
                     sectionsSrvc.createSection(vm.section).then(function (response) {
                         var newSection = response;
                         vm.parentSurvey.sectionIds.push(newSection.id);
                         surveysSrvc.updateSurvey(vm.parentSurvey).then(function (response) {
                             surveysSrvc.updateAllSurveys().then(function () {
-                                listQuestions(newSection);
+                                vm.listQuestions(newSection);
                             });
                         });
                     });
+                },
+                listQuestions: function (newSection) {
+                    questionsSrvc.isWaiting(true);
+
+                    var sectionQuestions = [];
+                    $state.go('questions_list', {
+                        parentSectionId: newSection.id,
+                        parentSurveyId: vm.parentSurvey.id
+                    });
+
+                    questionsSrvc.updateQuestions(sectionQuestions).then(function () {
+                        if (sectionQuestions.length > 0) {
+                            $state.reload();
+                        }
+                        questionsSrvc.isWaiting(false);
+                    });
+                },
+                createSectionGlobal: function () {
+                    vm.section.referenceCount = 0;
+                    sectionsSrvc.createSection(vm.section).then(function (response) {
+                    var newSection = response;
+                    vm.listQuestionsGlobal(newSection);
+                    });
+                },
+                listQuestionsGlobal: function (newSection) {
+                    questionsSrvc.isWaiting(true);
+
+                    var sectionQuestions = [];
+                    $state.go('questions_list', {
+                        parentSectionId: newSection.id,
+                    });
+
+                    questionsSrvc.updateQuestions(sectionQuestions).then(function () {
+                        if (sectionQuestions.length > 0) {
+                            $state.reload();
+                        }
+                        questionsSrvc.isWaiting(false);
+                    });
                 }
-            }),
-            listQuestions = function (newSection) {
-                questionsSrvc.isWaiting(true);
-
-                var sectionQuestions = [];
-                $state.go('questions_list', {
-                    parentSectionId: newSection.id,
-                    parentSurveyId: vm.parentSurvey.id
-                });
-
-                questionsSrvc.updateQuestions(sectionQuestions).then(function () {
-                    if (sectionQuestions.length > 0) {
-                        $state.reload();
-                    }
-                    questionsSrvc.isWaiting(false);
-                });
-            };
+            });
     }
 }());

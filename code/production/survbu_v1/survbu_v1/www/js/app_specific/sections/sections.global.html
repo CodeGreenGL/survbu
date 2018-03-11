@@ -23,7 +23,7 @@
 
         <div ng-hide="vm.hideListAll()">
             <ion-list>
-                <ion-item ng-click="vm.listQuestions(section.id)" ng-repeat="section in vm.allSections" class="item-button-right">
+                <ion-item ng-click="vm.listQuestionsGlobal(section.id)" ng-repeat="section in vm.allSections" class="item-button-right">
                     <span class="refCountLabel">{{section.referenceCount}}</span>
                     {{section.heading}}
                     <button ng-click="vm.showActionMenu($event, section.id)" class="button button-icon icon ion-navicon actionMenuButton"></button>

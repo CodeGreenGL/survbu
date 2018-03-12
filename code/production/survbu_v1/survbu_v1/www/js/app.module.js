@@ -119,7 +119,7 @@
                 })
                 .state('questions_detailglobal', {
                     cache: false,
-                    url: '/questions_detail',
+                    url: '/questions_detailglobal',
                     templateUrl: 'js/app_specific/questions/questions.detail.html',
                     params: {
                         'questionId': 0

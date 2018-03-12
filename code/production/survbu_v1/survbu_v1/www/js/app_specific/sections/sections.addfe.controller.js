@@ -55,7 +55,7 @@
                             questionsSrvc.updateQuestions(vm.sections[i].questionIds).then(function (questions) {
                                 for (var j = 0; j < questions.length; j++) {
                                     questions[j].referenceCount = questions[j].referenceCount + 1;
-                                    promisesQ.push(questionsSrvc.updateQuestion(questions[j]));
+                                    promisesQ.push(questionsSrvc.updateQuestion(questions[j])); //THIS HAS TO BE SYNCHRONOUS; AT THE MOMENT RACE CONDITION IS POSSIBLE
                                 };
                             });
                         }

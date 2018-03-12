@@ -44,7 +44,10 @@
                     return (vm.stillWaiting() || !vm.noContent());
                 },
                 addSections: function () {
-                    
+                                                //THIS SHOULD WORK, BUT RESTLET DOESN'T REFRESH THE UPDATED QUESTIONS IN TIME FOR THEM TO BE RETRIEVED FOR FURTHER REFERENCE COUNT INCREMENT,
+                                                //WHICH RESULTS IN RACE CONDITION.
+                                                //THE ONLY SOLUTION SEEMS TO BE TO PUT ALL QUESTIONS FOR UPDATING INTO ONE ARRAY AND, WHEN ONE QUESTION IS IN MORE THAN ONE ADDED SECTION, INCREMENT
+                                                //THE REF_COUNT VALUE ONE MORE TIME BEFORE FINALLY UPDATING TO THE BACKEND
                     var promisesS = [];
                     var promisesQ = [];
                     for (var i = 0; i < vm.sections.length; i++) {
@@ -55,17 +58,19 @@
                             questionsSrvc.updateQuestions(vm.sections[i].questionIds).then(function (questions) {
                                 for (var j = 0; j < questions.length; j++) {
                                     questions[j].referenceCount = questions[j].referenceCount + 1;
-                                    promisesQ.push(questionsSrvc.updateQuestion(questions[j])); //THIS HAS TO BE SYNCHRONOUS; AT THE MOMENT RACE CONDITION IS POSSIBLE
+                                    promisesQ.push(questionsSrvc.updateQuestion(questions[j]));
+                                    if ( j+1 === questions.length) {
+                                        $q.all(promisesQ).then(function () {
+                                            for (var i = 0; i < vm.sections.length; i++) {
+                                                promisesS.push(sectionsSrvc.updateSection(vm.sections[i]));
+                                            }
+                                        });
+                                        promisesQ = [];
+                                    }
                                 };
                             });
                         }
                     };
-
-                    $q.all(promisesQ).then(function () {
-                        for (var i = 0; i < vm.sections.length; i++) {
-                            promisesS.push(sectionsSrvc.updateSection(vm.sections[i]));
-                        }
-                    });
 
                     $q.all(promisesS).then(function () {
                         sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {

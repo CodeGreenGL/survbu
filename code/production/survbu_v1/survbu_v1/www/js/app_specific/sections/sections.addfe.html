@@ -10,12 +10,12 @@
     <ion-content class="has-header">
         
         <div class="searchBar">
-            <input class="col" placeholder="Search" ng-model="vm.searchInput.introductionMessage" ng-show="vm.searchInputEnabled"/>
+            <input class="col" placeholder="Search" ng-model="vm.searchInput.heading" ng-show="vm.searchInputEnabled"/>
         </div>
         
         <div ng-hide="vm.hideList()">
             <md-list>
-                <md-list-item  ng-repeat="section in vm.sections | orderBy: 'introductionMessage' | filter: vm.searchInput">
+                <md-list-item  ng-repeat="section in vm.sections | orderBy: 'heading' | filter: vm.searchInput">
                     {{section.heading}}
                     <md-checkbox class="md-secondary" ng-model="section.adding" aria-label="Saddfe"></md-checkbox>
                 </md-list-item>

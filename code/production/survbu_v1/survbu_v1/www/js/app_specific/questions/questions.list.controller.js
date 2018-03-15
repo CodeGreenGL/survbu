@@ -24,16 +24,21 @@
         surveysSrvc
 
     ) {
-        var isGlobal = $state.params.sectionId === 0;
-
+        var isGlobal = $state.params.sectionId === 0,
+            isSectionsGlobal = $state.params.surveyId === 0;
+        
+        questionsSrvc.isWaiting(true);
         if (isGlobal) { // Update questions if global list, i.e no parent section id
-            questionsSrvc.isWaiting(true);
             questionsSrvc.getAllQuestions().then(function (responseQuestions) {
                 vm.questions = responseQuestions;
                 questionsSrvc.isWaiting(false);
             });
-        } else {
-            questionsSrvc.isWaiting(true);
+        } else if (isSectionsGlobal) { // Update if user came from global sections list then clicked a question
+            questionsSrvc.updateQuestions(sectionsSrvc.getSectionAtGlobal($state.params.sectionId).questionIds).then(function () {
+                vm.questions = questionsSrvc.getQuestions();
+                questionsSrvc.isWaiting(false);
+            });
+        } else { // Update through normal navigation of app
             questionsSrvc.updateQuestions(sectionsSrvc.getSectionAt($state.params.sectionId).questionIds).then(function () {
                 vm.questions = questionsSrvc.getQuestions();
                 questionsSrvc.isWaiting(false);

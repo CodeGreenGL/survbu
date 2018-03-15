@@ -92,10 +92,12 @@ ion-content[class*="homeContent"].scroll-content {
     
 }
 
-#searchButton{
+#SearchIcon{
     background: none;
     border: 0;
     -webkit-appearance: none;
+    position: relative;
+    right: -98%;
 }
 .SearchBar input {
      height: 30px;

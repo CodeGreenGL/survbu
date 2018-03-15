@@ -264,6 +264,8 @@ ion-content[class*="homeContent"].scroll-content {
     animation-delay: 0.08s;
 }
 
+/* Fancy Button Menu END */
+
 .noborder {
     outline: none !important;
     border: 0 !important;
@@ -276,9 +278,10 @@ ion-content[class*="homeContent"].scroll-content {
     border-radius: 5px;
 }
 
-.listItem {
-    border-bottom: 2px solid md-list{
-padding-top: 10px;
+md-list-item {
+    border-bottom: 1px solid #263238;
 }
 
-/* Fancy Button Menu END */
+md-list {
+    padding: 0px;
+}

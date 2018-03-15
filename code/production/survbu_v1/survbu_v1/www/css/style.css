@@ -1,5 +1,5 @@
 .pane {
-    background-color: #272733;
+    background-color: #eceff1;
 }
 
 .bar {
@@ -274,6 +274,11 @@ ion-content[class*="homeContent"].scroll-content {
     padding: 10px 12px;
     color: white;
     border-radius: 5px;
+}
+
+.listItem {
+    border-bottom: 2px solid md-list{
+padding-top: 10px;
 }
 
 /* Fancy Button Menu END */

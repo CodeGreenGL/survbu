@@ -8,7 +8,7 @@
     </ion-nav-bar>
 
     <div id="container-floating">
-        <button class="nd2 nds noborder" ng-hide="vm.isGlobal" ui-sref="sections_addfe">
+        <button class="nd2 nds noborder" ng-hide="vm.isGlobal" ui-sref="sections_addfe({surveyId: vm.parentSurvey.id})">
             <i class="icon ion-plus-round"></i>
         </button>
 

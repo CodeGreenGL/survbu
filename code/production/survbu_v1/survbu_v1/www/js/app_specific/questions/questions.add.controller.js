@@ -46,8 +46,8 @@
                     questionsSrvc.postQuestion(vm.question).then(function (response) {
                         var newQuestionID = response.id;
 
-                        questionsSrvc.getAllQuestions().then(function () {
-                            questionsSrvc.getAllQuestions().then(function () {
+                        surveysSrvc.updateAllSurveys().then(function () {
+                            surveysSrvc.updateAllSurveys().then(function () {
                                 $ionicHistory.goBack();
                             });
                         });

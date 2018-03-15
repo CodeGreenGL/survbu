@@ -23,7 +23,11 @@
         sectionsSrvc,
         questionsSrvc
     ) {
-        questionsSrvc.updateRemainingQuestions();
+        questionsSrvc.isWaiting(true);
+        questionsSrvc.updateRemainingQuestions().then(function (response) {
+            vm.questions = response;
+            questionsSrvc.isWaiting(false);
+        });
         var vm = angular.extend(this, {
             parentSection: sectionsSrvc.getSectionAt($stateParams.sectionId),
             parentSurvey: surveysSrvc.getSurveyAt($stateParams.surveyId),

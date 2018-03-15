@@ -277,8 +277,6 @@ ion-content[class*="homeContent"].scroll-content {
 }
 
 .listItem {
-    border-bottom: 2px solid md-list{
-padding-top: 10px;
 }
 
 /* Fancy Button Menu END */

@@ -36,6 +36,7 @@
         } else if (isSectionsGlobal) { // Update if user came from global sections list then clicked a question
             questionsSrvc.updateQuestions(sectionsSrvc.getSectionAtGlobal($state.params.sectionId).questionIds).then(function () {
                 vm.questions = questionsSrvc.getQuestions();
+                vm.parentSection = sectionsSrvc.getSectionAtGlobal($state.params.sectionId);
                 questionsSrvc.isWaiting(false);
             });
         } else { // Update through normal navigation of app

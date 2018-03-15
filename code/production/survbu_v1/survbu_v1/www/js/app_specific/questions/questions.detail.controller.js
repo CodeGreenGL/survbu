@@ -23,7 +23,7 @@
         sectionsSrvc,
         surveysSrvc
     ) {
-        var isGlobal = $stateParams.surveyId === 0,
+        var isGlobal = $stateParams.sectionId === 0,
             vm = angular.extend(this, {
                 parentSection: (isGlobal) ? sectionsSrvc.getSectionAtGlobal($stateParams.sectionId) : sectionsSrvc.getSectionAt($stateParams.sectionId),
                 parentSurvey: (isGlobal) ? undefined : surveysSrvc.getSurveyAt($stateParams.surveyId),

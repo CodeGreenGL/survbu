@@ -7,9 +7,20 @@
         <ion-nav-back-button/>
     </ion-nav-bar>
     
-    <button class="button button-float button-positive" ui-sref="questions_add({sectionId: vm.parentSection.id, surveyId: vm.parentSurvey.id})">
-        <i class="icon ion-plus-round"></i>
-    </button>
+    <div id="container-floating">
+        <button class="nd2 nds noborder" ng-hide="!isGlobal" ui-sref="questions_addfe">
+            <i class="icon ion-plus-round"></i>
+        </button>
+
+        <button class="nd1 nds noborder" ui-sref="questions_add({sectionId: vm.parentSection.id, surveyId: vm.parentSurvey.id})">
+            <i class="icon ion-plus-round"></i>
+        </button>
+
+        <button id="floating-button" class="button button-positive">
+            <i class="plus icon ion-plus-round"></i>
+            <i class="edit icon ion-android-arrow-dropup-circle"></i>
+        </button>
+    </div>
     
     <ion-content class="has-header">
         

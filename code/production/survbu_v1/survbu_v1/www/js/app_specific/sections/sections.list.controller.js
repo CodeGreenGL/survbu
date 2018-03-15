@@ -72,16 +72,6 @@
                     sectionId: sectionId
                 });
             },
-            addFromExisting: function () {
-                sectionsSrvc.isWaiting(true);
-                $state.go('sections_addfe', {
-                    surveyId: vm.parentSurvey.id
-                });
-                sectionsSrvc.updateRemainingSections().then(function () {
-                    $state.reload();
-                    sectionsSrvc.isWaiting(false);
-                });
-            },
             showActionMenu: function ($event, sectionId) {
                 $event.stopPropagation();
 

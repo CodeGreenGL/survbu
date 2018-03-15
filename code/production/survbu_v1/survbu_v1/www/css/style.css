@@ -132,8 +132,6 @@ ion-content[class*="homeContent"].scroll-content {
 
 #container-floating:hover {
     height: 400px;
-    width: 122px;
-    padding: 30px;
 }
 
 #container-floating:hover .plus {

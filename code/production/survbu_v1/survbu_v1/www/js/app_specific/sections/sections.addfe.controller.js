@@ -21,6 +21,7 @@
         surveysSrvc,
         sectionsSrvc
     ) {
+        sectionsSrvc.updateRemainingSections();
         var vm = angular.extend(this, {
             parentSurvey: surveysSrvc.getSurveyAt($stateParams.surveyId),
             sections: sectionsSrvc.getRemainingSections(),

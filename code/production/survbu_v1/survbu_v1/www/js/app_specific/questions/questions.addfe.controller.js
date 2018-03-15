@@ -23,13 +23,24 @@
         sectionsSrvc,
         questionsSrvc
     ) {
+        var isGlobal = $stateParams.surveyId === 0;
+
+        if ($stateParams.sectionId !== 0) {
+            sectionsSrvc.isWaiting(true);
+            sectionsSrvc.getAllSections().then(function () {
+                vm.parentSection = sectionsSrvc.getSectionAtGlobal($stateParams.sectionId);
+                sectionsSrvc.isWaiting(false);
+            });
+        }
+
         questionsSrvc.isWaiting(true);
         questionsSrvc.updateRemainingQuestions().then(function (response) {
             vm.questions = response;
             questionsSrvc.isWaiting(false);
         });
+
         var vm = angular.extend(this, {
-            parentSection: sectionsSrvc.getSectionAt($stateParams.sectionId),
+            parentSection: (isGlobal) ? sectionsSrvc.getSectionAtGlobal($stateParams.sectionId) : sectionsSrvc.getSectionAt($stateParams.sectionId),
             parentSurvey: surveysSrvc.getSurveyAt($stateParams.surveyId),
             questions: questionsSrvc.getRemainingQuestions(),
             stillWaiting: function () {
@@ -56,11 +67,15 @@
                 }
                 $q.all(promisesQ).then(function () {
                     sectionsSrvc.updateSection(vm.parentSection).then(function () {
-                        sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
-                            questionsSrvc.updateQuestions(vm.parentSection.questionIds).then(function () {
-                                $ionicHistory.goBack();
+                        if (!isGlobal) {
+                            sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
+                                questionsSrvc.updateQuestions(vm.parentSection.questionIds).then(function () {
+                                    $ionicHistory.goBack();
+                                });
                             });
-                        });
+                        } else {
+                            $ionicHistory.goBack();
+                        }
                     });
                 });
             }

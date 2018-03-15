@@ -7,6 +7,7 @@
 angular.module('starter', [
     'ionic',
     'ui.router',
+    'ngMaterial',
     'surveyModule'
 ])
     .run(function ($ionicPlatform, $state, $rootScope) {

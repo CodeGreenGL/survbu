@@ -8,74 +8,49 @@
 
     control.$inject = [
         '$state',
-        '$stateParams',
+        '$ionicHistory',
         'surveysSrvc',
-        'sectionsSrvc',
-        'questionsSrvc'
+        'sectionsSrvc'
     ];
 
     function control(
         $state,
-        $stateParams,
+        $ionicHistory,
         surveysSrvc,
-        sectionsSrvc,
-        questionsSrvc
+        sectionsSrvc
     ) {
-        var parentSurveyId = $stateParams.parentSurveyId,
+        var isGlobal = $state.params.surveyId === 0,
             vm = angular.extend(this, {
-                parentSurvey: surveysSrvc.getSurveyAt(parentSurveyId),
+                parentSurvey: surveysSrvc.getSurveyAt($state.params.surveyId),
                 section: {
                     heading: "",
-                    introductionMessage: "",
-                    referenceCount: 1
+                    introductionMessage: ""
                 },
                 createSection: function () {
-                    sectionsSrvc.createSection(vm.section).then(function (response) {
+                    var sectionObject = {
+                        heading: vm.section.heading,
+                        introductionMessage: vm.section.introductionMessage,
+                        referenceCount: ((isGlobal) ? 0 : 1) // Set referenceCount to 0 if there is no parentSection, i.e from global list
+                    };
+
+                    sectionsSrvc.createSection(sectionObject).then(function (response) {
                         var newSection = response;
-                        vm.parentSurvey.sectionIds.push(newSection.id);
-                        surveysSrvc.updateSurvey(vm.parentSurvey).then(function (response) {
+
+                        surveysSrvc.updateAllSurveys().then(function () {
                             surveysSrvc.updateAllSurveys().then(function () {
-                                vm.listQuestions(newSection);
+                                $ionicHistory.goBack();
                             });
                         });
-                    });
-                },
-                listQuestions: function (newSection) {
-                    questionsSrvc.isWaiting(true);
 
-                    var sectionQuestions = [];
-                    $state.go('questions_list', {
-                        parentSectionId: newSection.id,
-                        parentSurveyId: vm.parentSurvey.id
-                    });
+                        if (!isGlobal) {
+                            vm.parentSurvey.sectionIds.push(newSection.id);
 
-                    questionsSrvc.updateQuestions(sectionQuestions).then(function () {
-                        if (sectionQuestions.length > 0) {
-                            $state.reload();
+                            surveysSrvc.updateSurvey(vm.parentSurvey).then(function () { // PUTs the new parentSection to API
+                                surveysSrvc.updateAllSurveys().then(function () { // Updates the entire surveys list with a fresh GET
+                                    surveysSrvc.isWaiting(false);
+                                });
+                            });
                         }
-                        questionsSrvc.isWaiting(false);
-                    });
-                },
-                createSectionGlobal: function () {
-                    vm.section.referenceCount = 0;
-                    sectionsSrvc.createSection(vm.section).then(function (response) {
-                    var newSection = response;
-                    vm.listQuestionsGlobal(newSection);
-                    });
-                },
-                listQuestionsGlobal: function (newSection) {
-                    questionsSrvc.isWaiting(true);
-
-                    var sectionQuestions = [];
-                    $state.go('questions_list', {
-                        parentSectionId: newSection.id,
-                    });
-
-                    questionsSrvc.updateQuestions(sectionQuestions).then(function () {
-                        if (sectionQuestions.length > 0) {
-                            $state.reload();
-                        }
-                        questionsSrvc.isWaiting(false);
                     });
                 }
             });

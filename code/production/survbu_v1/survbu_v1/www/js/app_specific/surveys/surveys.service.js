@@ -1,4 +1,5 @@
-/*global angular */
+/*global angular, console */
+/* eslint no-console: 0*/
 (function () {
     'use strict';
 
@@ -8,28 +9,20 @@
 
     surveysSrvc.$inject = [
         '$q', // promises service
-        '$http', // HTTP service
-        '$filter'
+        '$http' // HTTP service
     ];
 
     function surveysSrvc(
         $q,
-        $http,
-        $filter
+        $http
     ) {
         //get all surveys from codegreen restlet; returns deferred promise
-        var surveysArray = [],
+        var surveysUrl = "https://codegreen.restlet.net/v2/surveys/",
+            surveysArray = [],
             waitingState = false,
             getAllSurveys = function () {
                 var deferred = $q.defer();
-                $http({
-                    url: 'https://codegreen.restlet.net/v2/surveys/', //'https://codegreen.restlet.net/v2/surveys/',
-                    headers: {
-                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOjBmYTIwMjYzLTVmOTYtNDZiMi05YjUxLWVlOTZkMzczYTVmZQ==", // SHOULD BE THE version 2 token => OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmExYmZjYTExLWI0ZDEtNGEzZS05YmMxLTk5YzI5ZDFmZTEzMw==",
-                        "content-type": "application/json",
-                        "accept": "application/json"
-                    }
-                }).then(function successCallback(response) {
+                $http.get(surveysUrl).then(function successCallback(response) {
                     surveysArray = response.data;
                     deferred.resolve(surveysArray);
                 }, function errorCallback(response) {
@@ -38,17 +31,9 @@
                 });
                 return deferred.promise;
             },
-            deleteSurveyID = function (surveyID) { //pass an object ??
+            deleteSurveyID = function (surveyID) {
                 var deferred = $q.defer();
-                $http({
-                    method: 'DELETE',
-                    url: 'https://codegreen.restlet.net/v1/surveys/' + surveyID, //change to survey.id??
-                    headers: {
-                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
-                        "content-type": "application/json",
-                        "accept": "application/json"
-                    }
-                }).then(function successCallback(response) {
+                $http.delete(surveysUrl + surveyID).then(function successCallback() {
                     deferred.resolve();
                 }, function errorCallback(response) {
                     console.error('Error while deleting surveyID');
@@ -56,19 +41,10 @@
                 });
                 return deferred.promise;
             },
-            updateSurvey = function (survey) {
+            updateSurvey = function (localSurvey) {
                 var updatedSurvey,
                     deferred = $q.defer();
-                $http({
-                    method: 'PUT',
-                    url: 'https://codegreen.restlet.net/v1/surveys/' + survey.id,
-                    headers: {
-                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
-                        "content-type": "application/json",
-                        "accept": "application/json"
-                    },
-                    data: survey
-                }).then(function successCallback(response) {
+                $http.put(surveysUrl + localSurvey.id, localSurvey).then(function successCallback(response) {
                     updatedSurvey = response.data;
                     deferred.resolve(updatedSurvey);
                 }, function errorCallback(response) {
@@ -77,20 +53,10 @@
                 });
                 return deferred.promise;
             },
-            createSurvey = function (survey) {
+            createSurvey = function (surveyObject) {
                 var addedSurvey,
                     deferred = $q.defer();
-
-                $http({
-                    method: "POST",
-                    url: 'https://codegreen.restlet.net/v1/surveys/',
-                    data: survey,
-                    headers: {
-                        "authorization": "Basic OTQwZjRjNDctOWJjMS00N2E5LTgxZWQtMWNmMmViNDljOGRlOmIzYWU4MTZiLTk1ZTUtNGMyNy1iM2ZjLWRkY2ZmNjZhYjI2Nw==",
-                        "content-type": "application/json",
-                        "accept": "application/json"
-                    }
-                }).then(function successCallback(response) {
+                $http.post(surveysUrl, surveyObject).then(function successCallback(response) {
                     addedSurvey = response.data;
                     //Add the survey to our surveyArray               
                     surveysArray.push(addedSurvey);
@@ -101,37 +67,22 @@
                 });
                 return deferred.promise;
             },
-            promiseToUpdateAllSurveys = function () {
-                // returns a promise
-                return getAllSurveys();
-            },
-            promiseToDeleteSurveyID = function (surveyID) {
-                // returns a promise
-                return deleteSurveyID(surveyID);
-            },
-            promiseToUpdateSurvey = function (survey) {
-                // returns a promise
-                return updateSurvey(survey);
-            },
-            promiseToCreateSurvey = function (survey) {
-                return createSurvey(survey);
-            },
             service = {
                 updateAllSurveys: function () {
                     surveysArray = [];
-                    return promiseToUpdateAllSurveys();
+                    return getAllSurveys();
                 },
                 deleteSurvey: function (surveyID) {
-                    return promiseToDeleteSurveyID(surveyID);
+                    return deleteSurveyID(surveyID);
                 },
                 updateSurvey: function (survey) {
-                    var survey = {
+                    var surveyObject = {
                         id: survey.id,
                         introductionMessage: survey.introductionMessage,
                         completionMessage: survey.completionMessage,
                         sectionIds: survey.sectionIds
                     };
-                    return promiseToUpdateSurvey(survey);
+                    return updateSurvey(surveyObject);
                 },
                 getSurveys: function () {
                     return angular.copy(surveysArray);
@@ -139,17 +90,13 @@
                 getNumSurveys: function () {
                     return surveysArray.length;
                 },
-                getSurveyAt: function (id) {
-                    return angular.copy($filter('filter')(surveysArray, {id: id}, true)[0]);
+                getSurveyAt: function (surveyID) {
+                    return surveysArray.find(function (survey) {
+                        return survey.id === surveyID;
+                    });
                 },
-                createSurvey: function (introMessage, completionMessage) {
-                    var survey = {
-                        id: "",
-                        introductionMessage: introMessage,
-                        completionMessage: completionMessage,
-                        sectionIds: []
-                    };
-                    return promiseToCreateSurvey(survey);
+                createSurvey: function (surveyObject) {
+                    return createSurvey(surveyObject);
                 },
                 isWaiting: function (iWait) {
                     waitingState = iWait;

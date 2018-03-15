@@ -1,5 +1,5 @@
 .pane {
-    background-color: #272733;
+    background-color: #eceff1;
 }
 
 .bar {
@@ -132,8 +132,6 @@ ion-content[class*="homeContent"].scroll-content {
 
 #container-floating:hover {
     height: 400px;
-    width: 122px;
-    padding: 30px;
 }
 
 #container-floating:hover .plus {
@@ -266,6 +264,8 @@ ion-content[class*="homeContent"].scroll-content {
     animation-delay: 0.08s;
 }
 
+/* Fancy Button Menu END */
+
 .noborder {
     outline: none !important;
     border: 0 !important;
@@ -278,4 +278,10 @@ ion-content[class*="homeContent"].scroll-content {
     border-radius: 5px;
 }
 
-/* Fancy Button Menu END */
+md-list-item {
+    border-bottom: 1px solid #263238;
+}
+
+md-list {
+    padding: 0px;
+}

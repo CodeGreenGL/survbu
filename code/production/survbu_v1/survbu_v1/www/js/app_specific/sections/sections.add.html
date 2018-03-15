@@ -5,11 +5,21 @@
     </ion-nav-bar>
     
     <ion-content class="has-header">
-          <form ng-submit="vm.createSection()">
-              <input type="text" placeholder="Section heading" ng-model="vm.section.heading"/>
-              <input type="text" placeholder="Introduction message" ng-model="vm.section.introductionMessage"/>
-              <input value="CREATE SECTION" type="submit"/>
-          </form>
+        <form name="addSection" ng-submit="vm.createSection()" class="list list-inset">
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Section Heading</span>
+                <input type="text" placeholder="Section: Extracurricular activities" ng-model="vm.section.heading" ng-required="true"/>
+            </label>
+
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Introduction Message</span>
+                <input type="text" placeholder="Extracurricular section introduction" ng-model="vm.section.introductionMessage" ng-required="true"/>
+            </label>
+
+            <label class="row">
+                <button class="button button-positive col-50 col-offset-25" type="submit" ng-disabled="addSection.$invalid">Create Section</button>
+            </label>
+        </form>
     </ion-content>
 
     <ion-footer-bar class="bar bar-dark bar-footer row">

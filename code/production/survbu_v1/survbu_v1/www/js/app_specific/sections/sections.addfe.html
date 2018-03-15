@@ -1,14 +1,21 @@
 <ion-view view-title="Sections" can-swipe-back="false">
     
     <ion-nav-bar class="bar-dark" align-title="center">
+        <ion-nav-buttons side="right">
+            <button class="button button-outline button-light icon ion-ios-search-strong" ng-click="vm.searchInputEnabled = !vm.searchInputEnabled"></button>
+        </ion-nav-buttons>
         <ion-nav-back-button/>
     </ion-nav-bar>
     
     <ion-content class="has-header">
         
+        <div class="searchBar">
+            <input class="col" placeholder="Search" ng-model="vm.searchInput.introductionMessage" ng-show="vm.searchInputEnabled"/>
+        </div>
+        
         <div ng-hide="vm.hideList()">
             <ion-list>
-                <ion-item  ng-repeat="section in vm.sections track by section.id" class="item-button-right">
+                <ion-item  ng-repeat="section in vm.sections track by section.id  | orderBy: 'introductionMessage' | filter: vm.searchInput" class="item-button-right">
                     {{section.heading}}
                     <span style="float: right;"><input type="checkbox" style="height: 20px; width: 20px;" ng-model="section.adding"/></span>
                 </ion-item>

@@ -1,20 +1,37 @@
 <ion-view view-title="Questions" can-swipe-back="false">
     
     <ion-nav-bar class="bar-dark" align-title="center">
+        <ion-nav-buttons side="right">
+            <button class="button button-outline button-light icon ion-ios-search-strong" ng-click="vm.searchInputEnabled = !vm.searchInputEnabled"></button>
+        </ion-nav-buttons>
         <ion-nav-back-button/>
     </ion-nav-bar>
     
-    <button class="button button-float button-positive" ng-click="vm.addQuestion()">
-        <i class="icon ion-plus-round"></i>
-    </button>
+    <div id="container-floating">
+        <button class="nd2 nds noborder" ng-hide="vm.isGlobal" ui-sref="questions_addfe({sectionId: vm.parentSection.id, surveyId: vm.parentSurvey.id})">
+            <i class="icon ion-plus-round"></i>
+        </button>
+
+        <button class="nd1 nds noborder" ui-sref="questions_add({sectionId: vm.parentSection.id, surveyId: vm.parentSurvey.id})">
+            <i class="icon ion-plus-round"></i>
+        </button>
+
+        <button id="floating-button" class="button button-positive">
+            <i class="plus icon ion-plus-round"></i>
+            <i class="edit icon ion-android-arrow-dropup-circle"></i>
+        </button>
+    </div>
     
     <ion-content class="has-header">
-       
-        <button ng-click="vm.addFromExisting()"  style="color: #ff3344f;">Add from existing</button>
+        
+        <div class="searchBar">
+            <input class="col" placeholder="Search" ng-model="vm.searchInput.questionText" ng-show="vm.searchInputEnabled"/>
+        </div>
+        
         <div ng-hide="vm.hideList()">
             <ion-list>
-                <ion-item ng-click="vm.selectDetail(question.id)" ng-repeat="question in vm.questions" class="item-button-right">
-                    {{question.questionText}} - {{question.id}}
+                <ion-item ui-sref="questions_detail({questionId: question.id, sectionId: vm.parentSection.id, surveyId: vm.parentSurvey.id})" ng-repeat="question in vm.questions | orderBy: 'questionText' | filter: vm.searchInput" class="item-button-right">
+                    <span class="refCountLabel" ng-show="!vm.parentSection">{{question.referenceCount}}</span> {{question.questionText}} - {{question.id}}
                     <button ng-click="vm.showDeleteAlert($event, question.id)" class="button button-icon icon ion-ios-close actionMenuButton" style="color:#ff3344f;"></button>
                 </ion-item>
             </ion-list>

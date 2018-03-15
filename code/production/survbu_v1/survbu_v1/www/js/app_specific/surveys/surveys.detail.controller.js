@@ -7,34 +7,22 @@
         .controller('surveysDetailCtrl', control);
 
     control.$inject = [
-        '$state',
+        '$ionicHistory',
         '$stateParams',
         'surveysSrvc'
     ];
 
     function control(
-        $state,
+        $ionicHistory,
         $stateParams,
         surveysSrvc
     ) {
-        var surveyId = $stateParams.surveyId,
-            vm = angular.extend(this, {
-            survey: surveysSrvc.getSurveyAt(surveyId),
-            cancelEditing: function () {
-                $state.go('surveys_list');
-            },
+        var vm = angular.extend(this, {
+            survey: surveysSrvc.getSurveyAt($stateParams.surveyId),
             updateSurvey: function () {
-                surveysSrvc.updateSurvey(vm.survey).then(function (response) {
-
-                    return vm.listSurveys(response);
-                });   
-            },
-            listSurveys: function(survey){
-                surveysSrvc.updateAllSurveys().then(function(){
-                    $state.go('surveys_list', {
-                        parentSurveyId: survey.id  //response may be renamed to survey and response.id => survey.id
-                    });
-                })
+                surveysSrvc.updateSurvey(vm.survey).then(function () {
+                    $ionicHistory.goBack();
+                });
             }
         });
     }

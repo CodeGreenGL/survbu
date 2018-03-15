@@ -22,14 +22,14 @@
                 <div ng-show="vm.containsChoices() && !vm.referenceCount()">
                     <h3 class="light">Choices:</h3>
                     <div ng-repeat="choice in vm.question.questionChoices">
-                        <input ng-model="choice">
+                        <input ng-model="choice"/>
                     </div>
                     <input ng-model="choice" type="text" placeholder="Add Choice"/>
                     <button ng-click="vm.addChoice(choice)">ADD</button>
                 </div>
                 <div ng-show="!vm.referenceCount()">
-                     <input type="submit" value="Confirm">
-                     <input type="button" value="Cancel" ng-click="vm.cancelEditing()">
+                     <input type="submit" value="Confirm"/>
+                     <input type="button" value="Cancel" ui-sref="questions_list"/>
                 </div>
                 <div ng-show="vm.referenceCount()">
                     <h4 class="light">This question belongs to {{vm.question.referenceCount}} sections therefore you cannot edit it.</h4>

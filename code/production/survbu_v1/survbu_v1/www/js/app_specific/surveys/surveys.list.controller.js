@@ -1,4 +1,5 @@
-/*global angular */
+/*global angular, console */
+/* eslint no-console: 0*/
 (function () {
     'use strict';
 
@@ -21,11 +22,15 @@
         surveysSrvc,
         sectionsSrvc
     ) {
+        surveysSrvc.isWaiting(true);
+        surveysSrvc.updateAllSurveys().then(function (responseSurveysArray) {
+            vm.surveys = responseSurveysArray;
+            surveysSrvc.isWaiting(false);
+        });
         var vm = angular.extend(this, {
             surveys: surveysSrvc.getSurveys(),
-            stillWaits: surveysSrvc.isItWaiting(),
             stillWaiting: function () {
-                return vm.stillWaits;
+                return surveysSrvc.isItWaiting();
             },
             noContent: function () {
                 return vm.surveys.length === 0;
@@ -43,24 +48,6 @@
             },
             addSurvey: function () { //no need to pass params since we have the values already avaliable in survey.add.controller
                 $state.go('surveys_add');
-            },
-            listSections: function (surveyId) { //take you to the sections list and updates the list; this was index
-                var survey = surveysSrvc.getSurveyAt(surveyId);
-                sectionsSrvc.isWaiting(true);
-               // var selectedSurvey = surveysSrvc.getSurveyAt(index),
-               // surveySections = index.sectionIds;
-                var surveySections = survey.sectionIds;
-                
-                $state.go('sections_list', {
-                    parentSurveyId: survey.id //selectedSurvey;
-                });
-
-                sectionsSrvc.updateSections(surveySections).then(function () {
-                    if (surveySections.length > 0) {
-                        $state.reload();
-                    }
-                    sectionsSrvc.isWaiting(false);
-                });
             },
             showActionMenu: function ($event, surveyId) { //this was index
                 $event.stopPropagation();
@@ -81,15 +68,13 @@
                                 template: 'Are you sure you want to permanently delete this survey?<br/><br/>This survey has no associated sections.'
                             }).then(function (response) {
                                 if (response) {
-                                    //Alternative Method: var removeIndex = vm.surveys.map(function (survey) { return survey.id; }).indexOf(selectedSurvey.id);
-                                    var removeIndex = vm.surveys.findIndex(survey => survey.id === selectedSurvey.id);
-                                    console.log(removeIndex);
-                                    vm.surveys.splice(removeIndex, 1);
+                                    vm.surveys.splice(vm.surveys.indexOf(selectedSurvey), 1);
                                     surveysSrvc.deleteSurvey(selectedSurvey.id);
                                 } else {
                                     console.log('User pressed cancel');
                                 }
                             });
+                            return true;
                         } else {
                             $ionicPopup.show({
                                 title: 'Delete \'' + selectedSurvey.introductionMessage + '\'',
@@ -115,6 +100,7 @@
                                 if (response === 0) {
                                     vm.surveys.splice(vm.surveys.indexOf(selectedSurvey), 1);
                                     surveysSrvc.deleteSurvey(selectedSurvey.id);
+                                    sectionsSrvc.dereferenceSections(selectedSurvey.sectionIds); // Dereference the sections if they are being kept
                                     console.log('Deleted Survey, KEPT associated sections');
                                 } else if (response === 1) {
                                     for (var i = 0; i < selectedSurvey.sectionIds.length; i++) {
@@ -127,6 +113,7 @@
                                     console.log('User pressed cancel');
                                 }
                             });
+                            return true;
                         }
                     },
                     buttonClicked: function (buttonIndex) {

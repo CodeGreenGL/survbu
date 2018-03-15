@@ -1,18 +1,25 @@
 <ion-view view-title="Surveys" can-swipe-back="false">
 
     <ion-nav-bar class="bar-dark" align-title="center">
+        <ion-nav-buttons side="right">
+            <button class="button button-outline button-light icon ion-ios-search-strong" ng-click="vm.searchInputEnabled = !vm.searchInputEnabled"></button>
+        </ion-nav-buttons>
         <ion-nav-back-button/>
     </ion-nav-bar>
-    
+
     <button class="button button-float button-positive" ng-click="vm.addSurvey()">
         <i class="icon ion-plus-round"></i>
     </button>
 
     <ion-content class="has-header">
         
+        <div class="searchBar">
+            <input class="col" placeholder="Search" ng-model="vm.searchInput.introductionMessage" ng-show="vm.searchInputEnabled"/>
+        </div>
+        
         <div ng-hide="vm.hideList()">
             <ion-list>
-                <ion-item ng-click="vm.listSections(survey.id)" ng-repeat="survey in vm.surveys" class="item-button-right">{{survey.introductionMessage}}
+                <ion-item ui-sref="sections_list({surveyId: survey.id})" ng-repeat="survey in vm.surveys | orderBy: 'introductionMessage' | filter: vm.searchInput" class="item-button-right">{{survey.introductionMessage}}
                     <button ng-click="vm.showActionMenu($event, survey.id)" class="button button-icon icon ion-navicon actionMenuButton"></button>
                 </ion-item>
             </ion-list>

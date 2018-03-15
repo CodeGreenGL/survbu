@@ -18,11 +18,11 @@
         </div>
         
         <div ng-hide="vm.hideList()">
-            <ion-list>
-                <ion-item ui-sref="sections_list({surveyId: survey.id})" ng-repeat="survey in vm.surveys | orderBy: 'introductionMessage' | filter: vm.searchInput" class="item-button-right">{{survey.introductionMessage}}
-                    <button ng-click="vm.showActionMenu($event, survey.id)" class="button button-icon icon ion-navicon actionMenuButton"></button>
-                </ion-item>
-            </ion-list>
+            <md-list>
+                <md-list-item ui-sref="sections_list({surveyId: survey.id})" ng-repeat="survey in vm.surveys | orderBy: 'introductionMessage' | filter: vm.searchInput" class="item-button-right">{{survey.introductionMessage}}
+                    <button ng-click="vm.showActionMenu($event, survey.id)" class="button button-icon icon ion-navicon actionMenuButton md-secondary"></button>
+                </md-list-item>
+            </md-list>
         </div>
 
         <div ng-hide="vm.hideNoItems()" class="backgroundText">

@@ -273,7 +273,8 @@ ion-content[class*="homeContent"].scroll-content {
 
 .refCountLabel {
     background: #1ba32b;
-    padding: 10px 12px;
+    padding: 0px 12px;
+    margin: 5px 5px;
     color: white;
     border-radius: 5px;
 }
@@ -284,4 +285,12 @@ md-list-item {
 
 md-list {
     padding: 0px;
+}
+
+md-list-item {
+    padding-right: 0px;
+}
+
+.item-button-right {
+    padding-right: 0px;
 }

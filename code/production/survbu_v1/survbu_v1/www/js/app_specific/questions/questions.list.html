@@ -29,12 +29,12 @@
         </div>
         
         <div ng-hide="vm.hideList()">
-            <ion-list>
-                <ion-item ui-sref="questions_detail({questionId: question.id, sectionId: vm.parentSection.id, surveyId: vm.parentSurvey.id})" ng-repeat="question in vm.questions | orderBy: 'questionText' | filter: vm.searchInput" class="item-button-right">
-                    <span class="refCountLabel" ng-show="!vm.parentSection">{{question.referenceCount}}</span> {{question.questionText}} - {{question.id}}
-                    <button ng-click="vm.showDeleteAlert($event, question.id)" class="button button-icon icon ion-ios-close actionMenuButton" style="color:#ff3344f;"></button>
-                </ion-item>
-            </ion-list>
+            <md-list>
+                <md-list-item ui-sref="questions_detail({questionId: question.id, sectionId: vm.parentSection.id, surveyId: vm.parentSurvey.id})" ng-repeat="question in vm.questions | orderBy: 'questionText' | filter: vm.searchInput" class="item-button-right">
+                    <span class="refCountLabel" ng-show="!vm.parentSection">{{question.referenceCount}}</span> {{question.questionText}}
+                    <button ng-click="vm.showDeleteAlert($event, question.id)" class="button button-icon icon ion-ios-close actionMenuButton md-secondary" style="color:#ff3344f;"></button>
+                </md-list-item>
+            </md-list>
         </div>
         
         <div ng-hide="vm.hideNoItems()" class="backgroundText">

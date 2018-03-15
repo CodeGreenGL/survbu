@@ -29,12 +29,12 @@
         </div>
 
         <div ng-hide="vm.hideList()">
-            <ion-list>
-                <ion-item ui-sref="questions_list({sectionId: section.id, surveyId: vm.parentSurvey.id})" ng-repeat="section in vm.sections | orderBy: 'heading' | filter: vm.searchInput" class="item-button-right">
+            <md-list>
+                <md-list-item ui-sref="questions_list({sectionId: section.id, surveyId: vm.parentSurvey.id})" ng-repeat="section in vm.sections | orderBy: 'heading' | filter: vm.searchInput" class="item-button-right">
                     <span class="refCountLabel" ng-show="!vm.parentSurvey">{{section.referenceCount}}</span> {{section.heading}}
-                    <button ng-click="vm.showActionMenu($event, section.id)" class="button button-icon icon ion-navicon actionMenuButton"></button>
-                </ion-item>
-            </ion-list>
+                    <button ng-click="vm.showActionMenu($event, section.id)" class="button button-icon icon ion-navicon actionMenuButton md-secondary"></button>
+                </md-list-item>
+            </md-list>
         </div>
 
         <div ng-hide="vm.hideNoItems()" class="backgroundText">

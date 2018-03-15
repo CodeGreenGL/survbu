@@ -14,12 +14,12 @@
         </div>
         
         <div ng-hide="vm.hideList()">
-            <ion-list>
-                <ion-item  ng-repeat="section in vm.sections track by section.id  | orderBy: 'introductionMessage' | filter: vm.searchInput" class="item-button-right">
+            <md-list>
+                <md-list-item  ng-repeat="section in vm.sections | orderBy: 'introductionMessage' | filter: vm.searchInput">
                     {{section.heading}}
-                    <span style="float: right;"><input type="checkbox" style="height: 20px; width: 20px;" ng-model="section.adding"/></span>
-                </ion-item>
-            </ion-list>
+                    <md-checkbox class="md-secondary" ng-model="section.adding" aria-label="Saddfe"></md-checkbox>
+                </md-list-item>
+            </md-list>
         </div>
         
         <div ng-hide="vm.hideNoItems()" class="backgroundText">

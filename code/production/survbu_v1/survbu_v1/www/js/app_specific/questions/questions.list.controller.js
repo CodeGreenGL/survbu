@@ -41,6 +41,7 @@
         }
 
         var vm = angular.extend(this, {
+            isGlobal: isGlobal,
             parentSection: sectionsSrvc.getSectionAt($stateParams.sectionId),
             parentSurvey: surveysSrvc.getSurveyAt($stateParams.surveyId),
             questions: questionsSrvc.getQuestions(),

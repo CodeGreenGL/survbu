@@ -42,6 +42,7 @@
             });
         }
         var vm = angular.extend(this, {
+            isGlobal: isGlobal,
             parentSurvey: surveysSrvc.getSurveyAt($stateParams.surveyId),
             sections: sectionsSrvc.returnSections(),
             allSections: sectionsSrvc.returnAllSections(),

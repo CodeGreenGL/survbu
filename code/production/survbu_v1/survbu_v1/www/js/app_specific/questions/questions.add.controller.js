@@ -45,7 +45,12 @@
                 createQuestion: function () {
                     questionsSrvc.postQuestion(vm.question).then(function (response) {
                         var newQuestionID = response.id;
-                        $ionicHistory.goBack();
+
+                        questionsSrvc.getAllQuestions().then(function () {
+                            questionsSrvc.getAllQuestions().then(function () {
+                                $ionicHistory.goBack();
+                            });
+                        });
 
                         if (!isGlobal) {
                             sectionsSrvc.isWaiting(true);

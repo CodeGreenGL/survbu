@@ -8,76 +8,60 @@
 
     control.$inject = [
         '$state',
-        '$stateParams',
+        '$ionicHistory',
         'surveysSrvc',
-        'sectionsSrvc',
-        'questionsSrvc'
+        'sectionsSrvc'
     ];
 
     function control(
         $state,
-        $stateParams,
+        $ionicHistory,
         surveysSrvc,
-        sectionsSrvc,
-        questionsSrvc
+        sectionsSrvc
     ) {
-        var parentSurveyId = $stateParams.parentSurveyId,
-            vm = angular.extend(this, {
-                parentSurvey: surveysSrvc.getSurveyAt(parentSurveyId),
-                section: {
-                    heading: "",
-                    introductionMessage: "",
-                    referenceCount: 1
-                },
-                createSection: function () {
-                    sectionsSrvc.createSection(vm.section).then(function (response) {
-                        var newSection = response;
-                        vm.parentSurvey.sectionIds.push(newSection.id);
-                        surveysSrvc.updateSurvey(vm.parentSurvey).then(function (response) {
-                            surveysSrvc.updateAllSurveys().then(function () {
-                                vm.listQuestions(newSection);
-                            });
-                        });
-                    });
-                },
-                listQuestions: function (newSection) {
-                    questionsSrvc.isWaiting(true);
+        var vm = angular.extend(this, {
+            parentSurvey: surveysSrvc.getSurveyAt($state.params.surveyId),
+            section: {
+                heading: "",
+                introductionMessage: ""
+            },
+            createSection: function () {
+                var sectionObject = {
+                    heading: vm.section.heading,
+                    introductionMessage: vm.section.introductionMessage,
+                    referenceCount: ((vm.parentSurvey === 0) ? 0 : 1) // Set referenceCount to 0 if there is no parentSection, i.e from global list
+                };
+                surveysSrvc.isWaiting(true);
+                sectionsSrvc.isWaiting(true);
 
-                    var sectionQuestions = [];
-                    $state.go('questions_list', {
-                        parentSectionId: newSection.id,
-                        parentSurveyId: vm.parentSurvey.id
-                    });
-
-                    questionsSrvc.updateQuestions(sectionQuestions).then(function () {
-                        if (sectionQuestions.length > 0) {
-                            $state.reload();
-                        }
-                        questionsSrvc.isWaiting(false);
-                    });
-                },
-                createSectionGlobal: function () {
-                    vm.section.referenceCount = 0;
-                    sectionsSrvc.createSection(vm.section).then(function (response) {
+                sectionsSrvc.createSection(sectionObject).then(function (response) {
+                    sectionsSrvc.isWaiting(false);
+                    
                     var newSection = response;
-                    vm.listQuestionsGlobal(newSection);
-                    });
-                },
-                listQuestionsGlobal: function (newSection) {
-                    questionsSrvc.isWaiting(true);
+                    vm.parentSurvey.sectionIds.push(newSection.id);
 
-                    var sectionQuestions = [];
-                    $state.go('questions_list', {
-                        parentSectionId: newSection.id,
-                    });
+                    $state.go('questions_list', { // Returns user to blank question list before updating questions to improve percieved responsiveness
+                        sectionId: newSection.id,
+                        surveyId: vm.parentSurvey.id
+                    }).then(function () {
+                        $ionicHistory.removeBackView(); // Remove add page (previous page) from ionic history, so user returns to sections list on back
 
-                    questionsSrvc.updateQuestions(sectionQuestions).then(function () {
-                        if (sectionQuestions.length > 0) {
-                            $state.reload();
+                        if (vm.parentSurvey === 0) {
+                            surveysSrvc.isWaiting(false); // If from global list, stop survey service from waiting since nothing needs to be done further
+                        } else if (vm.parentSurvey !== 0) { // --- this section needs to be revised ---
+                            // PUTs the new parentSection to API
+                            surveysSrvc.updateSurvey(vm.parentSurvey).then(function () {
+                                // Updates the entire surveys list with a fresh GET
+                                surveysSrvc.updateAllSurveys().then(function () {
+                                    surveysSrvc.isWaiting(false);
+                                });
+                            });
                         }
-                        questionsSrvc.isWaiting(false);
+
+                        $state.reload(); // Refresh the state so back button doesn't display old data
                     });
-                }
-            });
+                });
+            }
+        });
     }
 }());

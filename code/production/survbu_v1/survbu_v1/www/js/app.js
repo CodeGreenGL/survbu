@@ -6,9 +6,9 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', [
     'ionic',
+    'ui.router',
     'surveyModule'
 ])
-
     .run(function ($ionicPlatform, $state, $rootScope) {
         'use strict';
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
@@ -28,9 +28,5 @@ angular.module('starter', [
             if (window.StatusBar) {
                 StatusBar.styleDefault();
             }
-            // ADDED START
-            $state.go("homepage");
-            // ADDED END
-
         });
     });

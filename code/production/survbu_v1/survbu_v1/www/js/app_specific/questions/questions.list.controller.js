@@ -1,4 +1,4 @@
-/*global angular */
+/*global angular*/
 (function () {
     'use strict';
 
@@ -24,118 +24,99 @@
         surveysSrvc
 
     ) {
-        var parentSectionId = $stateParams.parentSectionId,
-            parentSurveyId = $stateParams.parentSurveyId,
-            vm = angular.extend(this, {
-                parentSection: sectionsSrvc.getSectionAt(parentSectionId),
-                parentSurvey: surveysSrvc.getSurveyAt(parentSurveyId),
-                questions: questionsSrvc.getQuestions(),
-                allQuestions: questionsSrvc.returnAllQuestions(), 
-                stillWaits: questionsSrvc.isItWaiting(),
+        var isGlobal = $state.params.sectionId === 0;
 
-                stillWaiting: function () {
-                    return vm.stillWaits;
-                },
-                noContent: function () {
-                    return vm.questions.length === 0;
-                },
-                hideList: function () {
-                    return (vm.stillWaiting() || vm.noContent());
-                },
-                hideNoItems: function () {
-                    return (vm.stillWaiting() || !vm.noContent());
-                },
-                noContentAll: function () {
-                    return vm.allQuestions.length === 0;
-                },
-                hideListAll: function () {
-                    return (vm.stillWaiting() || vm.noContentAll());
-                },
-                hideNoItemsAll: function () {
-                    return (vm.stillWaiting() || !vm.noContentAll());
-                },
-                selectDetail: function selectDetail(questionId) {
-                    $state.go('questions_detail', {
-                        questionId: questionId,
-                        parentSectionId: vm.parentSection.id,
-                        parentSurveyId: vm.parentSurvey.id
-                    });
-                },
-                selectDetailGlobal: function (questionId) {
-                    $state.go('questions_detailglobal', {
-                        questionId: questionId
-                    });
-                },
-                addQuestion: function () {
-                    $state.go('questions_add', {
-                        parentSectionId: vm.parentSection.id,
-                        parentSurveyId: vm.parentSurvey.id
-                    });
-                },
-                addQuestionGlobal: function () {
-                    $state.go('questions_addglobal');
-                },
-                addFromExisting: function () {
-                    questionsSrvc.isWaiting(true);
-                    $state.go('questions_addfe', {
-                        parentSectionId: vm.parentSection.id,
-                        parentSurveyId: vm.parentSurvey.id
-                    });
-                    questionsSrvc.updateRemainingQuestions().then(function () {
-                        $state.reload();
-                        questionsSrvc.isWaiting(false);
-                    });
-                },
-                showDeleteAlert: function ($event, questionId) {
-                    $event.stopPropagation();
+        if (isGlobal) { // Update questions if global list, i.e no parent section id
+            questionsSrvc.isWaiting(true);
+            questionsSrvc.getAllQuestions().then(function (responseQuestions) {
+                vm.questions = responseQuestions;
+                questionsSrvc.isWaiting(false);
+            });
+        } else {
+            questionsSrvc.isWaiting(true);
+            questionsSrvc.updateQuestions(sectionsSrvc.getSectionAt($state.params.sectionId).questionIds).then(function () {
+                vm.questions = questionsSrvc.getQuestions();
+                questionsSrvc.isWaiting(false);
+            });
+        }
 
-                    var question = questionsSrvc.getQuestionAt(questionId);
+        var vm = angular.extend(this, {
+            parentSection: sectionsSrvc.getSectionAt($stateParams.sectionId),
+            parentSurvey: surveysSrvc.getSurveyAt($stateParams.surveyId),
+            questions: questionsSrvc.getQuestions(),
+            allQuestions: questionsSrvc.returnAllQuestions(),
+            stillWaiting: function () {
+                return questionsSrvc.isItWaiting();
+            },
+            noContent: function () {
+                return vm.questions.length === 0;
+            },
+            hideList: function () {
+                return (vm.stillWaiting() || vm.noContent());
+            },
+            hideNoItems: function () {
+                return (vm.stillWaiting() || !vm.noContent());
+            },
+            noContentAll: function () {
+                return vm.allQuestions.length === 0;
+            },
+            hideListAll: function () {
+                return (vm.stillWaiting() || vm.noContentAll());
+            },
+            hideNoItemsAll: function () {
+                return (vm.stillWaiting() || !vm.noContentAll());
+            },
+            addFromExisting: function () {
+                questionsSrvc.isWaiting(true);
+                $state.go('questions_addfe', {
+                    sectionId: vm.parentSection.id,
+                    surveyId: vm.parentSurvey.id
+                });
+                questionsSrvc.updateRemainingQuestions().then(function () {
+                    $state.reload();
+                    questionsSrvc.isWaiting(false);
+                });
+            },
+            showDeleteAlert: function ($event, questionId) {
+                $event.stopPropagation();
+
+                var selectedQuestion = (isGlobal) ? questionsSrvc.getQuestionAtGlobal(questionId) : questionsSrvc.getQuestionAt(questionId),
+                    referenceCount = selectedQuestion.referenceCount;
+
+                if ((isGlobal) && referenceCount > 0) {
+                    $ionicPopup.alert({
+                        title: 'Can\'t delete question, referenceCount is ' + referenceCount,
+                        template: 'Questions from the global list can only be deleted if referenceCount is 0.'
+                    });
+                } else if (referenceCount > 1) {
+                    $ionicPopup.alert({
+                        title: 'Can\'t delete question, referenceCount is ' + referenceCount,
+                        template: 'This question is used in ' + referenceCount + ' sections, and cannot be deleted.'
+                    });
+                } else if (referenceCount === 0 || referenceCount === 1 || referenceCount === null) {
                     $ionicPopup.confirm({
                         title: 'Delete Question',
-                        template: 'Are you sure you want to delete \'' + question.questionText + '\'?'
+                        template: 'Are you sure you want to delete \'' + selectedQuestion.questionText + '\'?'
                     }).then(function (response) {
                         if (response) {
-                            var removeIndex = vm.questions.findIndex(quest => quest.id === questionId);
+                            var removeIndex = vm.questions.findIndex(function (quest) {
+                                return quest.id === questionId;
+                            });
                             vm.questions.splice(removeIndex, 1);
-                            vm.parentSection.questionIds.splice(removeIndex, 1);
-                            question.referenceCount = question.referenceCount - 1;
-                            questionsSrvc.updateQuestion(question).then(function () {
-                                sectionsSrvc.updateSection(vm.parentSection).then(function () {
+                            questionsSrvc.deleteQuestion(selectedQuestion.id);
+
+                            if (!isGlobal) {
+                                vm.parentSection.questionIds.splice(removeIndex, 1);
+                                sectionsSrvc.updateSectionsFromQuestionID(selectedQuestion.id, vm.parentSection.id).then(function () {
                                     sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
                                         questionsSrvc.updateQuestions(vm.parentSection.questionIds);
                                     });
                                 });
-                            });
-                        } else {
-                            console.log('User pressed cancel');
+                            } // if not in the global list, update the sections list
                         }
                     });
-                },
-                showDeleteAlertGlobal: function ($event, questionId) {
-                    $event.stopPropagation();
-
-                    var question = questionsSrvc.getQuestionAtGlobal(questionId);
-                    if (question.referenceCount > 0) {
-                        $ionicPopup.alert({
-                            title: 'Can\'t delete question from global list!',
-                            template: 'Questions can only be deleted via the relevant section.'
-                        });
-                    } else if (question.referenceCount === 0) {
-                        $ionicPopup.confirm({
-                            title: 'Delete Question',
-                            template: 'Are you sure you want to delete \'' + question.questionText + '\'?'
-                        }).then(function (response) {
-                            if (response) {
-                                var removeIndex = vm.allQuestions.findIndex(quest => quest.id === questionId);
-                                vm.allQuestions.splice(removeIndex, 1);
-                                questionsSrvc.deleteQuestion(question);
-                            } else {
-                                console.log('User pressed cancel');
-                            }
-                        });
-                    }
                 }
-           
+            }
         });
     }
 }());

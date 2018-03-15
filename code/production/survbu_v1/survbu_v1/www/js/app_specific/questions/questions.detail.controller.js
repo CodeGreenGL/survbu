@@ -9,6 +9,7 @@
     control.$inject = [
         '$state',
         '$stateParams',
+        '$ionicHistory',
         'questionsSrvc',
         'sectionsSrvc',
         'surveysSrvc'
@@ -17,46 +18,43 @@
     function control(
         $state,
         $stateParams,
+        $ionicHistory,
         questionsSrvc,
         sectionsSrvc,
         surveysSrvc
     ) {
-        var parentSectionId = $stateParams.parentSectionId,
-            parentSurveyId = $stateParams.parentSurveyId,
+        var isGlobal = $stateParams.surveyId === 0,
             vm = angular.extend(this, {
-                parentSection: sectionsSrvc.getSectionAt(parentSectionId),
-                parentSurvey: surveysSrvc.getSurveyAt(parentSurveyId),
-                question: questionsSrvc.getQuestionAt($stateParams.questionId),
-
+                parentSection: (isGlobal) ? sectionsSrvc.getSectionAtGlobal($stateParams.sectionId) : sectionsSrvc.getSectionAt($stateParams.sectionId),
+                parentSurvey: (isGlobal) ? undefined : surveysSrvc.getSurveyAt($stateParams.surveyId),
+                question: (isGlobal) ? questionsSrvc.getQuestionAtGlobal($stateParams.questionId) : questionsSrvc.getQuestionAt($stateParams.questionId),
                 cancelEditing: function () {
-                    $state.go('questions_list',{
-                        parentSectionId: vm.parentSection.id,
-                        parentSurveyId: vm.parentSurvey.id
+                    $state.go('questions_list', {
+                        sectionId: vm.parentSection.id,
+                        surveyId: vm.parentSurvey.id
                     });
                 },
-                containsChoices: function() {
-                    if(vm.question.questionType === "MULTIPLE_SELECT" || vm.question.questionType === "SINGLE_SELECT"){
-                        return true; 
+                containsChoices: function () {
+                    if (vm.question.questionType === "MULTIPLE_SELECT" || vm.question.questionType === "SINGLE_SELECT") {
+                        return true;
                     }
                     return false;
                 },
                 addChoice: function (addChoice) {
                     vm.question.questionChoices.push(addChoice);
-                 },
-                updateQuestion: function(){
-                    questionsSrvc.updateQuestion(vm.question).then(function(){
-                        questionsSrvc.updateQuestions(vm.parentSection.questionIds).then(function(){
-                            $state.go('questions_list',{
-                                parentSectionId: vm.parentSection.id,
-                                parentSurveyId: vm.parentSurvey.id
-                            });
-                        });
+                },
+                updateQuestion: function () {
+                    questionsSrvc.updateQuestion(vm.question).then(function () {
+                        $ionicHistory.goBack();
                     });
                 },
-                referenceCount: function(){
-                    if(vm.question.referenceCount > 1){return true;}
-                    else{return false;} 
-                },
+                referenceCount: function () {
+                    if (vm.question.referenceCount > 1) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
             });
-        }
+    }
 }());

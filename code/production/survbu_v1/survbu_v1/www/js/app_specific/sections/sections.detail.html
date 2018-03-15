@@ -18,8 +18,8 @@
                     <input type="text" placeholder="Section Description" ng-model="vm.section.introductionMessage"/>
                 </label>
                 <div ng-show="!vm.referenceCount()">
-                    <input value="Update Section" type="submit">
-                    <input value="Cancel" type="button" ng-click="vm.cancelEditing()">
+                    <input value="Update Section" type="submit"/>
+                    <input value="Cancel" type="button" ui-sref="sections_list"/>
                 </div>
                 <div ng-show="vm.referenceCount()">
                     <h4 class="light">This section belongs to {{vm.section.referenceCount}} survey therefore you cannot edit it.</h4>
@@ -31,7 +31,7 @@
 
     <ion-footer-bar class="bar bar-dark bar-footer row">
         <i class="col-20"></i>
-        <button class="doneButton button button-positive col" ng-click="vm.submitButton()">Save</button>
+        <button class="doneButton button button-positive col" ui-sref="sections_list">Done</button>
         <i class="col-20"></i>
     </ion-footer-bar>
 

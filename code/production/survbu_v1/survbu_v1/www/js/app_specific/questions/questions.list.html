@@ -1,6 +1,9 @@
 <ion-view view-title="Questions" can-swipe-back="false">
     
     <ion-nav-bar class="bar-dark" align-title="center">
+        <ion-nav-buttons side="right">
+            <button class="button button-outline button-light icon ion-ios-search-strong" ng-click="vm.searchInputEnabled = !vm.searchInputEnabled"></button>
+        </ion-nav-buttons>
         <ion-nav-back-button/>
     </ion-nav-bar>
     
@@ -9,11 +12,15 @@
     </button>
     
     <ion-content class="has-header">
+        
+        <div class="searchBar">
+            <input class="col" placeholder="Search" ng-model="vm.searchInput.heading" ng-show="vm.searchInputEnabled"/>
+        </div>
        
-        <button ng-click="vm.addFromExisting()"  style="color: #ff3344f;">Add from existing</button>
+        <button ng-hide="!isGlobal" ui-sref="questions_addfe">Add from existing</button>
         <div ng-hide="vm.hideList()">
             <ion-list>
-                <ion-item ui-sref="questions_detail({questionId: question.id, sectionId: vm.parentSection.id, surveyId: vm.parentSurvey.id})" ng-repeat="question in vm.questions" class="item-button-right">
+                <ion-item ui-sref="questions_detail({questionId: question.id, sectionId: vm.parentSection.id, surveyId: vm.parentSurvey.id})" ng-repeat="question in vm.questions | orderBy: 'questionText' | filter: vm.searchInput" class="item-button-right">
                     <span class="refCountLabel" ng-show="!vm.parentSection">{{question.referenceCount}}</span> {{question.questionText}} - {{question.id}}
                     <button ng-click="vm.showDeleteAlert($event, question.id)" class="button button-icon icon ion-ios-close actionMenuButton" style="color:#ff3344f;"></button>
                 </ion-item>

@@ -23,14 +23,13 @@
         sectionsSrvc,
         questionsSrvc
     ) {
+        questionsSrvc.updateRemainingQuestions();
         var vm = angular.extend(this, {
             parentSection: sectionsSrvc.getSectionAt($stateParams.sectionId),
             parentSurvey: surveysSrvc.getSurveyAt($stateParams.surveyId),
             questions: questionsSrvc.getRemainingQuestions(),
-
-            stillWaits: questionsSrvc.isItWaiting(),
             stillWaiting: function () {
-                return vm.stillWaits;
+                return questionsSrvc.isItWaiting();
             },
             noContent: function () {
                 return vm.questions.length === 0;
@@ -44,7 +43,7 @@
             addQuestions: function () {
                 var i,
                     promisesQ = [];
-                for (i = 0; i < vm.questions.length; i++) {
+                for (i = 0; i < vm.questions.length; i = i + 1) {
                     if (vm.questions[i].adding === true) {
                         vm.parentSection.questionIds.push(vm.questions[i].id);
                         vm.questions[i].referenceCount = vm.questions[i].referenceCount + 1;

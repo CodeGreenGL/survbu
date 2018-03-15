@@ -66,17 +66,6 @@
             hideNoItemsAll: function () {
                 return (vm.stillWaiting() || !vm.noContentAll());
             },
-            addFromExisting: function () {
-                questionsSrvc.isWaiting(true);
-                $state.go('questions_addfe', {
-                    sectionId: vm.parentSection.id,
-                    surveyId: vm.parentSurvey.id
-                });
-                questionsSrvc.updateRemainingQuestions().then(function () {
-                    $state.reload();
-                    questionsSrvc.isWaiting(false);
-                });
-            },
             showDeleteAlert: function ($event, questionId) {
                 $event.stopPropagation();
 

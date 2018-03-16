@@ -301,3 +301,7 @@ md-list-item {
     border-radius: 5px;
 }
 
+.homePageButton:hover{
+    background-color: #4a78ce !important;
+}
+

@@ -320,7 +320,7 @@ md-list-item {
     right: 0;
 }
 
-.addNewButton{
+.addNewButton, .addNewButtonSingleButton{
     width: 50%;
     height: 44px;
     background-color: #40a653;
@@ -328,6 +328,7 @@ md-list-item {
     color: white;
     float: right;
 }
+
 
 .addFromExisitingButton{
     width: 50%;
@@ -398,6 +399,10 @@ md-list-item {
     height: 45px;
     position: fixed;
     right: 0;
+}
+
+.addNewButtonSingleButton{
+    width: 120px;
 }
 
 .homePageButtonSurvey{

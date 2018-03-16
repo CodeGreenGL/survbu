@@ -54,12 +54,10 @@
                         });
 
                         if (!isGlobal) {
+                            // Push the new question ID into the parent section
                             vm.parentSection.questionIds.push(newQuestionID);
-                            
                             // PUTs the new parentSection to API
-                            sectionsSrvc.updateSection(vm.parentSection).then(function () {
-                                questionsSrvc.updateQuestions(vm.parentSection.questionIds);
-                            });
+                            sectionsSrvc.updateSection(vm.parentSection);
                         }
                     });
                 }

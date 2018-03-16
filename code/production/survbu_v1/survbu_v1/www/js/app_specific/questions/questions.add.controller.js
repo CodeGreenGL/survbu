@@ -54,20 +54,10 @@
                         });
 
                         if (!isGlobal) {
+                            // Push the new question ID into the parent section
                             vm.parentSection.questionIds.push(newQuestionID);
-                            
                             // PUTs the new parentSection to API
-                            sectionsSrvc.updateSection(vm.parentSection).then(function () {
-                                if (!isSectionsGlobal) {
-                                    // Given an array of sectionIds, updates the section array with the retrieved section objects.
-                                    sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
-                                        // Retrieve questions from API
-                                        questionsSrvc.updateQuestions(vm.parentSection.questionIds);
-                                    });
-                                } else {
-                                    questionsSrvc.updateQuestions(vm.parentSection.questionIds);
-                                }
-                            });
+                            sectionsSrvc.updateSection(vm.parentSection);
                         }
                     });
                 }

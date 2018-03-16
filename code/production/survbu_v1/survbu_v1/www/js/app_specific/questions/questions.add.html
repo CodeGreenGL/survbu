@@ -31,6 +31,7 @@
                 <span class="input-label">Question Choices</span>
                 <input type="text" placeholder="Choice one" ng-model="choice" ng-required="vm.displayAddQuestionChoices()" />
                 <button class="button button-small button-positive" type="button" ng-click="vm.addChoice(choice)">Add</button>
+                
                 <ion-list class="list list-inset">
                     <ion-item ng-repeat="choice in vm.question.questionChoices" class="item-button-right padding">{{choice}}
                         <button ng-click="vm.removeChoice(choice)" type="button" class="button-icon button icon ion-ios-close" style="top: -5px;"></button>

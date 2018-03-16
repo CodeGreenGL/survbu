@@ -295,14 +295,15 @@ md-list-item {
     padding-right: 0px;
 }
 
-.homePageButton{
+.homePageButton, .homePageButtonSurvey{
     padding-top: 10px;
     padding-bottom: 10px;
     border-radius: 5px;
     background-color: #40a653 !important;
 }
 
-.homePageButton:hover{
+
+.homePageButton:hover, .homePageButtonSurvey:hover{
     background-color: #158638 !important;
 }
 
@@ -371,6 +372,25 @@ md-list-item {
     background-color: #158638 !important;
 }
 
+.addFromExistingButton{
+    width: 120px;
+    height: 45px;
+    border: none;
+    background-color: #158638;
+    color: white;
+}
+
+
+.test:before {
+    content: "";
+    display: block;
+    background: url("icon.jpg") no-repeat;
+    width: 20px;
+    height: 20px;
+    float: left;
+    margin: 0 6px 0 0;
+}
+
 
 @media only screen and (max-width: 600px) {
    .addButttonHolder{
@@ -378,6 +398,18 @@ md-list-item {
     height: 45px;
     position: fixed;
     right: 0;
+}
+
+.homePageButtonSurvey{
+    width: 80%;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.homePageButton{
+  width: 70%;
+    padding-top: 10px;
+    padding-bottom: 10px;  
 }
 }
 

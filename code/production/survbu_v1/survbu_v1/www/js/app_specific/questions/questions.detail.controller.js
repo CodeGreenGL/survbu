@@ -43,6 +43,9 @@
                 addChoice: function (addChoice) {
                     vm.question.questionChoices.push(addChoice);
                 },
+                removeChoice: function (removeChoice) {
+                    vm.question.questionChoices.splice(vm.question.questionChoices.indexOf(removeChoice), 1);
+                },
                 updateQuestion: function () {
                     questionsSrvc.updateQuestion(vm.question).then(function () {
                         $ionicHistory.goBack();

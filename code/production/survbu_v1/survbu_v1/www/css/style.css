@@ -295,3 +295,9 @@ md-list-item {
     padding-right: 0px;
 }
 
+.homePageButton{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 5px;
+}
+

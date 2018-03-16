@@ -42,13 +42,14 @@
                 return (vm.stillWaiting() || !vm.noContent());
             },
             addSections: function () {
-                vm.sections.forEach(function (section) { // For each section
-                    if (section.adding === true) {
-                        vm.parentSurvey.sectionIds.push(section.id); // Add chosen sections to parent survey
-                        section.referenceCount = section.referenceCount + 1; // Increment referencecount for the section
-                        sectionsSrvc.updateSection(section);
+                for (var i = 0, len = vm.sections.length; i < len; i = i + 1) { // For each section
+                    if (vm.sections[i].adding === true) {
+                        vm.parentSurvey.sectionIds.push(vm.sections[i].id); // Add chosen sections to parent survey
+                        vm.sections[i].referenceCount = vm.sections[i].referenceCount + 1; // Increment referencecount for the section
+                        delete vm.sections[i].adding;
+                        sectionsSrvc.updateSection(vm.sections[i]);
                     }
-                });
+                }
 
                 sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
                     surveysSrvc.updateSurvey(vm.parentSurvey).then(function () {

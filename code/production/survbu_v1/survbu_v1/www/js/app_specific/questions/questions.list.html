@@ -7,7 +7,7 @@
         <ion-nav-back-button/>
     </ion-nav-bar>
     
-    <div id="container-floating">
+    <!--<div id="container-floating">
         <button class="nd2 nds noborder" ng-hide="vm.isGlobal" ui-sref="questions_addfe({sectionId: vm.parentSection.id, surveyId: vm.parentSurvey.id})">
             <i class="icon ion-plus-round"></i>
         </button>
@@ -20,7 +20,7 @@
             <i class="plus icon ion-plus-round"></i>
             <i class="edit icon ion-android-arrow-dropup-circle"></i>
         </button>
-    </div>
+    </div> -->
     
     <ion-content class="has-header">
         
@@ -32,7 +32,7 @@
             <md-list>
                 <md-list-item ui-sref="questions_detail({questionId: question.id, sectionId: vm.parentSection.id, surveyId: vm.parentSurvey.id})" ng-repeat="question in vm.questions | orderBy: 'questionText' | filter: vm.searchInput" class="item-button-right">
                     <span class="refCountLabel" ng-show="!vm.parentSection">{{question.referenceCount}}</span> {{question.questionText}}
-                    <button ng-click="vm.showDeleteAlert($event, question.id)" class="button button-icon icon ion-ios-close actionMenuButton md-secondary" style="color:#ff3344f;"></button>
+                    <button ng-click="vm.showDeleteAlert($event, question.id)" class="button button-icon icon ion-ios-close actionMenuButton md-secondary"></button>
                 </md-list-item>
             </md-list>
         </div>
@@ -54,7 +54,11 @@
     </ion-content>
     
     <ion-footer-bar class="bar bar-dark bar-footer row">
-        <i class="col-20"></i>
+         <div class="addButttonHolder">
+        <button class="addNewButton" ui-sref="questions_add({sectionId: vm.parentSection.id, surveyId: vm.parentSurvey.id})">Add new</button>
+
+            <button class="addFromExisitingButton" ng-hide="vm.isGlobal" ui-sref="questions_addfe({sectionId: vm.parentSection.id, surveyId: vm.parentSurvey.id})">Add Existing</button>
+        </div>
     </ion-footer-bar>
     
 </ion-view>

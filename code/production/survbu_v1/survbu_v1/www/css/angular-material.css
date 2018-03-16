@@ -2672,6 +2672,9 @@ md-list-item {
     -webkit-transition: background-color 0.15s linear;
     transition: background-color 0.15s linear; }
   md-list-item._md-button-wrap {
+    background-color: #f7f7f7;
+    color: #666666;
+    border-bottom: .5px solid #adadad;
     position: relative; }
     md-list-item._md-button-wrap > div.md-button:first-child {
       display: -webkit-box;

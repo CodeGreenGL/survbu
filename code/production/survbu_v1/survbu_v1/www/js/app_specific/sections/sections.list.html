@@ -8,18 +8,19 @@
     </ion-nav-bar>
 
     <div id="container-floating">
-        <button class="nd2 nds noborder" ng-hide="vm.isGlobal" ui-sref="sections_addfe({surveyId: vm.parentSurvey.id})">
+        
+        <!--<button class="nd2 nds noborder" ng-hide="vm.isGlobal" ui-sref="sections_addfe({surveyId: vm.parentSurvey.id})">
             <i class="icon ion-plus-round"></i>
-        </button>
+        </button> -->
 
-        <button class="nd1 nds noborder" ui-sref="sections_add({surveyId: vm.parentSurvey.id})">
+        <!-- <button class="nd1 nds noborder" ui-sref="sections_add({surveyId: vm.parentSurvey.id})">
             <i class="icon ion-plus-round"></i>
-        </button>
+        </button> -->
 
-        <button id="floating-button" class="button button-positive">
+        <!-- <button id="floating-button" class="button button-positive">
             <i class="plus icon ion-plus-round"></i>
             <i class="edit icon ion-android-arrow-dropup-circle"></i>
-        </button>
+        </button> -->
     </div>
 
     <ion-content class="has-header">
@@ -54,7 +55,10 @@
     </ion-content>
 
     <ion-footer-bar class="bar bar-dark bar-footer row">
-        <i class="col-20"></i>
+        <div class="addButttonHolder">
+            <button ui-sref="sections_add({surveyId: vm.parentSurvey.id})" class="addNewButton">Add new</button>
+            <button ng-hide="vm.isGlobal" ui-sref="sections_addfe({surveyId: vm.parentSurvey.id})" class="addFromExisitingButton">Add Existing</button>
+        </div>
     </ion-footer-bar>
 
 </ion-view>

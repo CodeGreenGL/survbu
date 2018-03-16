@@ -1,5 +1,5 @@
 .pane {
-    background-color: #eceff1;
+    background-color: #f2f2f2;
 }
 
 .bar {
@@ -299,9 +299,81 @@ md-list-item {
     padding-top: 10px;
     padding-bottom: 10px;
     border-radius: 5px;
+    background-color: #40a653 !important;
 }
 
 .homePageButton:hover{
-    background-color: #3266c9 !important;
+    background-color: #158638 !important;
 }
+
+.bar.bar-dark.bar-footer{
+    background-color: #f7f7f7;
+    border-top: none;
+    box-shadow: -1px -1px 2px lightgray;
+}
+
+.addButttonHolder{
+    width: 240px;
+    height: 45px;
+    position: fixed;
+    right: 0;
+}
+
+.addNewButton{
+    width: 50%;
+    height: 44px;
+    background-color: #40a653;
+    border: none;
+    color: white;
+    float: right;
+}
+
+.addFromExisitingButton{
+    width: 50%;
+    height: 44px;
+    background-color: #158638;
+    border: none;
+    color: white;
+    float: left;
+}
+
+.detailsHolder{
+    width: 600px;
+    margin: auto;
+    margin-top: 50px;
+    background-color: blue;
+}
+
+.confirmEditButton{
+    width: 120px;
+    height: 45px;
+    border-radius: 5px;
+    border: none;
+    background-color: orange;
+    color: white;
+}
+
+.cancelEditButton{
+    width: 120px;
+    height: 45px;
+    border-radius: 5px;
+    border: none;
+    background-color: darkred;
+    color: white;
+}
+
+.addButtonInsideForm{
+    background-color: #158638 !important;
+}
+
+
+@media only screen and (max-width: 600px) {
+   .addButttonHolder{
+    width: 100%;
+    height: 45px;
+    position: fixed;
+    right: 0;
+}
+}
+
 

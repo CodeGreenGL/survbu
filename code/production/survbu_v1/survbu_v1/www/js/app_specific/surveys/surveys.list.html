@@ -7,9 +7,9 @@
         <ion-nav-back-button/>
     </ion-nav-bar>
 
-    <button class="button button-float button-positive" ng-click="vm.addSurvey()">
+    <!--<button class="button button-float button-positive" ng-click="vm.addSurvey()">
         <i class="icon ion-plus-round"></i>
-    </button>
+    </button> -->
 
     <ion-content class="has-header">
         
@@ -42,7 +42,9 @@
     </ion-content>
 
     <ion-footer-bar class="bar bar-dark bar-footer row">
-        <i class="col-20"></i>
+        <div class="addButttonHolder">
+            <button ng-click="vm.addSurvey()" class="addNewButton"><i class="icon ion-plus-round"></i> Add new</button>
+        </div>
     </ion-footer-bar>
 
 </ion-view>

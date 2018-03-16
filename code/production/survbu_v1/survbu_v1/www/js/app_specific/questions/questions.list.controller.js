@@ -26,7 +26,7 @@
     ) {
         var isGlobal = $state.params.sectionId === 0,
             isSectionsGlobal = $state.params.surveyId === 0;
-        
+            
         questionsSrvc.isWaiting(true);
         if (isGlobal) { // Update questions if global list, i.e no parent section id
             questionsSrvc.getAllQuestions().then(function (responseQuestions) {
@@ -92,10 +92,17 @@
                             vm.parentSection.questionIds.splice(removeIndex, 1);
                             questionsSrvc.dereferenceQuestions([selectedQuestion.id]);
 
-                            sectionsSrvc.updateSectionsFromQuestionID(selectedQuestion.id, vm.parentSection.id).then(function () {
-                                sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
-                                    questionsSrvc.updateQuestions(vm.parentSection.questionIds);
-                                });
+                            sectionsSrvc.updateSectionsFromQuestionID(selectedQuestion.id, vm.parentSection.id, (isSectionsGlobal) ? true : false).then(function () {
+                                if (!isSectionsGlobal) {
+                                    sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
+                                        questionsSrvc.updateQuestions(vm.parentSection.questionIds);
+                                    });
+                                } else {
+                                    sectionsSrvc.getAllSections().then(function () {
+                                        questionsSrvc.updateQuestions(vm.parentSection.questionIds);
+                                    });
+                                }
+
                             });
                         }
                     });

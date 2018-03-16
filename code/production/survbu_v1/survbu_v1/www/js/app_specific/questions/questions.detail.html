@@ -4,7 +4,7 @@
         <ion-nav-back-button/>
     </ion-nav-bar>
 
-    <ion-content class="has-header">
+   <!-- <ion-content class="has-header">
         <div class="detailsHolder">
         <form ng-submit="vm.updateQuestion()">
                 <h3 class="light">Question:</h3>
@@ -37,7 +37,56 @@
                 </div>
         </form>
     </div>
+    </ion-content> -->
+
+    <ion-content class="has-header">
+        <div class="detailsHolder">
+        <form ng-submit="vm.updateQuestion()" class="list list-inset">
+                <label class="item item-input item-stacked-label">
+                <span class="input-label">Question Text</span>
+                <input type="text" placeholder="What is your favourite food?" ng-model="vm.question.questionText" ng-required="true"/>
+            </label>
+
+                    <label class="item item-input">
+                <span class="input-label">Question Type</span>
+                <select ng-model="vm.question.questionType" ng-required="true">
+                    <option value="FREE_TEXT">Free Text</option>
+                    <option value="BOOLEAN">Boolean</option>
+                    <option value="RATING_1_TO_5">Rating from 1 to 5</option>
+                    <option value="MULTIPLE_SELECT">Multiple Select</option>
+                    <option value="TIME">Time</option>
+                    <option value="DURATION_S">Duration in Second</option>
+                    <option value="SINGLE_SELECT">Single Select</option>
+                    <option value="NUMBER">Number</option>
+                </select>
+            </label>
+            
+                <div class="item item-input item-stacked-label" ng-show="vm.containsChoices() && !vm.referenceCount()">
+                     <span class="input-label">Question Choices</span>
+                     <input type="text" placeholder="Choice one" ng-model="choice" ng-required="vm.displayAddQuestionChoices()" />
+                     <button class="button button-small button-positive" type="button" ng-click="vm.addChoice(choice)">Add</button>
+
+
+
+                    <ion-list class="list list-inset">
+                        <ion-item ng-repeat="choice in vm.question.questionChoices" class="item-button-right padding">{{choice}}
+                            <button ng-click="vm.removeChoice(choice)" type="button" class="button-icon button icon ion-ios-close" style="top: -5px;"></button>
+                        </ion-item>
+                </ion-list>
+                </div>
+
+
+
+                <div ng-show="!vm.referenceCount()">
+                     <input class="confirmEditButton" type="submit" value="Confirm"/>
+                     <input class="cancelEditButton" type="button" value="Cancel" ui-sref="questions_list"/>
+                </div>
+                <div ng-show="vm.referenceCount()">
+                    <h4 class="light">This question belongs to {{vm.question.referenceCount}} sections therefore you cannot edit it.</h4>
+                </div>
+        </form>
+    </div>
     </ion-content>
 
-    <ion-footer-bar class="bar bar-dark bar-footer row"></ion-footer-bar>
+    <!--<ion-footer-bar class="bar bar-dark bar-footer row"></ion-footer-bar> -->
 </ion-view>

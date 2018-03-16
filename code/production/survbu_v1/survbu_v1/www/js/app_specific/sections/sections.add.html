@@ -5,6 +5,7 @@
     </ion-nav-bar>
     
     <ion-content class="has-header">
+         <div class="detailsHolder">
         <form name="addSection" ng-submit="vm.createSection()" class="list list-inset">
             <label class="item item-input item-stacked-label">
                 <span class="input-label">Section Heading</span>
@@ -20,10 +21,11 @@
                 <button class="addButtonInsideForm button button-positive col-50 col-offset-25" type="submit" ng-disabled="addSection.$invalid">Create Section</button>
             </label>
         </form>
+    </div>
     </ion-content>
 
-    <ion-footer-bar class="bar bar-dark bar-footer row">
+    <!-- <ion-footer-bar class="bar bar-dark bar-footer row">
         <i class="col-20"></i>
-    </ion-footer-bar>
+    </ion-footer-bar> -->
 
 </ion-view>

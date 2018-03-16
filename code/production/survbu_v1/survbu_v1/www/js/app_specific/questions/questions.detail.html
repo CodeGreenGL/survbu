@@ -77,7 +77,7 @@
 
                 <div ng-show="!vm.referenceCount()">
                      <input class="confirmEditButton" type="submit" value="Confirm"/>
-                     <input class="cancelEditButton" type="button" value="Cancel" ui-sref="questions_list"/>
+                     <input class="cancelEditButton" type="button" value="Cancel" ui-sref="questions_list({sectionId: vm.parentSection.id, surveyId: vm.parentSurvey.id})"/>
                 </div>
                 <div ng-show="vm.referenceCount()">
                     <h4 class="light">This question belongs to {{vm.question.referenceCount}} sections therefore you cannot edit it.</h4>

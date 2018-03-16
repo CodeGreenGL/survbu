@@ -22,14 +22,15 @@
         questionsSrvc
     ) {
         var isGlobal = $stateParams.sectionId === 0,
+            isSectionsGlobal = $stateParams.surveyId === 0,
             vm = angular.extend(this, {
-                parentSection: sectionsSrvc.getSectionAt($stateParams.sectionId),
-                parentSurvey: surveysSrvc.getSurveyAt($stateParams.surveyId),
+                parentSection: (isSectionsGlobal) ? sectionsSrvc.getSectionAtGlobal($stateParams.sectionId) : sectionsSrvc.getSectionAt($stateParams.sectionId),
+                parentSurvey: (isSectionsGlobal) ? undefined : surveysSrvc.getSurveyAt($stateParams.surveyId),
                 question: {
                     questionText: "",
                     questionType: "",
                     questionChoices: [],
-                    referenceCount: (isGlobal) ? 0 : 1 // Set referenceCount to 0 if there is no parentSection, i.e from global list
+                    referenceCount: (isGlobal) ? 0 : 1 // Set referenceCount to 0 if there is no sectionId, i.e from global list
                 },
                 displayAddQuestionChoices: function () {
                     if (vm.question.questionType === 'MULTIPLE_SELECT' || vm.question.questionType === 'SINGLE_SELECT') {
@@ -53,16 +54,19 @@
                         });
 
                         if (!isGlobal) {
-                            sectionsSrvc.isWaiting(true);
                             vm.parentSection.questionIds.push(newQuestionID);
                             
                             // PUTs the new parentSection to API
                             sectionsSrvc.updateSection(vm.parentSection).then(function () {
-                                // Given an array of sectionIds, updates the section array with the retrieved section objects.
-                                sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
-                                    // Retrieve questions from API
+                                if (!isSectionsGlobal) {
+                                    // Given an array of sectionIds, updates the section array with the retrieved section objects.
+                                    sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
+                                        // Retrieve questions from API
+                                        questionsSrvc.updateQuestions(vm.parentSection.questionIds);
+                                    });
+                                } else {
                                     questionsSrvc.updateQuestions(vm.parentSection.questionIds);
-                                });
+                                }
                             });
                         }
                     });

@@ -26,7 +26,7 @@
     ) {
         var isGlobal = $state.params.sectionId === 0,
             isSectionsGlobal = $state.params.surveyId === 0;
-        
+            
         questionsSrvc.isWaiting(true);
         if (isGlobal) { // Update questions if global list, i.e no parent section id
             questionsSrvc.getAllQuestions().then(function (responseQuestions) {
@@ -79,17 +79,39 @@
                 var selectedQuestion = (isGlobal) ? questionsSrvc.getQuestionAtGlobal(questionId) : questionsSrvc.getQuestionAt(questionId),
                     referenceCount = selectedQuestion.referenceCount;
 
-                if ((isGlobal) && referenceCount > 0) {
+                if (!isGlobal) {
+                    $ionicPopup.confirm({
+                        title: 'Remove Question',
+                        template: 'Are you sure you want to remove \'' + selectedQuestion.questionText + '\'?'
+                    }).then(function (response) {
+                        if (response) {
+                            var removeIndex = vm.questions.findIndex(function (quest) {
+                                return quest.id === questionId;
+                            });
+                            vm.questions.splice(removeIndex, 1);
+                            vm.parentSection.questionIds.splice(removeIndex, 1);
+                            questionsSrvc.dereferenceQuestions([selectedQuestion.id]);
+
+                            sectionsSrvc.updateSectionsFromQuestionID(selectedQuestion.id, vm.parentSection.id, (isSectionsGlobal) ? true : false).then(function () {
+                                if (!isSectionsGlobal) {
+                                    sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
+                                        questionsSrvc.updateQuestions(vm.parentSection.questionIds);
+                                    });
+                                } else {
+                                    sectionsSrvc.getAllSections().then(function () {
+                                        questionsSrvc.updateQuestions(vm.parentSection.questionIds);
+                                    });
+                                }
+
+                            });
+                        }
+                    });
+                } else if ((isGlobal) && (referenceCount > 0)) {
                     $ionicPopup.alert({
                         title: 'Can\'t delete question, referenceCount is ' + referenceCount,
                         template: 'Questions from the global list can only be deleted if referenceCount is 0.'
                     });
-                } else if (referenceCount > 1) {
-                    $ionicPopup.alert({
-                        title: 'Can\'t delete question, referenceCount is ' + referenceCount,
-                        template: 'This question is used in ' + referenceCount + ' sections, and cannot be deleted.'
-                    });
-                } else if (referenceCount === 0 || referenceCount === 1 || referenceCount === null) {
+                } else if ((isGlobal) && (referenceCount === 0 || referenceCount === null)) {
                     $ionicPopup.confirm({
                         title: 'Delete Question',
                         template: 'Are you sure you want to delete \'' + selectedQuestion.questionText + '\'?'
@@ -100,15 +122,6 @@
                             });
                             vm.questions.splice(removeIndex, 1);
                             questionsSrvc.deleteQuestion(selectedQuestion.id);
-
-                            if (!isGlobal) {
-                                vm.parentSection.questionIds.splice(removeIndex, 1);
-                                sectionsSrvc.updateSectionsFromQuestionID(selectedQuestion.id, vm.parentSection.id).then(function () {
-                                    sectionsSrvc.updateSections(vm.parentSurvey.sectionIds).then(function () {
-                                        questionsSrvc.updateQuestions(vm.parentSection.questionIds);
-                                    });
-                                });
-                            } // if not in the global list, update the sections list
                         }
                     });
                 }

@@ -114,14 +114,25 @@
                     sectionsArray = [];
                     return getSurveySections(surveySections);
                 },
-                updateSectionsFromQuestionID: function (questionID, sectionID) {
-                    var arrayIndex = sectionsArray.findIndex(function (section) {
+                updateSectionsFromQuestionID: function (questionID, sectionID, global) {
+                    var arrayIndex, localSection;
+                    if (global == true) {
+                        arrayIndex = allSectionsArray.findIndex(function (section) {
                             return section.id == sectionID;
-                        }),
+                        });
+                        localSection = allSectionsArray[arrayIndex];
+
+                        localSection.questionIds.splice(localSection.questionIds.indexOf(questionID), 1);
+                        allSectionsArray[arrayIndex] = localSection;
+                    } else {
+                        arrayIndex = sectionsArray.findIndex(function (section) {
+                            return section.id == sectionID;
+                        });
                         localSection = sectionsArray[arrayIndex];
 
-                    localSection.questionIds.splice(localSection.questionIds.indexOf(questionID), 1);
-                    sectionsArray[arrayIndex] = localSection;
+                        localSection.questionIds.splice(localSection.questionIds.indexOf(questionID), 1);
+                        sectionsArray[arrayIndex] = localSection;
+                    }
 
                     return updateSection(localSection);
                 },
